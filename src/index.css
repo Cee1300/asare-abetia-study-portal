@@ -1,0 +1,79 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    @apply bg-slate-950 text-white;
+    font-family: 'DM Sans', sans-serif;
+    background-image: 
+      radial-gradient(ellipse at 20% 50%, rgba(37, 99, 235, 0.08) 0%, transparent 60%),
+      radial-gradient(ellipse at 80% 20%, rgba(245, 158, 11, 0.05) 0%, transparent 50%);
+  }
+
+  ::-webkit-scrollbar {
+    width: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #0f172a;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #334155;
+    border-radius: 9999px;
+  }
+}
+
+@layer components {
+  .card {
+    @apply bg-slate-900 border border-slate-800 rounded-2xl;
+  }
+
+  .card-hover {
+    @apply bg-slate-900 border border-slate-800 rounded-2xl transition-all duration-300 hover:border-slate-600 hover:shadow-lg hover:shadow-slate-900/50;
+  }
+
+  .btn-primary {
+    @apply bg-blue-700 hover:bg-blue-600 text-white font-medium px-6 py-3 rounded-xl 
+           transition-all duration-200 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  .btn-gold {
+    @apply bg-amber-500 hover:bg-amber-400 text-slate-950 font-semibold px-6 py-3 rounded-xl
+           transition-all duration-200 active:scale-95 shadow-lg shadow-amber-500/20;
+  }
+
+  .btn-ghost {
+    @apply text-slate-400 hover:text-white hover:bg-slate-800 px-4 py-2 rounded-lg transition-all duration-200;
+  }
+
+  .input-field {
+    @apply w-full bg-slate-800 border border-slate-700 text-white placeholder-slate-400
+           rounded-xl px-4 py-3 focus:outline-none focus:border-slate-500 focus:ring-1 
+           focus:ring-slate-500 transition-all duration-200;
+  }
+
+  .subject-badge {
+    @apply inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium;
+  }
+
+  .score-pill {
+    @apply inline-flex items-center justify-center w-10 h-10 rounded-full text-sm font-bold;
+  }
+}
+
+/* Subject colour tokens */
+.subject-maths   { @apply bg-blue-500/10 text-blue-400 border border-blue-500/20; }
+.subject-science { @apply bg-emerald-500/10 text-emerald-400 border border-emerald-500/20; }
+.subject-english { @apply bg-purple-500/10 text-purple-400 border border-purple-500/20; }
+
+/* Animation delays */
+.delay-100 { animation-delay: 100ms; }
+.delay-200 { animation-delay: 200ms; }
+.delay-300 { animation-delay: 300ms; }
+.delay-400 { animation-delay: 400ms; }
+.delay-500 { animation-delay: 500ms; }
