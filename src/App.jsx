@@ -3,6 +3,7 @@ import { AuthProvider, useAuth } from './contexts/AuthContext'
 import LoginPage from './pages/LoginPage'
 import StudentDashboard from './pages/StudentDashboard'
 import DayPackPage from './pages/DayPackPage'
+import RewardsPage from './pages/RewardsPage'
 import AdminDashboard from './pages/AdminDashboard'
 import AdminStudentView from './pages/AdminStudentView'
 import AdminMarkWork from './pages/AdminMarkWork'
@@ -38,26 +39,12 @@ export default function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/login" element={<LoginPage />} />
-          
-          {/* Student routes */}
-          <Route path="/dashboard" element={
-            <StudentRoute><StudentDashboard /></StudentRoute>
-          } />
-          <Route path="/pack/:dayNum" element={
-            <StudentRoute><DayPackPage /></StudentRoute>
-          } />
-
-          {/* Admin routes */}
-          <Route path="/admin" element={
-            <ProtectedRoute requireAdmin><AdminDashboard /></ProtectedRoute>
-          } />
-          <Route path="/admin/student/:studentId" element={
-            <ProtectedRoute requireAdmin><AdminStudentView /></ProtectedRoute>
-          } />
-          <Route path="/admin/mark/:studentId/:dayNum" element={
-            <ProtectedRoute requireAdmin><AdminMarkWork /></ProtectedRoute>
-          } />
-
+          <Route path="/dashboard" element={<StudentRoute><StudentDashboard /></StudentRoute>} />
+          <Route path="/pack/:dayNum" element={<StudentRoute><DayPackPage /></StudentRoute>} />
+          <Route path="/rewards" element={<StudentRoute><RewardsPage /></StudentRoute>} />
+          <Route path="/admin" element={<ProtectedRoute requireAdmin><AdminDashboard /></ProtectedRoute>} />
+          <Route path="/admin/student/:studentId" element={<ProtectedRoute requireAdmin><AdminStudentView /></ProtectedRoute>} />
+          <Route path="/admin/mark/:studentId/:dayNum" element={<ProtectedRoute requireAdmin><AdminMarkWork /></ProtectedRoute>} />
           <Route path="*" element={<RootRedirect />} />
         </Routes>
       </BrowserRouter>

@@ -1,11 +1,10 @@
 import { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
-import { doc, getDoc, setDoc, serverTimestamp } from 'firebase/firestore'
+import { doc, getDoc, setDoc, updateDoc, serverTimestamp, addDoc, collection } from 'firebase/firestore'
 import { db } from '../firebase'
 import { useAuth } from '../contexts/AuthContext'
-import { TIMETABLE, SUBJECT_COLOURS, STUDENTS } from '../utils/students'
-import { BookOpen, FlaskConical, Pencil, ChevronLeft, Send, Star, CheckCircle, Clock } from 'lucide-react'
-import { format, parseISO } from 'date-fns'
+import { TIMETABLE, SUBJECT_COLOURS, STUDENTS, POINTS } from '../utils/students'
+import { BookOpen, FlaskConical, Pencil, ChevronLeft, Send, Star, CheckCircle, Clock, Zap } from 'lucide-react'
 
 const SUBJECT_ICONS = { Mathematics: BookOpen, Science: FlaskConical, English: Pencil }
 
@@ -17,6 +16,7 @@ export default function DayPackPage() {
   const [answers, setAnswers] = useState({})
   const [submission, setSubmission] = useState(null)
   const [submitting, setSubmitting] = useState(false)
+  const [marking, setMarking] = useState(false)
   const [loading, setLoading] = useState(true)
   const [activeTab, setActiveTab] = useState('learn')
 
@@ -56,10 +56,81 @@ export default function DayPackPage() {
       await setDoc(doc(db, 'submissions', `${studentId}_day${dayNum}`), subData)
       setSubmission(subData)
       setActiveTab('practice')
+
+      // Auto-mark via Claude API
+      await autoMark(answers)
     } catch (err) {
       console.error(err)
     }
     setSubmitting(false)
+  }
+
+  async function autoMark(submittedAnswers) {
+    if (!pack?.questions?.length) return
+    setMarking(true)
+    try {
+      const response = await fetch('/.netlify/functions/mark-answers', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          questions: pack.questions,
+          answers: submittedAnswers,
+          subject: dayData?.subject,
+          topic: dayData?.topic,
+          level: student?.level || 'B7',
+        }),
+      })
+
+      if (!response.ok) throw new Error('Marking function failed')
+      const result = await response.json()
+
+      // Build markedAnswers map
+      const markedAnswers = {}
+      result.questions?.forEach(q => {
+        markedAnswers[q.qNum - 1] = {
+          correct: q.correct,
+          marks: q.marks,
+          feedback: q.feedback || '',
+          correctAnswer: q.correctAnswer || '',
+        }
+      })
+
+      const score = result.totalScore || 0
+
+      // Update submission with marks
+      await updateDoc(doc(db, 'submissions', `${studentId}_day${dayNum}`), {
+        score,
+        markedAnswers,
+        dadFeedback: result.overallFeedback || '',
+        markedAt: serverTimestamp(),
+        status: 'marked',
+        autoMarked: true,
+      })
+
+      // Award points
+      let pts = POINTS.submitOnTime
+      if (score >= 9) pts += POINTS.score9plus
+      else if (score >= 7) pts += POINTS.score7plus
+
+      await addDoc(collection(db, 'points'), {
+        studentId,
+        dayNum: Number(dayNum),
+        amount: pts,
+        reason: `Day ${dayNum} auto-marked: ${score}/10`,
+        createdAt: serverTimestamp(),
+      })
+
+      // Reload submission to show results
+      const updatedSnap = await getDoc(doc(db, 'submissions', `${studentId}_day${dayNum}`))
+      if (updatedSnap.exists()) {
+        setSubmission(updatedSnap.data())
+        setActiveTab('results')
+      }
+    } catch (err) {
+      console.error('Auto-marking failed:', err)
+      // Fall back gracefully — submission is saved, will be marked manually
+    }
+    setMarking(false)
   }
 
   function getScoreColour(score) {
@@ -93,7 +164,17 @@ export default function DayPackPage() {
   return (
     <div className="min-h-screen pb-20">
 
-      {/* Header */}
+      {/* Marking overlay */}
+      {marking && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center" style={{ background: 'rgba(0,0,0,0.75)' }}>
+          <div className="bg-slate-900 border border-slate-700 rounded-2xl p-8 text-center max-w-xs">
+            <div className="w-12 h-12 border-2 border-slate-600 border-t-amber-500 rounded-full animate-spin mx-auto mb-4" />
+            <p className="text-white font-medium mb-1">Marking your work...</p>
+            <p className="text-slate-400 text-sm">Dad's AI is reviewing your answers</p>
+          </div>
+        </div>
+      )}
+
       <header className="sticky top-0 z-40 bg-slate-950/90 backdrop-blur-md border-b border-slate-800">
         <div className="max-w-2xl mx-auto px-4 py-3">
           <div className="flex items-center gap-3">
@@ -113,19 +194,11 @@ export default function DayPackPage() {
               </div>
             )}
           </div>
-
-          {/* Tabs */}
           <div className="flex gap-1 mt-3 bg-slate-900 rounded-xl p-1">
             {['learn', 'practice', ...(isMarked ? ['results'] : [])].map(tab => (
-              <button
-                key={tab}
-                onClick={() => setActiveTab(tab)}
+              <button key={tab} onClick={() => setActiveTab(tab)}
                 className={`flex-1 py-2 rounded-lg text-xs font-medium capitalize transition-all
-                  ${activeTab === tab
-                    ? 'bg-slate-700 text-white shadow'
-                    : 'text-slate-400 hover:text-slate-200'
-                  }`}
-              >
+                  ${activeTab === tab ? 'bg-slate-700 text-white shadow' : 'text-slate-400 hover:text-slate-200'}`}>
                 {tab === 'learn' ? '📖 Learn' : tab === 'practice' ? '✏️ Practice' : '📊 Results'}
               </button>
             ))}
@@ -140,7 +213,7 @@ export default function DayPackPage() {
           <div className="space-y-4 animate-fade-in">
             <div className="card p-4">
               <div className="grid grid-cols-3 divide-x divide-slate-800 text-center">
-                {[['📖 Read', '10 min'], ['✏️ Solve', '35 min'], ['📸 Submit', '15 min']].map(([label, time]) => (
+                {[['📖 Read', '10 min'], ['✏️ Solve', '35 min'], ['📸 Submit', '5 min']].map(([label, time]) => (
                   <div key={label} className="px-3">
                     <p className="text-white text-sm font-medium">{label}</p>
                     <p className="text-slate-400 text-xs mt-0.5">{time}</p>
@@ -151,9 +224,7 @@ export default function DayPackPage() {
 
             {pack?.objectives && (
               <div className="card p-5">
-                <h3 className="text-slate-300 text-xs font-semibold uppercase tracking-wider mb-3">
-                  What You Will Learn Today
-                </h3>
+                <h3 className="text-slate-300 text-xs font-semibold uppercase tracking-wider mb-3">What You Will Learn Today</h3>
                 <div className="space-y-2">
                   {pack.objectives.map((obj, i) => (
                     <div key={i} className="flex items-start gap-2.5">
@@ -218,7 +289,7 @@ export default function DayPackPage() {
               <div className="card p-4 border border-amber-500/20 bg-amber-500/5">
                 <div className="flex items-center gap-2 text-amber-400">
                   <Clock size={16} />
-                  <p className="text-sm font-medium">Submitted — waiting for Dad to mark</p>
+                  <p className="text-sm font-medium">Submitted — being marked automatically...</p>
                 </div>
               </div>
             )}
@@ -231,17 +302,10 @@ export default function DayPackPage() {
 
               return (
                 <div key={i} className="card overflow-hidden">
-                  <div className={`px-4 py-2.5 flex items-center justify-between
-                    ${isChallenge ? 'bg-amber-500/10' : 'bg-slate-800/50'}`}>
+                  <div className={`px-4 py-2.5 flex items-center justify-between ${isChallenge ? 'bg-amber-500/10' : 'bg-slate-800/50'}`}>
                     <div className="flex items-center gap-2">
-                      <span className={`text-xs font-bold font-mono ${isChallenge ? 'text-amber-400' : colours.text}`}>
-                        Q{i+1}
-                      </span>
-                      {isChallenge && (
-                        <span className="text-amber-400 text-xs flex items-center gap-1">
-                          <Star size={11} /> Challenge
-                        </span>
-                      )}
+                      <span className={`text-xs font-bold font-mono ${isChallenge ? 'text-amber-400' : colours.text}`}>Q{i+1}</span>
+                      {isChallenge && <span className="text-amber-400 text-xs flex items-center gap-1"><Star size={11} /> Challenge</span>}
                     </div>
                     {markedAnswer && (
                       <span className={`text-xs font-bold ${markedAnswer.correct ? 'text-emerald-400' : 'text-red-400'}`}>
@@ -289,22 +353,14 @@ export default function DayPackPage() {
             })}
 
             {!hasSubmitted && questions.length > 0 && (
-              <button
-                onClick={submitAnswers}
-                disabled={submitting || Object.keys(answers).length === 0}
-                className="btn-gold w-full flex items-center justify-center gap-2"
-              >
+              <button onClick={submitAnswers} disabled={submitting || Object.keys(answers).length === 0}
+                className="btn-gold w-full flex items-center justify-center gap-2">
                 {submitting ? (
-                  <>
-                    <svg className="animate-spin h-4 w-4" viewBox="0 0 24 24" fill="none">
-                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/>
-                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/>
-                    </svg>
-                    Submitting...
-                  </>
-                ) : (
-                  <><Send size={16} /> Submit to Dad</>
-                )}
+                  <><svg className="animate-spin h-4 w-4" viewBox="0 0 24 24" fill="none">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/>
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/>
+                  </svg>Submitting...</>
+                ) : <><Send size={16} /> Submit to Dad</>}
               </button>
             )}
 
@@ -332,6 +388,19 @@ export default function DayPackPage() {
                  submission.score >= 5 ? '📚 Keep going!' :
                  '🔄 Review corrections below'}
               </p>
+              {submission.autoMarked && (
+                <p className="text-slate-500 text-xs mt-2">Marked automatically · Dad may review</p>
+              )}
+            </div>
+
+            {/* Points earned */}
+            <div className="card p-4 border border-amber-500/20 bg-amber-500/5">
+              <div className="flex items-center gap-2">
+                <Zap size={16} className="text-amber-400" />
+                <p className="text-amber-400 font-medium text-sm">
+                  +{submission.score >= 9 ? POINTS.score9plus + POINTS.submitOnTime : submission.score >= 7 ? POINTS.score7plus + POINTS.submitOnTime : POINTS.submitOnTime} points earned
+                </p>
+              </div>
             </div>
 
             {submission.dadFeedback && (
