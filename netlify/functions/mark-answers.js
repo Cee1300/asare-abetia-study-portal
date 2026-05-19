@@ -8,8 +8,10 @@ export async function handler(event) {
 
   const CLAUDE_API_KEY = process.env.CLAUDE_API_KEY
   if (!CLAUDE_API_KEY) {
+    console.error('CLAUDE_API_KEY is not set')
     return { statusCode: 500, body: JSON.stringify({ error: 'API key not configured' }) }
   }
+  console.log('API key present, length:', CLAUDE_API_KEY.length)
 
   let body
   try {
@@ -74,7 +76,7 @@ MARKING RULES:
         'anthropic-version': '2023-06-01',
       },
       body: JSON.stringify({
-        model: 'claude-haiku-4-5-20251001', // Use Haiku for speed
+        model: 'claude-sonnet-4-20250514',
         max_tokens: 2000,
         messages: [{ role: 'user', content: prompt }],
       }),
