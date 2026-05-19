@@ -88,13 +88,7 @@ MARKING RULES:
     if (!response.ok) {
       const errText = await response.text()
       console.error('Claude API error:', response.status, errText)
-      return { 
-        statusCode: 502, 
-        body: JSON.stringify({ 
-          error: `Claude API returned ${response.status}`,
-          details: errText
-        }) 
-      }
+      return { statusCode: 502, body: JSON.stringify({ error: `Claude API returned ${response.status}` }) }
     }
 
     const data = await response.json()
