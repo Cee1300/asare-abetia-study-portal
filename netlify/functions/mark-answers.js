@@ -1,13 +1,5 @@
 // netlify/functions/mark-answers.js
-// ─────────────────────────────────────────────────────────────
-// This function runs SERVER-SIDE on Netlify.
-// The CLAUDE_API_KEY environment variable is set in Netlify dashboard.
-// It is NEVER sent to the browser.
-//
-// Set in Netlify: Site Settings → Environment Variables
-// Key: CLAUDE_API_KEY
-// Value: your Anthropic API key
-// ─────────────────────────────────────────────────────────────
+// Server-side Claude API marking — key never exposed to browser
 
 export async function handler(event) {
   if (event.httpMethod !== 'POST') {
@@ -28,10 +20,52 @@ export async function handler(event) {
 
   const { questions, answers, subject, topic, level } = body
 
-  // Build the marking prompt
-  const prompt = buildMarkingPrompt(questions, answers, subject, topic, level)
+  if (!questions?.length) {
+    return { statusCode: 400, body: JSON.stringify({ error: 'No questions provided' }) }
+  }
+
+  const qList = questions.map((q, i) => {
+    const qText = q.q?.replace('[Challenge] ', '') || ''
+    const isChallenge = q.q?.includes('[Challenge]')
+    return `Q${i+1}${isChallenge ? ' (CHALLENGE)' : ''}:
+Question: ${qText}
+Answer Key: ${q.a || '(use your knowledge)'}
+Student Answer: ${answers[i] || '(blank — no answer)'}`
+  }).join('\n\n')
+
+  const prompt = `You are marking a ${level || 'B7'} student's ${subject} assignment on "${topic}" at a Ghanaian junior high school (GES/NaCCA curriculum).
+
+Mark each question. Return ONLY valid JSON with no preamble or markdown backticks.
+
+${qList}
+
+Return this exact JSON structure:
+{
+  "totalScore": <number, max ${questions.length}, 0.5 increments allowed>,
+  "questions": [
+    {
+      "qNum": <1-based number>,
+      "correct": <boolean>,
+      "marks": <0, 0.5, or 1>,
+      "feedback": "<max 2 sentences if wrong, empty string if correct>",
+      "correctAnswer": "<correct answer if student was wrong, empty string if correct>"
+    }
+  ],
+  "overallFeedback": "<1-2 sentence overall message — encouraging and specific>"
+}
+
+MARKING RULES:
+- 1 mark: correct answer and method
+- 0.5 mark: correct method but arithmetic error, or partially correct  
+- 0 marks: wrong method, blank, or completely wrong
+- British English throughout
+- Do not inflate scores`
 
   try {
+    // Use AbortController for timeout
+    const controller = new AbortController()
+    const timeout = setTimeout(() => controller.abort(), 25000) // 25 second timeout
+
     const response = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
       headers: {
@@ -40,21 +74,30 @@ export async function handler(event) {
         'anthropic-version': '2023-06-01',
       },
       body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
-        max_tokens: 4000,
+        model: 'claude-haiku-4-5-20251001', // Use Haiku for speed
+        max_tokens: 2000,
         messages: [{ role: 'user', content: prompt }],
       }),
+      signal: controller.signal,
     })
+
+    clearTimeout(timeout)
+
+    if (!response.ok) {
+      const errText = await response.text()
+      console.error('Claude API error:', response.status, errText)
+      return { statusCode: 502, body: JSON.stringify({ error: `Claude API returned ${response.status}` }) }
+    }
 
     const data = await response.json()
     const text = data.content?.[0]?.text || ''
 
-    // Parse the JSON response
     let result
     try {
       const clean = text.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim()
       result = JSON.parse(clean)
-    } catch {
+    } catch (parseErr) {
+      console.error('JSON parse error:', parseErr, 'Raw text:', text)
       return { statusCode: 500, body: JSON.stringify({ error: 'Failed to parse marking response' }) }
     }
 
@@ -64,48 +107,10 @@ export async function handler(event) {
       body: JSON.stringify(result),
     }
   } catch (err) {
+    if (err.name === 'AbortError') {
+      return { statusCode: 504, body: JSON.stringify({ error: 'Marking timed out — will be marked manually' }) }
+    }
+    console.error('Function error:', err)
     return { statusCode: 500, body: JSON.stringify({ error: err.message }) }
   }
-}
-
-function buildMarkingPrompt(questions, answers, subject, topic, level) {
-  const qList = questions.map((q, i) => {
-    const qText = q.q?.replace('[Challenge] ', '') || ''
-    const isChallenge = q.q?.includes('[Challenge]')
-    return `Q${i+1}${isChallenge ? ' (CHALLENGE)' : ''}:
-Question: ${qText}
-Answer Key: ${q.a || '(no answer key provided — use your knowledge)'}
-Student's Answer: ${answers[i] || '(blank — no answer submitted)'}`
-  }).join('\n\n')
-
-  return `You are marking a ${level} student's ${subject} assignment on the topic "${topic}" at a Ghanaian junior high school (GES/NaCCA curriculum).
-
-Mark each question and return ONLY a JSON object with no preamble or markdown.
-
-Questions and student answers:
-${qList}
-
-Return this exact JSON structure:
-{
-  "totalScore": <number, max ${questions.length}, can be in 0.5 increments>,
-  "questions": [
-    {
-      "qNum": <number>,
-      "correct": <boolean>,
-      "marks": <0, 0.5, or 1>,
-      "feedback": "<brief, encouraging feedback — max 2 sentences. Only include if wrong or partial. If correct, return empty string.>",
-      "correctAnswer": "<the correct answer — only include if student was wrong or partial>"
-    }
-  ],
-  "overallFeedback": "<1-2 sentence overall feedback to the student — encouraging, specific, honest>"
-}
-
-MARKING GUIDELINES:
-- Full mark (1): correct answer, correct method shown
-- Half mark (0.5): correct method but arithmetic error, or partially correct
-- Zero (0): wrong method, no answer, or completely wrong
-- For written/extended answers: judge understanding and key ideas, not exact wording
-- Challenge questions worth 1 mark — reward genuine attempt even if wrong
-- British English spelling throughout
-- Be encouraging but honest — do not inflate scores`
 }

@@ -128,9 +128,11 @@ export default function DayPackPage() {
       }
     } catch (err) {
       console.error('Auto-marking failed:', err)
-      // Fall back gracefully — submission is saved, will be marked manually
+      // Fall back gracefully — submission saved, show as pending for manual marking
+      setActiveTab('practice')
+    } finally {
+      setMarking(false)
     }
-    setMarking(false)
   }
 
   function getScoreColour(score) {
