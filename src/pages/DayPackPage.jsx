@@ -441,6 +441,22 @@ export default function DayPackPage() {
               )
             })}
 
+            {/* Corrections button — show if any wrong answers */}
+            {questions.some((q, i) => submission?.markedAnswers?.[i] && !submission.markedAnswers[i].correct) &&
+             !submission?.correctionsSubmitted && (
+              <button
+                onClick={() => navigate(`/corrections/${dayNum}`)}
+                className="btn-gold w-full flex items-center justify-center gap-2"
+              >
+                ✏️ Submit Corrections (+{POINTS.correctionsSubmit} pts)
+              </button>
+            )}
+            {submission?.correctionsSubmitted && (
+              <div className="card p-3 border border-emerald-500/20 bg-emerald-500/5 text-center">
+                <p className="text-emerald-400 text-sm">✅ Corrections submitted — well done!</p>
+              </div>
+            )}
+
             <button onClick={() => navigate('/dashboard')} className="btn-primary w-full">
               ← Back to Dashboard
             </button>
