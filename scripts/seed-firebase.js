@@ -40,7 +40,7 @@ const USERS = [
   },
   {
     email: 'declyn@aasp.edu.gh',
-    password: 'Declyn@10!',    // Change this
+    password: 'Declyn@10',    // Change this
     displayName: 'Declyn Bota',
     role: 'student',
     studentId: 'declyn',
@@ -51,7 +51,7 @@ const USERS = [
   },
   {
     email: 'ivan@aasp.edu.gh',
-    password: 'Ivan@8!',      // Change this
+    password: 'Ivan@8',      // Change this
     displayName: 'Ivan Liam',
     role: 'student',
     studentId: 'ivan',
