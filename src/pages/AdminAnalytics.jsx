@@ -107,7 +107,8 @@ export default function AdminAnalytics() {
     // R&R readiness — check if 7 new sessions done since last recap
     const recapSessions = Object.values(submissions).filter(s => typeof s.dayNum === 'string' && s.dayNum.includes('recap'))
     const lastRecapNum = recapSessions.length
-    const sessionsSinceLastRecap = completed - (lastRecapNum * 7)
+    const dailyCompleted = marked.filter(s => typeof s.dayNum === 'number').length
+    const sessionsSinceLastRecap = dailyCompleted - (lastRecapNum * 7)
     const recapReady = sessionsSinceLastRecap >= 7
 
     return {
