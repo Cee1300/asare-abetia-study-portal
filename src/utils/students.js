@@ -84,6 +84,11 @@ export const TIMETABLE = {
     { day: 3,  date: '2026-05-22', subject: 'Mathematics', topic: 'Addition & Subtraction', standard: 'B3.1.2.1' },
     { day: 4,  date: '2026-05-23', subject: 'English',     topic: 'Stories, Songs & Conversation', standard: 'B3.1.1.1' },
     { day: 5,  date: '2026-05-24', subject: 'Mathematics', topic: 'Multiplication Tables', standard: 'B3.1.3.1' },
+    { day: 6,  date: '2026-05-26', subject: 'Science',     topic: 'Materials & States of Matter', standard: 'B3.1.2.1' },
+    { day: 7,  date: '2026-05-27', subject: 'Mathematics', topic: 'Division: Sharing Equally', standard: 'B3.1.4.1' },
+    { day: 8,  date: '2026-05-28', subject: 'English',     topic: 'Phonics, Digraphs & Word Families', standard: 'B3.2.2.1' },
+    { day: 9,  date: '2026-05-29', subject: 'Mathematics', topic: 'Fractions: Halves, Quarters & Thirds', standard: 'B3.1.5.1' },
+    { day: 10, date: '2026-05-30', subject: 'Science',     topic: 'Earth Science: Sun, Seasons & Water', standard: 'B3.2.1.1' },
   ],
 }
 
