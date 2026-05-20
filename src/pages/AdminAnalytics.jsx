@@ -262,7 +262,7 @@ export default function AdminAnalytics() {
           <h3 className="text-slate-300 text-sm font-medium mb-3">Subject Performance</h3>
           <div className="space-y-3">
             {Object.entries(d.subjectStats || {}).map(([subject, stats]) => {
-              const colours = SUBJECT_COLOURS[subject]
+              const colours = SUBJECT_COLOURS[subject] || SUBJECT_COLOURS.Mathematics
               const isUp = stats.trend > 0
               const isDown = stats.trend < 0
               return (
@@ -334,7 +334,7 @@ export default function AdminAnalytics() {
               {['Mathematics', 'Science', 'English'].map(subject => {
                 const subjectWeak = (d.weakAreas || []).filter(w => w.subject === subject)
                 if (subjectWeak.length === 0) return null
-                const colours = SUBJECT_COLOURS[subject]
+                const colours = SUBJECT_COLOURS[subject] || SUBJECT_COLOURS.Mathematics
                 return (
                   <div key={subject} className="card overflow-hidden">
                     <div className={`px-4 py-2.5 flex items-center justify-between ${colours.bg}`}>

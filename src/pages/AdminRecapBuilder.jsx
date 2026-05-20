@@ -142,7 +142,7 @@ export default function AdminRecapBuilder() {
               {['Mathematics', 'Science', 'English'].map(subject => {
                 const subWeak = weakAreas.filter(w => w.subject === subject).slice(0, 3)
                 if (subWeak.length === 0) return null
-                const colours = SUBJECT_COLOURS[subject]
+                const colours = SUBJECT_COLOURS[subject] || SUBJECT_COLOURS.Mathematics
                 const SubIcon = SUBJECT_ICONS[subject] || BookOpen
                 return (
                   <div key={subject} className="card overflow-hidden">
