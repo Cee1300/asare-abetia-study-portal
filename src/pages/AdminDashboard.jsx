@@ -1,18 +1,18 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { collection, query, where, getDocs, doc, setDoc, serverTimestamp } from 'firebase/firestore'
+import { collection, query, where, getDocs, doc, updateDoc, setDoc, serverTimestamp } from 'firebase/firestore'
 import { db } from '../firebase'
 import { useAuth } from '../contexts/AuthContext'
-import { STUDENTS } from '../utils/students'
+import { STUDENTS, TIMETABLE } from '../utils/students'
 import {
-  BookOpen, FlaskConical, Pencil, ChevronRight,
-  LogOut, Bell, Clock, CheckCircle, AlertCircle, Zap
+  Users, BookOpen, FlaskConical, Pencil, ChevronRight,
+  LogOut, Bell, Settings, Clock, CheckCircle, AlertCircle, Zap
 } from 'lucide-react'
 
 const SUBJECT_ICONS = { Mathematics: BookOpen, Science: FlaskConical, English: Pencil }
 
 export default function AdminDashboard() {
-  const { logout } = useAuth()
+  const { profile, logout } = useAuth()
   const navigate = useNavigate()
   const [stats, setStats] = useState({})
   const [pendingSubmissions, setPendingSubmissions] = useState([])
@@ -42,6 +42,7 @@ export default function AdminDashboard() {
       pending.forEach(s => allSubmissions.push({ ...s, studentName: student.name, studentId: id }))
     }
 
+    // Load points
     for (const id of Object.keys(STUDENTS)) {
       const q = query(collection(db, 'points'), where('studentId', '==', id))
       const snap = await getDocs(q)
@@ -50,6 +51,7 @@ export default function AdminDashboard() {
       studentStats[id].points = pts
     }
 
+    // Load dad messages
     const msgSnap = await getDocs(collection(db, 'dadMessages'))
     const msgs = { jezreel: '', declyn: '', ivan: '' }
     msgSnap.forEach(d => {
@@ -74,7 +76,7 @@ export default function AdminDashboard() {
   }
 
   function getScoreColour(score) {
-    if (score >= 9) return 'text-amber-400'
+    if (score >= 9) return 'text-gold-400'
     if (score >= 7) return 'text-emerald-400'
     if (score >= 5) return 'text-amber-400'
     return 'text-red-400'
@@ -82,7 +84,7 @@ export default function AdminDashboard() {
 
   if (loading) return (
     <div className="min-h-screen flex items-center justify-center">
-      <div className="w-8 h-8 border-2 border-slate-600 border-t-amber-500 rounded-full animate-spin" />
+      <div className="w-8 h-8 border-2 border-navy-600 border-t-gold-500 rounded-full animate-spin" />
     </div>
   )
 
@@ -90,11 +92,11 @@ export default function AdminDashboard() {
     <div className="min-h-screen pb-16">
 
       {/* Header */}
-      <header className="sticky top-0 z-40 bg-slate-950/90 backdrop-blur-md border-b border-slate-800">
+      <header className="sticky top-0 z-40 bg-navy-950/90 backdrop-blur-md border-b border-navy-800">
         <div className="max-w-4xl mx-auto px-4 py-3 flex items-center justify-between">
           <div>
-            <h1 className="text-lg text-white font-semibold">Admin Panel</h1>
-            <p className="text-slate-400 text-xs">Asare-Abetia Study Portal</p>
+            <h1 className="font-display text-lg text-white">Admin Panel</h1>
+            <p className="text-navy-400 text-xs">Asare-Abetia Study Portal</p>
           </div>
           <div className="flex items-center gap-2">
             {pendingSubmissions.length > 0 && (
@@ -103,6 +105,9 @@ export default function AdminDashboard() {
                 <span className="text-amber-400 text-xs font-medium">{pendingSubmissions.length} pending</span>
               </div>
             )}
+            <button onClick={() => navigate("/admin/analytics")} className="btn-ghost p-2" title="Analytics">
+              <Zap size={16} className="text-amber-400" />
+            </button>
             <button onClick={logout} className="btn-ghost p-2">
               <LogOut size={16} />
             </button>
@@ -114,7 +119,7 @@ export default function AdminDashboard() {
 
         {/* Student cards */}
         <div>
-          <h2 className="text-slate-300 text-sm font-medium mb-3">Students</h2>
+          <h2 className="text-navy-300 text-sm font-medium mb-3">Students</h2>
           <div className="grid gap-4 sm:grid-cols-3">
             {Object.entries(STUDENTS).map(([id, student]) => {
               const st = stats[id] || {}
@@ -134,22 +139,22 @@ export default function AdminDashboard() {
                       </div>
                       <div>
                         <p className="text-white font-medium">{student.name}</p>
-                        <p className="text-slate-400 text-xs">{student.class}</p>
+                        <p className="text-navy-400 text-xs">{student.class}</p>
                       </div>
                     </div>
-                    <ChevronRight size={16} className="text-slate-500" />
+                    <ChevronRight size={16} className="text-navy-500" />
                   </div>
 
                   <div className="grid grid-cols-2 gap-2 mb-3">
-                    <div className="bg-slate-800 rounded-lg p-2.5 text-center">
+                    <div className="bg-navy-800 rounded-lg p-2.5 text-center">
                       <p className={`font-bold text-base ${getScoreColour(st.avgScore || 0)}`}>
                         {st.avgScore ? st.avgScore.toFixed(1) : '—'}
                       </p>
-                      <p className="text-slate-500 text-[10px]">Avg Score</p>
+                      <p className="text-navy-500 text-[10px]">Avg Score</p>
                     </div>
-                    <div className="bg-slate-800 rounded-lg p-2.5 text-center">
+                    <div className="bg-navy-800 rounded-lg p-2.5 text-center">
                       <p className="font-bold text-base text-blue-400">{st.points || 0}</p>
-                      <p className="text-slate-500 text-[10px]">Points</p>
+                      <p className="text-navy-500 text-[10px]">Points</p>
                     </div>
                   </div>
 
@@ -172,7 +177,7 @@ export default function AdminDashboard() {
         {/* Pending submissions */}
         {pendingSubmissions.length > 0 && (
           <div>
-            <h2 className="text-slate-300 text-sm font-medium mb-3 flex items-center gap-2">
+            <h2 className="text-navy-300 text-sm font-medium mb-3 flex items-center gap-2">
               <AlertCircle size={14} className="text-amber-400" />
               Pending Marking ({pendingSubmissions.length})
             </h2>
@@ -196,7 +201,7 @@ export default function AdminDashboard() {
                     </div>
                     <div className="flex-1 min-w-0">
                       <p className="text-white text-sm font-medium truncate">{sub.topic}</p>
-                      <p className="text-slate-400 text-xs">{sub.studentName} · Day {sub.dayNum} · {sub.subject}</p>
+                      <p className="text-navy-400 text-xs">{sub.studentName} · Day {sub.dayNum} · {sub.subject}</p>
                     </div>
                     <div className="flex items-center gap-2 text-amber-400 text-xs flex-shrink-0">
                       <Clock size={12} />
@@ -212,7 +217,7 @@ export default function AdminDashboard() {
 
         {/* Dad messages */}
         <div>
-          <h2 className="text-slate-300 text-sm font-medium mb-3">Daily Messages to Boys</h2>
+          <h2 className="text-navy-300 text-sm font-medium mb-3">Daily Messages to Boys</h2>
           <div className="space-y-3">
             {Object.entries(STUDENTS).map(([id, student]) => (
               <div key={id} className="card p-4">

@@ -8,6 +8,8 @@ import CorrectionsPage from './pages/CorrectionsPage'
 import AdminDashboard from './pages/AdminDashboard'
 import AdminStudentView from './pages/AdminStudentView'
 import AdminMarkWork from './pages/AdminMarkWork'
+import AdminAnalytics from './pages/AdminAnalytics'
+import AdminRecapBuilder from './pages/AdminRecapBuilder'
 import LoadingScreen from './components/LoadingScreen'
 
 function ProtectedRoute({ children, requireAdmin = false }) {
@@ -47,6 +49,8 @@ export default function App() {
           <Route path="/admin" element={<ProtectedRoute requireAdmin><AdminDashboard /></ProtectedRoute>} />
           <Route path="/admin/student/:studentId" element={<ProtectedRoute requireAdmin><AdminStudentView /></ProtectedRoute>} />
           <Route path="/admin/mark/:studentId/:dayNum" element={<ProtectedRoute requireAdmin><AdminMarkWork /></ProtectedRoute>} />
+          <Route path="/admin/analytics" element={<ProtectedRoute requireAdmin><AdminAnalytics /></ProtectedRoute>} />
+          <Route path="/admin/recap/:studentId/:recapNum" element={<ProtectedRoute requireAdmin><AdminRecapBuilder /></ProtectedRoute>} />
           <Route path="*" element={<RootRedirect />} />
         </Routes>
       </BrowserRouter>
