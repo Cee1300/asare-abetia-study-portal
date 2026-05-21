@@ -9,6 +9,9 @@ import { BookOpen, FlaskConical, Pencil, ChevronLeft, Send, Star, CheckCircle, C
 const SUBJECT_ICONS = { Mathematics: BookOpen, Science: FlaskConical, English: Pencil }
 
 export default function DayPackPage() {
+  // Helper to convert literal \n strings from Firestore into real newlines
+  const nl = (str) => str ? str.split('\\n').join('\n') : ''
+
   const { dayNum } = useParams()
   const { profile } = useAuth()
   const navigate = useNavigate()
@@ -247,12 +250,12 @@ export default function DayPackPage() {
                   <h3 className="text-white font-semibold text-base">{concept.heading}</h3>
                 </div>
                 <p className="text-slate-200 text-sm leading-relaxed whitespace-pre-line">
-                  {concept.body.replace(/\\n/g, '\n')}
+                  {nl(concept.body)}
                 </p>
                 {concept.note && (
                   <div className="mt-4 flex items-start gap-2 bg-amber-500/5 border border-amber-500/20 rounded-xl px-3 py-2.5">
                     <span className="text-amber-400 text-sm mt-0.5">📌</span>
-                    <p className="text-amber-200/80 text-xs leading-relaxed">{concept.note}</p>
+                    <p className="text-amber-200/80 text-xs leading-relaxed whitespace-pre-line">{nl(concept.note)}</p>
                   </div>
                 )}
               </div>
@@ -265,11 +268,11 @@ export default function DayPackPage() {
                   <span className={`text-xs font-semibold ${colours.text}`}>Example {i+1}</span>
                 </div>
                 <div className="p-4 border-b border-slate-800">
-                  <p className="text-white text-sm font-medium leading-relaxed whitespace-pre-line">{ex.q.replace(/\\n/g, '\n')}</p>
+                  <p className="text-white text-sm font-medium leading-relaxed whitespace-pre-line">{nl(ex.q)}</p>
                 </div>
                 <div className="p-4 bg-emerald-500/5">
                   <p className="text-emerald-400 text-xs font-semibold mb-1.5">Answer</p>
-                  <p className="text-emerald-200/90 text-sm leading-relaxed whitespace-pre-line">{ex.a.replace(/\\n/g, '\n')}</p>
+                  <p className="text-emerald-200/90 text-sm leading-relaxed whitespace-pre-line">{nl(ex.a)}</p>
                 </div>
               </div>
             ))}
