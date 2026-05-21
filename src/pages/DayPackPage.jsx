@@ -246,13 +246,9 @@ export default function DayPackPage() {
                   <div className="w-1.5 h-5 rounded-full" style={{ background: colours.hex }} />
                   <h3 className="text-white font-semibold text-base">{concept.heading}</h3>
                 </div>
-                <div className="space-y-2">
-                  {concept.body.split('\n').map((line, j) => (
-                    line.trim()
-                      ? <p key={j} className="text-slate-200 text-sm leading-relaxed">{line}</p>
-                      : <div key={j} className="h-2" />
-                  ))}
-                </div>
+                <p className="text-slate-200 text-sm leading-relaxed whitespace-pre-line">
+                  {concept.body.replace(/\\n/g, '\n')}
+                </p>
                 {concept.note && (
                   <div className="mt-4 flex items-start gap-2 bg-amber-500/5 border border-amber-500/20 rounded-xl px-3 py-2.5">
                     <span className="text-amber-400 text-sm mt-0.5">📌</span>
@@ -269,11 +265,11 @@ export default function DayPackPage() {
                   <span className={`text-xs font-semibold ${colours.text}`}>Example {i+1}</span>
                 </div>
                 <div className="p-4 border-b border-slate-800">
-                  <p className="text-white text-sm font-medium leading-relaxed whitespace-pre-line">{ex.q}</p>
+                  <p className="text-white text-sm font-medium leading-relaxed whitespace-pre-line">{ex.q.replace(/\\n/g, '\n')}</p>
                 </div>
                 <div className="p-4 bg-emerald-500/5">
                   <p className="text-emerald-400 text-xs font-semibold mb-1.5">Answer</p>
-                  <p className="text-emerald-200/90 text-sm leading-relaxed whitespace-pre-line">{ex.a}</p>
+                  <p className="text-emerald-200/90 text-sm leading-relaxed whitespace-pre-line">{ex.a.replace(/\\n/g, '\n')}</p>
                 </div>
               </div>
             ))}
