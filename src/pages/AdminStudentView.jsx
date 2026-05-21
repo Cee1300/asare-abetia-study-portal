@@ -30,7 +30,7 @@ export default function AdminStudentView() {
   }, [studentId])
 
   function getScoreColour(score) {
-    if (score >= 9) return 'text-amber-400'
+    if (score >= 9) return 'text-gold-400'
     if (score >= 7) return 'text-emerald-400'
     if (score >= 5) return 'text-amber-400'
     return 'text-red-400'
@@ -43,13 +43,13 @@ export default function AdminStudentView() {
 
   if (loading) return (
     <div className="min-h-screen flex items-center justify-center">
-      <div className="w-8 h-8 border-2 border-slate-600 border-t-amber-500 rounded-full animate-spin" />
+      <div className="w-8 h-8 border-2 border-navy-600 border-t-gold-500 rounded-full animate-spin" />
     </div>
   )
 
   return (
     <div className="min-h-screen pb-16">
-      <header className="sticky top-0 z-40 bg-slate-950/90 backdrop-blur-md border-b border-slate-800">
+      <header className="sticky top-0 z-40 bg-navy-950/90 backdrop-blur-md border-b border-slate-800">
         <div className="max-w-2xl mx-auto px-4 py-3 flex items-center gap-3">
           <button onClick={() => navigate('/admin')} className="btn-ghost p-2 -ml-2">
             <ChevronLeft size={20} />
@@ -62,7 +62,7 @@ export default function AdminStudentView() {
           </div>
           <div>
             <p className="text-white font-medium">{student?.name}</p>
-            <p className="text-slate-400 text-xs">{student?.class} · {student?.level}</p>
+            <p className="text-navy-400 text-xs">{student?.class} · {student?.level}</p>
           </div>
         </div>
       </header>
@@ -78,7 +78,7 @@ export default function AdminStudentView() {
           ].map(({ label, value }) => (
             <div key={label} className="card p-4 text-center">
               <p className="text-white font-bold text-xl">{value}</p>
-              <p className="text-slate-400 text-xs mt-0.5">{label}</p>
+              <p className="text-navy-400 text-xs mt-0.5">{label}</p>
             </div>
           ))}
         </div>
@@ -86,7 +86,7 @@ export default function AdminStudentView() {
         {/* Score chart */}
         {marked.length > 0 && (
           <div className="card p-4">
-            <p className="text-slate-300 text-xs font-medium mb-3">Score History</p>
+            <p className="text-navy-300 text-xs font-medium mb-3">Score History</p>
             <div className="flex items-end gap-1.5 h-16">
               {timetable.map(day => {
                 const sub = submissions[day.day]
@@ -104,7 +104,7 @@ export default function AdminStudentView() {
                         opacity: score !== undefined ? 1 : 0.2,
                       }}
                     />
-                    <span className="text-[9px] text-slate-600">{day.day}</span>
+                    <span className="text-[9px] text-navy-600">{day.day}</span>
                   </div>
                 )
               })}
@@ -126,11 +126,8 @@ export default function AdminStudentView() {
                 key={day.day}
                 onClick={() => isPending ? navigate(`/admin/mark/${studentId}/${day.day}`) : undefined}
                 className={`flex items-center gap-4 px-4 py-3 rounded-xl border transition-all
-                  ${isPending
-                    ? 'border-amber-500/30 bg-amber-500/5 cursor-pointer hover:border-amber-500/50'
-                    : isMarked
-                    ? 'border-slate-800 bg-slate-900'
-                    : 'border-slate-800/50 bg-slate-900/30 opacity-50'}`}
+                  ${isPending ? 'border-amber-500/30 bg-amber-500/5 cursor-pointer hover:border-amber-500/50' :
+                    isMarked ? 'border-slate-800 bg-slate-900' : 'border-slate-800/50 bg-slate-900/30 opacity-50'}`}
               >
                 <span className="text-slate-500 text-xs font-mono w-5">{day.day}</span>
 
@@ -140,7 +137,11 @@ export default function AdminStudentView() {
 
                 <div className="flex-1 min-w-0">
                   <p className="text-white text-sm truncate">{day.topic}</p>
-                  <p className="text-slate-500 text-xs">{format(parseISO(day.date), 'EEE, MMM d')}</p>
+                  <p className="text-slate-500 text-xs">
+                    {sub?.submittedAt
+                      ? `Submitted ${format(new Date(sub.submittedAt.seconds * 1000), 'EEE, MMM d')}`
+                      : format(parseISO(day.date), 'EEE, MMM d')}
+                  </p>
                 </div>
 
                 <div className="flex-shrink-0">
