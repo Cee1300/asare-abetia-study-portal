@@ -5,7 +5,7 @@ import { db } from '../firebase'
 import { useAuth } from '../contexts/AuthContext'
 import { TIMETABLE, SUBJECT_COLOURS, STUDENTS } from '../utils/students'
 import { BADGES, getTitle, getAvatar, checkNewBadges } from '../utils/rewards'
-import { format, parseISO, isToday, isPast, differenceInCalendarDays } from 'date-fns'
+import { format, parseISO, differenceInCalendarDays } from 'date-fns'
 import {
   BookOpen, FlaskConical, Pencil, Star,
   ChevronRight, Lock, CheckCircle, Clock, Zap, LogOut, Trophy
@@ -89,12 +89,13 @@ export default function StudentDashboard() {
   }
 
   function getPackStatus(day) {
-    const packDate = parseISO(day.date)
     const sub = submissions[day.day]
     if (sub?.score !== undefined) return 'marked'
     if (sub) return 'submitted'
-    if (isToday(packDate)) return 'today'
-    if (isPast(packDate)) return 'overdue'
+    // Sequential unlock: day 1 always available, subsequent days unlock when previous is submitted
+    if (day.day === 1) return 'available'
+    const prevSub = submissions[day.day - 1]
+    if (prevSub) return 'available'
     return 'upcoming'
   }
 
@@ -225,7 +226,7 @@ export default function StudentDashboard() {
           </div>
         )}
 
-        {timetable.filter(d => getPackStatus(d) === 'today').map(day => {
+        {timetable.filter(d => getPackStatus(d) === 'available' && !submissions[d.day]).map(day => {
           const SubjectIcon = SUBJECT_ICONS[day.subject] || BookOpen
           const colours = SUBJECT_COLOURS[day.subject]
           return (
@@ -285,8 +286,8 @@ export default function StudentDashboard() {
                       </div>
                     )}
                     {status === 'submitted' && <span className="text-amber-400 text-xs flex items-center gap-1"><Clock size={13} /> Pending</span>}
-                    {status === 'today' && <span className="text-amber-400 text-xs font-medium flex items-center gap-1"><Star size={13} /> Today</span>}
-                    {status === 'overdue' && <span className="text-red-400 text-xs">Overdue</span>}
+                    {status === 'available' && <span className="text-amber-400 text-xs font-medium flex items-center gap-1"><Star size={13} /> Next</span>}
+                    
                     {status === 'upcoming' && <Lock size={14} className="text-slate-600" />}
                   </div>
                 </div>
