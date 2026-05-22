@@ -249,9 +249,9 @@ export default function DayPackPage() {
                   <div className="w-1.5 h-5 rounded-full" style={{ background: colours.hex }} />
                   <h3 className="text-white font-semibold text-base">{concept.heading}</h3>
                 </div>
-                <pre className="text-slate-200 text-sm leading-relaxed whitespace-pre-wrap break-words" style={{fontFamily:"DM Sans, sans-serif"}}>
-                  {concept.body}
-                </pre>
+                <div className="text-slate-200 text-sm leading-relaxed"
+                  dangerouslySetInnerHTML={{__html: concept.body.split('\n').map(line => line.trim() ? `<p style="margin:0 0 4px 0">${line}</p>` : '<div style="height:8px"></div>').join('')}}
+                />
                 {concept.note && (
                   <div className="mt-4 flex items-start gap-2 bg-amber-500/5 border border-amber-500/20 rounded-xl px-3 py-2.5">
                     <span className="text-amber-400 text-sm mt-0.5">📌</span>
@@ -268,11 +268,15 @@ export default function DayPackPage() {
                   <span className={`text-xs font-semibold ${colours.text}`}>Example {i+1}</span>
                 </div>
                 <div className="p-4 border-b border-slate-800">
-                  <pre className="text-white text-sm font-medium leading-relaxed whitespace-pre-wrap break-words" style={{fontFamily:"DM Sans, sans-serif"}}>{ex.q}</pre>
+                  <div className="text-white text-sm font-medium leading-relaxed"
+                    dangerouslySetInnerHTML={{__html: ex.q.split('\n').map(line => line.trim() ? `<p style="margin:0 0 4px 0">${line}</p>` : '<div style="height:8px"></div>').join('')}}
+                  />
                 </div>
                 <div className="p-4 bg-emerald-500/5">
                   <p className="text-emerald-400 text-xs font-semibold mb-1.5">Answer</p>
-                  <pre className="text-emerald-200/90 text-sm leading-relaxed whitespace-pre-wrap break-words" style={{fontFamily:"DM Sans, sans-serif"}}>{ex.a}</pre>
+                  <div className="text-emerald-200/90 text-sm leading-relaxed"
+                    dangerouslySetInnerHTML={{__html: ex.a.split('\n').map(line => line.trim() ? `<p style="margin:0 0 4px 0">${line}</p>` : '<div style="height:8px"></div>').join('')}}
+                  />
                 </div>
               </div>
             ))}
