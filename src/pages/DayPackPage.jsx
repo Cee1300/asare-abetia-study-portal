@@ -249,7 +249,7 @@ export default function DayPackPage() {
                   <div className="w-1.5 h-5 rounded-full" style={{ background: colours.hex }} />
                   <h3 className="text-white font-semibold text-base">{concept.heading}</h3>
                 </div>
-                <pre className="text-slate-200 text-sm leading-relaxed font-body whitespace-pre-wrap break-words">
+                <pre className="text-slate-200 text-sm leading-relaxed whitespace-pre-wrap break-words" style={{fontFamily:"DM Sans, sans-serif"}}>
                   {concept.body}
                 </pre>
                 {concept.note && (
@@ -268,11 +268,11 @@ export default function DayPackPage() {
                   <span className={`text-xs font-semibold ${colours.text}`}>Example {i+1}</span>
                 </div>
                 <div className="p-4 border-b border-slate-800">
-                  <pre className="text-white text-sm font-medium leading-relaxed font-sans whitespace-pre-wrap break-words">{ex.q}</pre>
+                  <pre className="text-white text-sm font-medium leading-relaxed whitespace-pre-wrap break-words" style={{fontFamily:"DM Sans, sans-serif"}}>{ex.q}</pre>
                 </div>
                 <div className="p-4 bg-emerald-500/5">
                   <p className="text-emerald-400 text-xs font-semibold mb-1.5">Answer</p>
-                  <pre className="text-emerald-200/90 text-sm leading-relaxed font-sans whitespace-pre-wrap break-words">{ex.a}</pre>
+                  <pre className="text-emerald-200/90 text-sm leading-relaxed whitespace-pre-wrap break-words" style={{fontFamily:"DM Sans, sans-serif"}}>{ex.a}</pre>
                 </div>
               </div>
             ))}
