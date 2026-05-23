@@ -89,7 +89,7 @@ export default function StudentDashboard() {
   }
 
   function getPackStatus(day) {
-    const sub = submissions[day.day]
+    const sub = submissions[day.day] || submissions[String(day.day)]
     if (sub?.score !== undefined) return 'marked'
     if (sub) return 'submitted'
     // Recap sessions: always available if isRecap

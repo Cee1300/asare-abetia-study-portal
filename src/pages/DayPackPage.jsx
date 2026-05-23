@@ -28,7 +28,7 @@ export default function DayPackPage() {
 
   const studentId = profile?.studentId
   const student = STUDENTS[studentId]
-  const dayData = TIMETABLE[studentId]?.find(d => d.day === Number(dayNum))
+  const dayData = TIMETABLE[studentId]?.find(d => String(d.day) === String(dayNum))
 
   useEffect(() => { loadPack() }, [dayNum, studentId])
 
