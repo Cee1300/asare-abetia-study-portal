@@ -172,7 +172,7 @@ export default function DayPackPage() {
     </div>
   )
 
-  const colours = SUBJECT_COLOURS[dayData.subject] || SUBJECT_COLOURS.Mathematics
+  const colours = SUBJECT_COLOURS[dayData?.subject] || SUBJECT_COLOURS.Mathematics
   const SubjectIcon = SUBJECT_ICONS[dayData.subject] || BookOpen
   const questions = pack?.questions || []
   const hasSubmitted = !!submission

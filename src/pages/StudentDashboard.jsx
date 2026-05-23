@@ -230,7 +230,7 @@ export default function StudentDashboard() {
 
         {timetable.filter(d => getPackStatus(d) === 'available' && !submissions[d.day]).map(day => {
           const SubjectIcon = SUBJECT_ICONS[day.subject] || BookOpen
-          const colours = SUBJECT_COLOURS[day.subject]
+          const colours = SUBJECT_COLOURS[day.subject] || SUBJECT_COLOURS.Mathematics
           return (
             <div key={day.day} onClick={() => navigate(`/pack/${day.day}`)}
               className="card-hover cursor-pointer p-5 border-2 animate-fade-up delay-200"
@@ -263,7 +263,7 @@ export default function StudentDashboard() {
               const status = getPackStatus(day)
               const sub = submissions[day.day]
               const SubjectIcon = SUBJECT_ICONS[day.subject] || BookOpen
-              const colours = SUBJECT_COLOURS[day.subject]
+              const colours = SUBJECT_COLOURS[day.subject] || SUBJECT_COLOURS.Mathematics
               const isLocked = status === 'upcoming'
               return (
                 <div key={day.day} onClick={() => !isLocked && navigate(`/pack/${day.day}`)}
