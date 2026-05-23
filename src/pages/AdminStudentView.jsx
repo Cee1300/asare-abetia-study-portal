@@ -92,7 +92,7 @@ export default function AdminStudentView() {
                 const sub = submissions[day.day]
                 const score = sub?.score
                 const height = score !== undefined ? (score / 10) * 100 : 0
-                const colours = SUBJECT_COLOURS[day.subject]
+                const colours = SUBJECT_COLOURS[day.subject] || SUBJECT_COLOURS.Mathematics
                 return (
                   <div key={day.day} className="flex-1 flex flex-col items-center gap-1">
                     <div
@@ -119,14 +119,15 @@ export default function AdminStudentView() {
             const isMarked = sub?.score !== undefined
             const isPending = sub && !isMarked
             const SubIcon = SUBJECT_ICONS[day.subject] || BookOpen
-            const colours = SUBJECT_COLOURS[day.subject]
+            const colours = SUBJECT_COLOURS[day.subject] || SUBJECT_COLOURS.Mathematics
 
             return (
               <div
                 key={day.day}
-                onClick={() => isPending ? navigate(`/admin/mark/${studentId}/${day.day}`) : undefined}
+onClick={() => (isPending || sub?.correctionsSubmitted) ? navigate(`/admin/mark/${studentId}/${day.day}`) : undefined}
                 className={`flex items-center gap-4 px-4 py-3 rounded-xl border transition-all
                   ${isPending ? 'border-amber-500/30 bg-amber-500/5 cursor-pointer hover:border-amber-500/50' :
+                    isMarked && sub?.correctionsSubmitted ? 'border-emerald-500/30 bg-emerald-500/5 cursor-pointer hover:border-emerald-500/50' :
                     isMarked ? 'border-slate-800 bg-slate-900' : 'border-slate-800/50 bg-slate-900/30 opacity-50'}`}
               >
                 <span className="text-slate-500 text-xs font-mono w-5">{day.day}</span>
@@ -146,9 +147,14 @@ export default function AdminStudentView() {
 
                 <div className="flex-shrink-0">
                   {isMarked && (
-                    <span className={`font-bold text-sm font-mono ${getScoreColour(sub.score)}`}>
-                      {sub.score}/10
-                    </span>
+                    <div className="flex items-center gap-2">
+                      <span className={`font-bold text-sm font-mono ${getScoreColour(sub.score)}`}>
+                        {sub.score}/10
+                      </span>
+                      {sub.correctionsSubmitted && (
+                        <span className="text-emerald-400 text-xs font-medium">✏️ Review</span>
+                      )}
+                    </div>
                   )}
                   {isPending && (
                     <span className="text-amber-400 text-xs flex items-center gap-1 font-medium">
