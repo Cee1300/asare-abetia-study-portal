@@ -155,6 +155,9 @@ export default function AdminStudentView() {
                       Mark <ChevronRight size={14} />
                     </span>
                   )}
+                  {isMarked && sub.correctionsSubmitted && (
+                    <span className="text-emerald-400 text-[10px] ml-1">✏️</span>
+                  )}
                   {!sub && <Lock size={13} className="text-slate-700" />}
                 </div>
               </div>

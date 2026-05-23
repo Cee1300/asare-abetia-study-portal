@@ -172,6 +172,40 @@ export default function AdminMarkWork() {
           </div>
         )}
 
+        {/* Corrections viewer */}
+        {submission?.correctionsSubmitted && submission?.corrections && (
+          <div className="card overflow-hidden">
+            <div className="px-4 py-3 bg-emerald-500/10 border-b border-slate-800 flex items-center gap-2">
+              <span className="text-emerald-400 text-sm">✅</span>
+              <p className="text-emerald-400 text-sm font-medium">Corrections Submitted by {student?.name}</p>
+            </div>
+            <div className="divide-y divide-slate-800">
+              {Object.entries(submission.corrections).map(([qIdx, correction]) => {
+                const ma = submission.markedAnswers?.[qIdx]
+                return (
+                  <div key={qIdx} className="p-4 space-y-2">
+                    <p className="text-slate-400 text-xs font-medium">Q{Number(qIdx)+1} Correction</p>
+                    <div className="bg-red-500/5 border border-red-500/20 rounded-lg px-3 py-2">
+                      <p className="text-xs text-red-400 mb-0.5">Original answer</p>
+                      <p className="text-slate-300 text-sm">{submission.answers?.[qIdx] || '(blank)'}</p>
+                    </div>
+                    <div className="bg-emerald-500/5 border border-emerald-500/20 rounded-lg px-3 py-2">
+                      <p className="text-xs text-emerald-400 mb-0.5">Student correction</p>
+                      <p className="text-white text-sm">{correction}</p>
+                    </div>
+                    {ma?.correctAnswer && (
+                      <div className="bg-blue-500/5 border border-blue-500/20 rounded-lg px-3 py-2">
+                        <p className="text-xs text-blue-400 mb-0.5">Expected answer</p>
+                        <p className="text-slate-300 text-xs">{ma.correctAnswer}</p>
+                      </div>
+                    )}
+                  </div>
+                )
+              })}
+            </div>
+          </div>
+        )}
+
         {(!submission?.answers || Object.keys(submission.answers).length === 0) && (
           <div className="card p-4 border border-dashed border-slate-700">
             <p className="text-slate-300 text-sm font-medium mb-3 flex items-center gap-2">
