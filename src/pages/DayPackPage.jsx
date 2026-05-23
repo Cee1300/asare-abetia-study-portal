@@ -249,6 +249,26 @@ export default function DayPackPage() {
               </div>
             </div>
 
+            {dayData?.isRecap && pack?.concepts?.[0] && (
+              <div className="card p-5 border border-amber-500/20 bg-amber-500/5">
+                <div className="flex items-center gap-2 mb-3">
+                  <span className="text-2xl">🔧</span>
+                  <div>
+                    <p className="text-amber-400 font-semibold text-sm">{pack.concepts[0].heading}</p>
+                    <p className="text-slate-400 text-xs">Repair session — targeted questions only</p>
+                  </div>
+                </div>
+                {pack.concepts[0].body.split('\n').filter(Boolean).map((line, i) => (
+                  line.trim() ? <p key={i} className="text-slate-200 text-sm mb-2">{line}</p> : <div key={i} className="h-2" />
+                ))}
+                {pack.concepts[0].note && (
+                  <div className="mt-3 bg-amber-500/10 border border-amber-500/20 rounded-xl px-3 py-2">
+                    <p className="text-amber-300 text-xs">📌 {pack.concepts[0].note}</p>
+                  </div>
+                )}
+              </div>
+            )}
+
             {pack?.objectives && (
               <div className="card p-5">
                 <h3 className="text-slate-300 text-xs font-semibold uppercase tracking-wider mb-3">What You Will Learn Today</h3>
@@ -331,7 +351,7 @@ export default function DayPackPage() {
 
             {questions.map((q, i) => {
               const isChallenge = q.q?.includes('[Challenge]')
-              const qText = q.q?.replace('[Challenge] ', '') || ''
+              const qText = (q.q || '').replace('[Challenge] ', '').replace(/^\[(MATHS|SCIENCE|ENGLISH)\] Q\d+\.? ?/i, '')
               const answer = answers[i] || ''
               const markedAnswer = submission?.markedAnswers?.[i]
 
@@ -341,6 +361,7 @@ export default function DayPackPage() {
                     <div className="flex items-center gap-2">
                       <span className={`text-xs font-bold font-mono ${isChallenge ? 'text-amber-400' : colours.text}`}>Q{i+1}</span>
                       {isChallenge && <span className="text-amber-400 text-xs flex items-center gap-1"><Star size={11} /> Challenge</span>}
+                      {recapSubject && <span className="text-slate-400 text-xs bg-slate-800 px-2 py-0.5 rounded-full">{recapSubject}</span>}
                     </div>
                     {markedAnswer && (
                       <span className={`text-xs font-bold ${markedAnswer.correct ? 'text-emerald-400' : 'text-red-400'}`}>
