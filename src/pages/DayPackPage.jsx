@@ -5,6 +5,8 @@ import { db } from '../firebase'
 import { useAuth } from '../contexts/AuthContext'
 import { TIMETABLE, SUBJECT_COLOURS, STUDENTS, POINTS } from '../utils/students'
 import { BookOpen, FlaskConical, Pencil, ChevronLeft, Send, Star, CheckCircle, Clock, Zap } from 'lucide-react'
+import ReviewModal from '../components/ReviewModal'
+import AskQuestion from '../components/AskQuestion'
 
 const SUBJECT_ICONS = { Mathematics: BookOpen, Science: FlaskConical, English: Pencil }
 
@@ -20,6 +22,7 @@ export default function DayPackPage() {
   const [submission, setSubmission] = useState(null)
   const [submitting, setSubmitting] = useState(false)
   const [marking, setMarking] = useState(false)
+  const [showReview, setShowReview] = useState(false)
   const [loading, setLoading] = useState(true)
   const [activeTab, setActiveTab] = useState('learn')
 
@@ -31,7 +34,11 @@ export default function DayPackPage() {
 
   async function loadPack() {
     const packSnap = await getDoc(doc(db, 'packs', `${studentId}_day${dayNum}`))
-    if (packSnap.exists()) setPack(packSnap.data())
+    if (packSnap.exists()) {
+      const d = packSnap.data()
+      console.log('PACK CONCEPTS[1] BODY SAMPLE:', JSON.stringify(d.concepts?.[1]?.body?.substring(0, 80)))
+      setPack(d)
+    }
 
     const subSnap = await getDoc(doc(db, 'submissions', `${studentId}_day${dayNum}`))
     if (subSnap.exists()) {
@@ -43,7 +50,12 @@ export default function DayPackPage() {
     setLoading(false)
   }
 
+  function handleSubmitClick() {
+    setShowReview(true)
+  }
+
   async function submitAnswers() {
+    setShowReview(false)
     if (Object.keys(answers).length === 0) return
     setSubmitting(true)
     try {
@@ -169,6 +181,16 @@ export default function DayPackPage() {
   return (
     <div className="min-h-screen pb-20">
 
+      {/* Review modal */}
+      {showReview && (
+        <ReviewModal
+          onConfirm={submitAnswers}
+          onCancel={() => setShowReview(false)}
+          answeredCount={Object.keys(answers).length}
+          totalCount={questions.length}
+        />
+      )}
+
       {/* Marking overlay */}
       {marking && (
         <div className="fixed inset-0 z-50 flex items-center justify-center" style={{ background: 'rgba(0,0,0,0.75)' }}>
@@ -281,6 +303,14 @@ export default function DayPackPage() {
               </div>
             ))}
 
+            <AskQuestion
+              subject={dayData?.subject}
+              topic={dayData?.topic}
+              level={student?.level || 'B7'}
+              studentId={studentId}
+              conceptContext={pack?.concepts?.map(c => c.heading + ': ' + c.body).join('\n\n').substring(0, 500)}
+            />
+
             <button onClick={() => setActiveTab('practice')} className="btn-gold w-full">
               Start Practice Questions →
             </button>
@@ -358,7 +388,7 @@ export default function DayPackPage() {
             })}
 
             {!hasSubmitted && questions.length > 0 && (
-              <button onClick={submitAnswers} disabled={submitting || Object.keys(answers).length === 0}
+              <button onClick={handleSubmitClick} disabled={submitting || Object.keys(answers).length === 0}
                 className="btn-gold w-full flex items-center justify-center gap-2">
                 {submitting ? (
                   <><svg className="animate-spin h-4 w-4" viewBox="0 0 24 24" fill="none">
