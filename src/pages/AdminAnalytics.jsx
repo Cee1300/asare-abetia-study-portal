@@ -39,13 +39,14 @@ export default function AdminAnalytics() {
 
     // Per-subject analysis
     const bySubject = {}
-    for (const sub of marked) {
+    for (const sub of marked.filter(s => s.subject !== 'All' && typeof s.dayNum === 'number')) {
       if (!bySubject[sub.subject]) bySubject[sub.subject] = []
       bySubject[sub.subject].push(sub)
     }
 
     const subjectStats = {}
-    for (const [subject, subs] of Object.entries(bySubject)) {
+    const validSubjects = ['Mathematics', 'Science', 'English']
+    for (const [subject, subs] of Object.entries(bySubject).filter(([s]) => validSubjects.includes(s))) {
       const scores = subs.map(s => s.score)
       const avg = scores.reduce((a, b) => a + b, 0) / scores.length
       const trend = scores.length >= 2
@@ -333,7 +334,7 @@ export default function AdminAnalytics() {
             <div className="space-y-2">
               {/* Group by subject */}
               {['Mathematics', 'Science', 'English'].map(subject => {
-                const subjectWeak = (d.weakAreas || []).filter(w => w.subject === subject)
+                const subjectWeak = (d.weakAreas || []).filter(w => w.subject === subject && w.subject !== 'All')
                 if (subjectWeak.length === 0) return null
                 const colours = SUBJECT_COLOURS[subject] || SUBJECT_COLOURS.Mathematics
                 return (
