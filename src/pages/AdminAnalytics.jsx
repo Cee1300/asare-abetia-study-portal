@@ -35,7 +35,7 @@ export default function AdminAnalytics() {
 
   function analyseStudent(studentId, submissions) {
     const timetable = TIMETABLE[studentId] || []
-    const marked = Object.values(submissions).filter(s => s.score !== undefined)
+    const marked = Object.values(submissions).filter(s => s.score !== undefined && s.subject !== 'All' && typeof s.dayNum === 'number')
 
     // Per-subject analysis
     const bySubject = {}
