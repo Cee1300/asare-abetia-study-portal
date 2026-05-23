@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { AuthProvider, useAuth } from './contexts/AuthContext'
+import ErrorBoundary from './components/ErrorBoundary'
 import LoginPage from './pages/LoginPage'
 import StudentDashboard from './pages/StudentDashboard'
 import DayPackPage from './pages/DayPackPage'
@@ -42,15 +43,79 @@ export default function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/login" element={<LoginPage />} />
-          <Route path="/dashboard" element={<StudentRoute><StudentDashboard /></StudentRoute>} />
-          <Route path="/pack/:dayNum" element={<StudentRoute><DayPackPage /></StudentRoute>} />
-          <Route path="/rewards" element={<StudentRoute><RewardsPage /></StudentRoute>} />
-          <Route path="/corrections/:dayNum" element={<StudentRoute><CorrectionsPage /></StudentRoute>} />
-          <Route path="/admin" element={<ProtectedRoute requireAdmin><AdminDashboard /></ProtectedRoute>} />
-          <Route path="/admin/student/:studentId" element={<ProtectedRoute requireAdmin><AdminStudentView /></ProtectedRoute>} />
-          <Route path="/admin/mark/:studentId/:dayNum" element={<ProtectedRoute requireAdmin><AdminMarkWork /></ProtectedRoute>} />
-          <Route path="/admin/analytics" element={<ProtectedRoute requireAdmin><AdminAnalytics /></ProtectedRoute>} />
-          <Route path="/admin/recap/:studentId/:recapNum" element={<ProtectedRoute requireAdmin><AdminRecapBuilder /></ProtectedRoute>} />
+
+          <Route path="/dashboard" element={
+            <StudentRoute>
+              <ErrorBoundary>
+                <StudentDashboard />
+              </ErrorBoundary>
+            </StudentRoute>
+          } />
+
+          <Route path="/pack/:dayNum" element={
+            <StudentRoute>
+              <ErrorBoundary>
+                <DayPackPage />
+              </ErrorBoundary>
+            </StudentRoute>
+          } />
+
+          <Route path="/rewards" element={
+            <StudentRoute>
+              <ErrorBoundary>
+                <RewardsPage />
+              </ErrorBoundary>
+            </StudentRoute>
+          } />
+
+          <Route path="/corrections/:dayNum" element={
+            <StudentRoute>
+              <ErrorBoundary>
+                <CorrectionsPage />
+              </ErrorBoundary>
+            </StudentRoute>
+          } />
+
+          <Route path="/admin" element={
+            <ProtectedRoute requireAdmin>
+              <ErrorBoundary>
+                <AdminDashboard />
+              </ErrorBoundary>
+            </ProtectedRoute>
+          } />
+
+          <Route path="/admin/student/:studentId" element={
+            <ProtectedRoute requireAdmin>
+              <ErrorBoundary>
+                <AdminStudentView />
+              </ErrorBoundary>
+            </ProtectedRoute>
+          } />
+
+          <Route path="/admin/mark/:studentId/:dayNum" element={
+            <ProtectedRoute requireAdmin>
+              <ErrorBoundary>
+                <AdminMarkWork />
+              </ErrorBoundary>
+            </ProtectedRoute>
+          } />
+
+          <Route path="/admin/analytics" element={
+            <ProtectedRoute requireAdmin>
+              <ErrorBoundary>
+                <AdminAnalytics />
+              </ErrorBoundary>
+            </ProtectedRoute>
+          } />
+
+          <Route path="/admin/recap/:studentId/:recapNum" element={
+            <ProtectedRoute requireAdmin>
+              <ErrorBoundary>
+                <AdminRecapBuilder />
+              </ErrorBoundary>
+            </ProtectedRoute>
+          } />
+
           <Route path="*" element={<RootRedirect />} />
         </Routes>
       </BrowserRouter>

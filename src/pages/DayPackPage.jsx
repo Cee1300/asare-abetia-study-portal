@@ -10,10 +10,33 @@ import AskQuestion from '../components/AskQuestion'
 
 const SUBJECT_ICONS = { Mathematics: BookOpen, Science: FlaskConical, English: Pencil }
 
-export default function DayPackPage() {
-  // Helper to convert literal \n strings from Firestore into real newlines
-  const nl = (str) => str ? str.split('\\n').join('\n') : ''
+// Derive Firestore document ID from studentId + dayNum
+function packId(studentId, dayNum) {
+  const isRecap = String(dayNum).startsWith('recap')
+  return `${studentId}_${isRecap ? dayNum : 'day' + dayNum}`
+}
 
+// Normalise dayNum for storage — recaps stay as strings, daily sessions become numbers
+function normaliseDayNum(dayNum) {
+  return String(dayNum).startsWith('recap') ? dayNum : Number(dayNum)
+}
+
+// Render text with real line breaks — splits on \n and returns paragraphs
+function TextBlock({ text, className }) {
+  if (!text) return null
+  const lines = text.split('\n')
+  return (
+    <div className={className}>
+      {lines.map((line, i) =>
+        line.trim()
+          ? <p key={i} style={{ marginBottom: 4 }}>{line}</p>
+          : <div key={i} style={{ height: 8 }} />
+      )}
+    </div>
+  )
+}
+
+export default function DayPackPage() {
   const { dayNum } = useParams()
   const { profile } = useAuth()
   const navigate = useNavigate()
@@ -25,33 +48,37 @@ export default function DayPackPage() {
   const [showReview, setShowReview] = useState(false)
   const [loading, setLoading] = useState(true)
   const [activeTab, setActiveTab] = useState('learn')
+  const [loadError, setLoadError] = useState(null)
 
   const studentId = profile?.studentId
   const student = STUDENTS[studentId]
   const dayData = TIMETABLE[studentId]?.find(d => String(d.day) === String(dayNum))
 
-  useEffect(() => { loadPack() }, [dayNum, studentId])
+  useEffect(() => {
+    if (studentId && dayNum) loadPack()
+  }, [dayNum, studentId])
 
   async function loadPack() {
-    const packSnap = await getDoc(doc(db, 'packs', `${studentId}_${dayNum.startsWith('recap') ? dayNum : 'day' + dayNum}`))
-    if (packSnap.exists()) {
-      const d = packSnap.data()
-      console.log('PACK CONCEPTS[1] BODY SAMPLE:', JSON.stringify(d.concepts?.[1]?.body?.substring(0, 80)))
-      setPack(d)
+    try {
+      const id = packId(studentId, dayNum)
+      const [packSnap, subSnap] = await Promise.all([
+        getDoc(doc(db, 'packs', id)),
+        getDoc(doc(db, 'submissions', id)),
+      ])
+      if (packSnap.exists()) setPack(packSnap.data())
+      if (subSnap.exists()) {
+        const sub = subSnap.data()
+        setSubmission(sub)
+        setAnswers(sub.answers || {})
+        if (sub.score !== undefined) setActiveTab('results')
+        else setActiveTab('practice')
+      }
+    } catch (err) {
+      console.error('loadPack error:', err)
+      setLoadError('Could not load pack. Please go back and try again.')
+    } finally {
+      setLoading(false)
     }
-
-    const subSnap = await getDoc(doc(db, 'submissions', `${studentId}_${dayNum.startsWith('recap') ? dayNum : 'day' + dayNum}`))
-    if (subSnap.exists()) {
-      setSubmission(subSnap.data())
-      setAnswers(subSnap.data().answers || {})
-      if (subSnap.data().score !== undefined) setActiveTab('results')
-      else setActiveTab('practice')
-    }
-    setLoading(false)
-  }
-
-  function handleSubmitClick() {
-    setShowReview(true)
   }
 
   async function submitAnswers() {
@@ -59,31 +86,32 @@ export default function DayPackPage() {
     if (Object.keys(answers).length === 0) return
     setSubmitting(true)
     try {
+      const id = packId(studentId, dayNum)
       const subData = {
         studentId,
-        dayNum: dayNum.startsWith ? (dayNum.startsWith("recap") ? dayNum : Number(dayNum)) : Number(dayNum),
+        dayNum: normaliseDayNum(dayNum),
         subject: dayData?.subject,
         topic: dayData?.topic,
         answers,
         submittedAt: serverTimestamp(),
         status: 'submitted',
       }
-      await setDoc(doc(db, 'submissions', `${studentId}_${dayNum.startsWith('recap') ? dayNum : 'day' + dayNum}`), subData)
+      await setDoc(doc(db, 'submissions', id), subData)
       setSubmission(subData)
       setActiveTab('practice')
-
-      // Auto-mark via Claude API
       await autoMark(answers)
     } catch (err) {
-      console.error(err)
+      console.error('submitAnswers error:', err)
+    } finally {
+      setSubmitting(false)
     }
-    setSubmitting(false)
   }
 
   async function autoMark(submittedAnswers) {
     if (!pack?.questions?.length) return
     setMarking(true)
     try {
+      const id = packId(studentId, dayNum)
       const response = await fetch('/.netlify/functions/mark-answers', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -96,10 +124,9 @@ export default function DayPackPage() {
         }),
       })
 
-      if (!response.ok) throw new Error('Marking function failed')
+      if (!response.ok) throw new Error(`Marking returned ${response.status}`)
       const result = await response.json()
 
-      // Build markedAnswers map
       const markedAnswers = {}
       result.questions?.forEach(q => {
         markedAnswers[q.qNum - 1] = {
@@ -112,8 +139,7 @@ export default function DayPackPage() {
 
       const score = result.totalScore || 0
 
-      // Update submission with marks
-      await updateDoc(doc(db, 'submissions', `${studentId}_${dayNum.startsWith('recap') ? dayNum : 'day' + dayNum}`), {
+      await updateDoc(doc(db, 'submissions', id), {
         score,
         markedAnswers,
         dadFeedback: result.overallFeedback || '',
@@ -122,29 +148,26 @@ export default function DayPackPage() {
         autoMarked: true,
       })
 
-      // Award points
       let pts = POINTS.submitOnTime
       if (score >= 9) pts += POINTS.score9plus
       else if (score >= 7) pts += POINTS.score7plus
 
       await addDoc(collection(db, 'points'), {
         studentId,
-        dayNum: Number(dayNum),
+        dayNum: normaliseDayNum(dayNum),
         amount: pts,
         reason: `Day ${dayNum} auto-marked: ${score}/10`,
         createdAt: serverTimestamp(),
       })
 
-      // Reload submission to show results
-      const updatedSnap = await getDoc(doc(db, 'submissions', `${studentId}_day${dayNum}`))
+      const updatedSnap = await getDoc(doc(db, 'submissions', id))
       if (updatedSnap.exists()) {
         setSubmission(updatedSnap.data())
         setActiveTab('results')
       }
     } catch (err) {
-      console.error('Auto-marking failed:', err)
-      // Fall back gracefully — submission saved, show as pending for manual marking
-      setActiveTab('practice')
+      console.error('autoMark error:', err)
+      // Graceful fallback — submission saved, pending manual marking
     } finally {
       setMarking(false)
     }
@@ -157,31 +180,43 @@ export default function DayPackPage() {
     return 'text-red-400'
   }
 
+  // Loading state
   if (loading) return (
     <div className="min-h-screen flex items-center justify-center">
       <div className="w-8 h-8 border-2 border-slate-600 border-t-amber-500 rounded-full animate-spin" />
     </div>
   )
 
-  if (!dayData) return (
-    <div className="min-h-screen flex items-center justify-center">
-      <div className="text-center">
-        <p className="text-slate-400 mb-4">Pack not found</p>
-        <button onClick={() => navigate('/dashboard')} className="btn-ghost">← Back</button>
+  // Error state
+  if (loadError) return (
+    <div className="min-h-screen flex items-center justify-center p-4">
+      <div className="card p-6 max-w-sm w-full text-center">
+        <p className="text-red-400 mb-4">{loadError}</p>
+        <button onClick={() => navigate('/dashboard')} className="btn-ghost w-full">← Back to Dashboard</button>
       </div>
     </div>
   )
 
-  const colours = SUBJECT_COLOURS[dayData?.subject] || SUBJECT_COLOURS.Mathematics
+  // Day not found
+  if (!dayData) return (
+    <div className="min-h-screen flex items-center justify-center p-4">
+      <div className="card p-6 max-w-sm w-full text-center">
+        <p className="text-slate-400 mb-4">Session not found</p>
+        <button onClick={() => navigate('/dashboard')} className="btn-ghost w-full">← Back</button>
+      </div>
+    </div>
+  )
+
+  const colours = SUBJECT_COLOURS[dayData.subject] || SUBJECT_COLOURS.Mathematics
   const SubjectIcon = SUBJECT_ICONS[dayData.subject] || BookOpen
   const questions = pack?.questions || []
   const hasSubmitted = !!submission
   const isMarked = submission?.score !== undefined
+  const isRecap = !!dayData.isRecap
 
   return (
     <div className="min-h-screen pb-20">
 
-      {/* Review modal */}
       {showReview && (
         <ReviewModal
           onConfirm={submitAnswers}
@@ -191,7 +226,6 @@ export default function DayPackPage() {
         />
       )}
 
-      {/* Marking overlay */}
       {marking && (
         <div className="fixed inset-0 z-50 flex items-center justify-center" style={{ background: 'rgba(0,0,0,0.75)' }}>
           <div className="bg-slate-900 border border-slate-700 rounded-2xl p-8 text-center max-w-xs">
@@ -209,15 +243,15 @@ export default function DayPackPage() {
               <ChevronLeft size={20} />
             </button>
             <div className={`w-7 h-7 rounded-md flex items-center justify-center ${colours.bg}`}>
-              <SubjectIcon size={14} className={colours.text} />
+              {isRecap ? <span className="text-sm">🔧</span> : <SubjectIcon size={14} className={colours.text} />}
             </div>
             <div className="flex-1 min-w-0">
               <p className="text-white font-medium text-sm truncate">{dayData.topic}</p>
-              <p className="text-slate-400 text-xs">{dayData.subject} · Day {dayNum}</p>
+              <p className="text-slate-400 text-xs">{dayData.subject} · {isRecap ? 'Recap' : `Day ${dayNum}`}</p>
             </div>
             {isMarked && (
               <div className={`font-bold text-sm font-mono ${getScoreColour(submission.score)}`}>
-                {submission.score}/10
+                {submission.score}/{questions.length}
               </div>
             )}
           </div>
@@ -235,9 +269,11 @@ export default function DayPackPage() {
 
       <div className="max-w-2xl mx-auto px-4 pt-6">
 
-        {/* LEARN TAB */}
+        {/* ── LEARN TAB ─────────────────────────────────── */}
         {activeTab === 'learn' && (
           <div className="space-y-4 animate-fade-in">
+
+            {/* Timing banner */}
             <div className="card p-4">
               <div className="grid grid-cols-3 divide-x divide-slate-800 text-center">
                 {[['📖 Read', '10 min'], ['✏️ Solve', '35 min'], ['📸 Submit', '5 min']].map(([label, time]) => (
@@ -249,7 +285,8 @@ export default function DayPackPage() {
               </div>
             </div>
 
-            {dayData?.isRecap && pack?.concepts?.[0] && (
+            {/* RECAP: intro card */}
+            {isRecap && pack?.concepts?.[0] && (
               <div className="card p-5 border border-amber-500/20 bg-amber-500/5">
                 <div className="flex items-center gap-2 mb-3">
                   <span className="text-2xl">🔧</span>
@@ -258,9 +295,10 @@ export default function DayPackPage() {
                     <p className="text-slate-400 text-xs">Repair session — targeted questions only</p>
                   </div>
                 </div>
-                {pack.concepts[0].body.split('\n').filter(Boolean).map((line, i) => (
-                  line.trim() ? <p key={i} className="text-slate-200 text-sm mb-2">{line}</p> : <div key={i} className="h-2" />
-                ))}
+                <TextBlock
+                  text={pack.concepts[0].body}
+                  className="text-slate-200 text-sm leading-relaxed"
+                />
                 {pack.concepts[0].note && (
                   <div className="mt-3 bg-amber-500/10 border border-amber-500/20 rounded-xl px-3 py-2">
                     <p className="text-amber-300 text-xs">📌 {pack.concepts[0].note}</p>
@@ -269,7 +307,8 @@ export default function DayPackPage() {
               </div>
             )}
 
-            {dayData?.isRecap && questions.length > 0 && (
+            {/* RECAP: subject breakdown */}
+            {isRecap && questions.length > 0 && (
               <div className="card p-5">
                 <h3 className="text-slate-300 text-xs font-semibold uppercase tracking-wider mb-3">What This Session Covers</h3>
                 <div className="space-y-2">
@@ -282,8 +321,8 @@ export default function DayPackPage() {
                     if (!subjQs.length) return null
                     const c = SUBJECT_COLOURS[subj] || SUBJECT_COLOURS.Mathematics
                     return (
-                      <div key={subj} className={"flex items-center gap-3 px-3 py-2 rounded-xl " + c.bg}>
-                        <span className={"text-xs font-bold " + c.text}>{subj}</span>
+                      <div key={subj} className={`flex items-center gap-3 px-3 py-2 rounded-xl ${c.bg}`}>
+                        <span className={`text-xs font-bold ${c.text}`}>{subj}</span>
                         <span className="text-slate-400 text-xs">{subjQs.length} question{subjQs.length !== 1 ? 's' : ''}</span>
                       </div>
                     )
@@ -295,14 +334,15 @@ export default function DayPackPage() {
               </div>
             )}
 
-            {!dayData?.isRecap && pack?.objectives && (
+            {/* DAILY: objectives */}
+            {!isRecap && pack?.objectives && (
               <div className="card p-5">
                 <h3 className="text-slate-300 text-xs font-semibold uppercase tracking-wider mb-3">What You Will Learn Today</h3>
                 <div className="space-y-2">
                   {pack.objectives.map((obj, i) => (
                     <div key={i} className="flex items-start gap-2.5">
                       <div className={`w-5 h-5 rounded-md flex items-center justify-center flex-shrink-0 mt-0.5 ${colours.bg}`}>
-                        <span className={`text-[10px] font-bold ${colours.text}`}>{i+1}</span>
+                        <span className={`text-[10px] font-bold ${colours.text}`}>{i + 1}</span>
                       </div>
                       <p className="text-slate-200 text-sm leading-relaxed">{obj}</p>
                     </div>
@@ -311,44 +351,44 @@ export default function DayPackPage() {
               </div>
             )}
 
-            {!dayData?.isRecap && pack?.concepts?.map((concept, i) => (
+            {/* DAILY: concept cards */}
+            {!isRecap && pack?.concepts?.map((concept, i) => (
               <div key={i} className="card p-5">
                 <div className="flex items-center gap-2 mb-3">
                   <div className="w-1.5 h-5 rounded-full" style={{ background: colours.hex }} />
                   <h3 className="text-white font-semibold text-base">{concept.heading}</h3>
                 </div>
-                <div className="text-slate-200 text-sm leading-relaxed"
-                  dangerouslySetInnerHTML={{__html: concept.body.split('\n').map(line => line.trim() ? `<p style="margin:0 0 4px 0">${line}</p>` : '<div style="height:8px"></div>').join('')}}
+                <TextBlock
+                  text={concept.body}
+                  className="text-slate-200 text-sm leading-relaxed"
                 />
                 {concept.note && (
                   <div className="mt-4 flex items-start gap-2 bg-amber-500/5 border border-amber-500/20 rounded-xl px-3 py-2.5">
                     <span className="text-amber-400 text-sm mt-0.5">📌</span>
-                    <p className="text-amber-200/80 text-xs leading-relaxed whitespace-pre-line">{nl(concept.note)}</p>
+                    <TextBlock text={concept.note} className="text-amber-200/80 text-xs leading-relaxed" />
                   </div>
                 )}
               </div>
             ))}
 
-            {!dayData?.isRecap && pack?.worked?.map((ex, i) => (
+            {/* DAILY: worked examples */}
+            {!isRecap && pack?.worked?.map((ex, i) => (
               <div key={i} className="card overflow-hidden">
                 <div className="px-4 py-2.5 flex items-center gap-2" style={{ background: colours.hex + '20' }}>
                   <CheckCircle size={14} className={colours.text} />
-                  <span className={`text-xs font-semibold ${colours.text}`}>Example {i+1}</span>
+                  <span className={`text-xs font-semibold ${colours.text}`}>Example {i + 1}</span>
                 </div>
                 <div className="p-4 border-b border-slate-800">
-                  <div className="text-white text-sm font-medium leading-relaxed"
-                    dangerouslySetInnerHTML={{__html: ex.q.split('\n').map(line => line.trim() ? `<p style="margin:0 0 4px 0">${line}</p>` : '<div style="height:8px"></div>').join('')}}
-                  />
+                  <TextBlock text={ex.q} className="text-white text-sm font-medium leading-relaxed" />
                 </div>
                 <div className="p-4 bg-emerald-500/5">
                   <p className="text-emerald-400 text-xs font-semibold mb-1.5">Answer</p>
-                  <div className="text-emerald-200/90 text-sm leading-relaxed"
-                    dangerouslySetInnerHTML={{__html: ex.a.split('\n').map(line => line.trim() ? `<p style="margin:0 0 4px 0">${line}</p>` : '<div style="height:8px"></div>').join('')}}
-                  />
+                  <TextBlock text={ex.a} className="text-emerald-200/90 text-sm leading-relaxed" />
                 </div>
               </div>
             ))}
 
+            {/* AI Tutor */}
             <AskQuestion
               subject={dayData?.subject}
               topic={dayData?.topic}
@@ -363,9 +403,10 @@ export default function DayPackPage() {
           </div>
         )}
 
-        {/* PRACTICE TAB */}
+        {/* ── PRACTICE TAB ──────────────────────────────── */}
         {activeTab === 'practice' && (
           <div className="space-y-4 animate-fade-in">
+
             {hasSubmitted && !isMarked && (
               <div className="card p-4 border border-amber-500/20 bg-amber-500/5">
                 <div className="flex items-center gap-2 text-amber-400">
@@ -376,10 +417,14 @@ export default function DayPackPage() {
             )}
 
             {questions.map((q, i) => {
-              const isChallenge = q.q?.includes('[Challenge]')
+              const isChallenge = (q.q || '').includes('[Challenge]')
               const subjectMatch = (q.q || '').match(/^\[(MATHS|SCIENCE|ENGLISH)\]/i)
-              const recapSubject = subjectMatch ? subjectMatch[1].charAt(0) + subjectMatch[1].slice(1).toLowerCase() : null
-              const qText = (q.q || '').replace('[Challenge] ', '').replace(/^\[(MATHS|SCIENCE|ENGLISH)\] Q\d+\.? ?/i, '')
+              const recapSubject = subjectMatch
+                ? subjectMatch[1].charAt(0) + subjectMatch[1].slice(1).toLowerCase()
+                : null
+              const qText = (q.q || '')
+                .replace('[Challenge] ', '')
+                .replace(/^\[(MATHS|SCIENCE|ENGLISH)\] Q\d+\.? ?/i, '')
               const answer = answers[i] || ''
               const markedAnswer = submission?.markedAnswers?.[i]
 
@@ -387,7 +432,7 @@ export default function DayPackPage() {
                 <div key={i} className="card overflow-hidden">
                   <div className={`px-4 py-2.5 flex items-center justify-between ${isChallenge ? 'bg-amber-500/10' : 'bg-slate-800/50'}`}>
                     <div className="flex items-center gap-2">
-                      <span className={`text-xs font-bold font-mono ${isChallenge ? 'text-amber-400' : colours.text}`}>Q{i+1}</span>
+                      <span className={`text-xs font-bold font-mono ${isChallenge ? 'text-amber-400' : colours.text}`}>Q{i + 1}</span>
                       {isChallenge && <span className="text-amber-400 text-xs flex items-center gap-1"><Star size={11} /> Challenge</span>}
                       {recapSubject && <span className="text-slate-400 text-xs bg-slate-800 px-2 py-0.5 rounded-full">{recapSubject}</span>}
                     </div>
@@ -399,17 +444,18 @@ export default function DayPackPage() {
                   </div>
 
                   <div className="p-4">
-                    <p className="text-white text-sm leading-relaxed whitespace-pre-line mb-3">{qText}</p>
+                    <TextBlock text={qText} className="text-white text-sm leading-relaxed mb-3" />
+
                     {markedAnswer ? (
                       <div className="space-y-2">
                         <div className={`rounded-xl p-3 ${markedAnswer.correct ? 'bg-emerald-500/10 border border-emerald-500/20' : 'bg-red-500/10 border border-red-500/20'}`}>
                           <p className="text-xs text-slate-400 mb-1">Your answer</p>
                           <p className="text-white text-sm">{answers[i] || '(no answer)'}</p>
                         </div>
-                        {!markedAnswer.correct && (
+                        {!markedAnswer.correct && markedAnswer.correctAnswer && (
                           <div className="bg-emerald-500/5 border border-emerald-500/20 rounded-xl p-3">
                             <p className="text-xs text-emerald-400 mb-1">Correct answer</p>
-                            <p className="text-emerald-200/90 text-sm whitespace-pre-line">{markedAnswer.correctAnswer}</p>
+                            <TextBlock text={markedAnswer.correctAnswer} className="text-emerald-200/90 text-sm" />
                           </div>
                         )}
                         {markedAnswer.feedback && (
@@ -437,12 +483,15 @@ export default function DayPackPage() {
             })}
 
             {!hasSubmitted && questions.length > 0 && (
-              <button onClick={handleSubmitClick} disabled={submitting || Object.keys(answers).length === 0}
-                className="btn-gold w-full flex items-center justify-center gap-2">
+              <button
+                onClick={() => setShowReview(true)}
+                disabled={submitting || Object.keys(answers).length === 0}
+                className="btn-gold w-full flex items-center justify-center gap-2"
+              >
                 {submitting ? (
                   <><svg className="animate-spin h-4 w-4" viewBox="0 0 24 24" fill="none">
-                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/>
-                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/>
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
                   </svg>Submitting...</>
                 ) : <><Send size={16} /> Submit to Dad</>}
               </button>
@@ -456,20 +505,20 @@ export default function DayPackPage() {
           </div>
         )}
 
-        {/* RESULTS TAB */}
+        {/* ── RESULTS TAB ───────────────────────────────── */}
         {activeTab === 'results' && isMarked && (
           <div className="space-y-4 animate-fade-in">
             <div className="card p-6 text-center">
               <p className="text-slate-400 text-sm mb-2">Your Score</p>
               <div className={`text-6xl font-bold mb-2 ${getScoreColour(submission.score)}`}>
                 {submission.score}
-                <span className="text-slate-500 text-3xl">/10</span>
+                <span className="text-slate-500 text-3xl">/{questions.length}</span>
               </div>
               <p className={`text-lg font-medium ${getScoreColour(submission.score)}`}>
-                {submission.score >= 9 ? '🌟 Outstanding!' :
-                 submission.score >= 8 ? '🎉 Excellent!' :
-                 submission.score >= 7 ? '💪 Good work!' :
-                 submission.score >= 5 ? '📚 Keep going!' :
+                {submission.score >= questions.length * 0.9 ? '🌟 Outstanding!' :
+                 submission.score >= questions.length * 0.8 ? '🎉 Excellent!' :
+                 submission.score >= questions.length * 0.7 ? '💪 Good work!' :
+                 submission.score >= questions.length * 0.5 ? '📚 Keep going!' :
                  '🔄 Review corrections below'}
               </p>
               {submission.autoMarked && (
@@ -477,12 +526,13 @@ export default function DayPackPage() {
               )}
             </div>
 
-            {/* Points earned */}
             <div className="card p-4 border border-amber-500/20 bg-amber-500/5">
               <div className="flex items-center gap-2">
                 <Zap size={16} className="text-amber-400" />
                 <p className="text-amber-400 font-medium text-sm">
-                  +{submission.score >= 9 ? POINTS.score9plus + POINTS.submitOnTime : submission.score >= 7 ? POINTS.score7plus + POINTS.submitOnTime : POINTS.submitOnTime} points earned
+                  +{submission.score >= 9 ? POINTS.score9plus + POINTS.submitOnTime :
+                     submission.score >= 7 ? POINTS.score7plus + POINTS.submitOnTime :
+                     POINTS.submitOnTime} points earned
                 </p>
               </div>
             </div>
@@ -492,7 +542,7 @@ export default function DayPackPage() {
                 <div className="flex items-center gap-2 mb-3">
                   <div className="w-8 h-8 rounded-full overflow-hidden bg-slate-700">
                     <img src="/dad.jpg" alt="Dad" className="w-full h-full object-cover"
-                      onError={e => e.target.style.display='none'} />
+                      onError={e => { e.target.style.display = 'none' }} />
                   </div>
                   <p className="text-slate-300 text-sm font-medium">Dad's feedback</p>
                 </div>
@@ -507,7 +557,7 @@ export default function DayPackPage() {
               return (
                 <div key={i} className={`card p-4 border ${markedAnswer.correct ? 'border-emerald-500/20' : 'border-red-500/20'}`}>
                   <div className="flex items-center justify-between mb-2">
-                    <span className="text-sm font-medium text-white">Q{i+1}</span>
+                    <span className="text-sm font-medium text-white">Q{i + 1}</span>
                     <span className={`text-sm font-bold ${markedAnswer.correct ? 'text-emerald-400' : 'text-red-400'}`}>
                       {markedAnswer.correct ? '✅' : '❌'} {markedAnswer.marks}mk
                     </span>
@@ -515,7 +565,7 @@ export default function DayPackPage() {
                   {!markedAnswer.correct && markedAnswer.correctAnswer && (
                     <div className="mt-2 bg-emerald-500/5 rounded-lg p-3">
                       <p className="text-emerald-400 text-xs mb-1">Correct answer</p>
-                      <p className="text-emerald-200/90 text-xs whitespace-pre-line">{markedAnswer.correctAnswer}</p>
+                      <TextBlock text={markedAnswer.correctAnswer} className="text-emerald-200/90 text-xs" />
                     </div>
                   )}
                   {markedAnswer.feedback && (
@@ -525,16 +575,16 @@ export default function DayPackPage() {
               )
             })}
 
-            {/* Corrections button — show if any wrong answers */}
             {questions.some((q, i) => submission?.markedAnswers?.[i] && !submission.markedAnswers[i].correct) &&
-             !submission?.correctionsSubmitted && (
-              <button
-                onClick={() => navigate(`/corrections/${dayNum}`)}
-                className="btn-gold w-full flex items-center justify-center gap-2"
-              >
-                ✏️ Submit Corrections (+{POINTS.correctionsSubmit} pts)
-              </button>
-            )}
+              !submission?.correctionsSubmitted && (
+                <button
+                  onClick={() => navigate(`/corrections/${dayNum}`)}
+                  className="btn-gold w-full flex items-center justify-center gap-2"
+                >
+                  ✏️ Submit Corrections (+{POINTS.correctionsSubmit} pts)
+                </button>
+              )}
+
             {submission?.correctionsSubmitted && (
               <div className="card p-3 border border-emerald-500/20 bg-emerald-500/5 text-center">
                 <p className="text-emerald-400 text-sm">✅ Corrections submitted — well done!</p>
