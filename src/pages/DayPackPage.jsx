@@ -33,14 +33,14 @@ export default function DayPackPage() {
   useEffect(() => { loadPack() }, [dayNum, studentId])
 
   async function loadPack() {
-    const packSnap = await getDoc(doc(db, 'packs', `${studentId}_day${dayNum}`))
+    const packSnap = await getDoc(doc(db, 'packs', `${studentId}_${dayNum.startsWith('recap') ? dayNum : 'day' + dayNum}`))
     if (packSnap.exists()) {
       const d = packSnap.data()
       console.log('PACK CONCEPTS[1] BODY SAMPLE:', JSON.stringify(d.concepts?.[1]?.body?.substring(0, 80)))
       setPack(d)
     }
 
-    const subSnap = await getDoc(doc(db, 'submissions', `${studentId}_day${dayNum}`))
+    const subSnap = await getDoc(doc(db, 'submissions', `${studentId}_${dayNum.startsWith('recap') ? dayNum : 'day' + dayNum}`))
     if (subSnap.exists()) {
       setSubmission(subSnap.data())
       setAnswers(subSnap.data().answers || {})
@@ -61,14 +61,14 @@ export default function DayPackPage() {
     try {
       const subData = {
         studentId,
-        dayNum: Number(dayNum),
+        dayNum: dayNum.startsWith ? (dayNum.startsWith("recap") ? dayNum : Number(dayNum)) : Number(dayNum),
         subject: dayData?.subject,
         topic: dayData?.topic,
         answers,
         submittedAt: serverTimestamp(),
         status: 'submitted',
       }
-      await setDoc(doc(db, 'submissions', `${studentId}_day${dayNum}`), subData)
+      await setDoc(doc(db, 'submissions', `${studentId}_${dayNum.startsWith('recap') ? dayNum : 'day' + dayNum}`), subData)
       setSubmission(subData)
       setActiveTab('practice')
 
@@ -113,7 +113,7 @@ export default function DayPackPage() {
       const score = result.totalScore || 0
 
       // Update submission with marks
-      await updateDoc(doc(db, 'submissions', `${studentId}_day${dayNum}`), {
+      await updateDoc(doc(db, 'submissions', `${studentId}_${dayNum.startsWith('recap') ? dayNum : 'day' + dayNum}`), {
         score,
         markedAnswers,
         dadFeedback: result.overallFeedback || '',

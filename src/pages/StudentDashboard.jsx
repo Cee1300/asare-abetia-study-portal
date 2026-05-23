@@ -92,6 +92,8 @@ export default function StudentDashboard() {
     const sub = submissions[day.day]
     if (sub?.score !== undefined) return 'marked'
     if (sub) return 'submitted'
+    // Recap sessions: always available if isRecap
+    if (day.isRecap) return 'available'
     // Sequential unlock: day 1 always available, subsequent days unlock when previous is submitted
     if (day.day === 1) return 'available'
     const prevSub = submissions[day.day - 1]
