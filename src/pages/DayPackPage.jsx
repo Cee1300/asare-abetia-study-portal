@@ -351,6 +351,8 @@ export default function DayPackPage() {
 
             {questions.map((q, i) => {
               const isChallenge = q.q?.includes('[Challenge]')
+              const subjectMatch = (q.q || '').match(/^\[(MATHS|SCIENCE|ENGLISH)\]/i)
+              const recapSubject = subjectMatch ? subjectMatch[1].charAt(0) + subjectMatch[1].slice(1).toLowerCase() : null
               const qText = (q.q || '').replace('[Challenge] ', '').replace(/^\[(MATHS|SCIENCE|ENGLISH)\] Q\d+\.? ?/i, '')
               const answer = answers[i] || ''
               const markedAnswer = submission?.markedAnswers?.[i]
