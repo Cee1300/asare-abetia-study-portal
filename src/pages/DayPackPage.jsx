@@ -7,6 +7,7 @@ import { TIMETABLE, SUBJECT_COLOURS, STUDENTS, POINTS } from '../utils/students'
 import { BookOpen, FlaskConical, Pencil, ChevronLeft, Send, Star, CheckCircle, Clock, Zap } from 'lucide-react'
 import ReviewModal from '../components/ReviewModal'
 import AskQuestion from '../components/AskQuestion'
+import MathText from '../components/MathText'
 
 const SUBJECT_ICONS = { Mathematics: BookOpen, Science: FlaskConical, English: Pencil }
 
@@ -21,20 +22,6 @@ function normaliseDayNum(dayNum) {
   return String(dayNum).startsWith('recap') ? dayNum : Number(dayNum)
 }
 
-// Render text with real line breaks — splits on \n and returns paragraphs
-function TextBlock({ text, className }) {
-  if (!text) return null
-  const lines = text.split('\n')
-  return (
-    <div className={className}>
-      {lines.map((line, i) =>
-        line.trim()
-          ? <p key={i} style={{ marginBottom: 4 }}>{line}</p>
-          : <div key={i} style={{ height: 8 }} />
-      )}
-    </div>
-  )
-}
 
 export default function DayPackPage() {
   const { dayNum } = useParams()
@@ -296,7 +283,7 @@ export default function DayPackPage() {
                     <p className="text-slate-400 text-xs">Repair session — targeted questions only</p>
                   </div>
                 </div>
-                <TextBlock
+                <MathText
                   text={pack.concepts[0].body}
                   className="text-slate-200 text-sm leading-relaxed"
                 />
@@ -359,14 +346,14 @@ export default function DayPackPage() {
                   <div className="w-1.5 h-5 rounded-full" style={{ background: colours.hex }} />
                   <h3 className="text-white font-semibold text-base">{concept.heading}</h3>
                 </div>
-                <TextBlock
+                <MathText
                   text={concept.body}
                   className="text-slate-200 text-sm leading-relaxed"
                 />
                 {concept.note && (
                   <div className="mt-4 flex items-start gap-2 bg-amber-500/5 border border-amber-500/20 rounded-xl px-3 py-2.5">
                     <span className="text-amber-400 text-sm mt-0.5">📌</span>
-                    <TextBlock text={concept.note} className="text-amber-200/80 text-xs leading-relaxed" />
+                    <MathText text={concept.note} className="text-amber-200/80 text-xs leading-relaxed" />
                   </div>
                 )}
               </div>
@@ -380,11 +367,11 @@ export default function DayPackPage() {
                   <span className={`text-xs font-semibold ${colours.text}`}>Example {i + 1}</span>
                 </div>
                 <div className="p-4 border-b border-slate-800">
-                  <TextBlock text={ex.q} className="text-white text-sm font-medium leading-relaxed" />
+                  <MathText text={ex.q} className="text-white text-sm font-medium leading-relaxed" />
                 </div>
                 <div className="p-4 bg-emerald-500/5">
                   <p className="text-emerald-400 text-xs font-semibold mb-1.5">Answer</p>
-                  <TextBlock text={ex.a} className="text-emerald-200/90 text-sm leading-relaxed" />
+                  <MathText text={ex.a} className="text-emerald-200/90 text-sm leading-relaxed" />
                 </div>
               </div>
             ))}
@@ -445,7 +432,7 @@ export default function DayPackPage() {
                   </div>
 
                   <div className="p-4">
-                    <TextBlock text={qText} className="text-white text-sm leading-relaxed mb-3" />
+                    <MathText text={qText} className="text-white text-sm leading-relaxed mb-3" />
 
                     {markedAnswer ? (
                       <div className="space-y-2">
@@ -456,7 +443,7 @@ export default function DayPackPage() {
                         {!markedAnswer.correct && markedAnswer.correctAnswer && (
                           <div className="bg-emerald-500/5 border border-emerald-500/20 rounded-xl p-3">
                             <p className="text-xs text-emerald-400 mb-1">Correct answer</p>
-                            <TextBlock text={markedAnswer.correctAnswer} className="text-emerald-200/90 text-sm" />
+                            <MathText text={markedAnswer.correctAnswer} className="text-emerald-200/90 text-sm" />
                           </div>
                         )}
                         {markedAnswer.feedback && (
@@ -566,7 +553,7 @@ export default function DayPackPage() {
                   {!markedAnswer.correct && markedAnswer.correctAnswer && (
                     <div className="mt-2 bg-emerald-500/5 rounded-lg p-3">
                       <p className="text-emerald-400 text-xs mb-1">Correct answer</p>
-                      <TextBlock text={markedAnswer.correctAnswer} className="text-emerald-200/90 text-xs" />
+                      <MathText text={markedAnswer.correctAnswer} className="text-emerald-200/90 text-xs" />
                     </div>
                   )}
                   {markedAnswer.feedback && (
