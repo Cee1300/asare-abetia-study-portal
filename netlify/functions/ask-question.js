@@ -1,5 +1,5 @@
 // netlify/functions/ask-question.js
-// Students can ask Claude questions about their pack content
+// AI tutor for students — strictly limited to current pack subject/topic
 
 export async function handler(event) {
   if (event.httpMethod !== 'POST') {
@@ -18,25 +18,24 @@ export async function handler(event) {
     return { statusCode: 400, body: JSON.stringify({ error: 'Invalid JSON' }) }
   }
 
-  const { question, subject, topic, level, studentName, context } = body
+  const { question, subject, topic, level, studentName } = body
 
-  const prompt = `You are a friendly, patient tutor helping ${studentName}, a ${level} student at a Ghanaian junior high school, understand their ${subject} work on the topic "${topic}".
+  const prompt = `You are a strict but friendly classroom tutor helping ${studentName}, a ${level} student in Ghana, understand their ${subject} work on the topic "${topic}".
 
-The student has asked: "${question}"
+STRICT RULES — you must follow these without exception:
+1. ONLY answer questions directly related to ${subject} and the topic "${topic}". 
+2. If the student asks about ANYTHING else (other subjects, general knowledge, news, people, games, social media, or anything unrelated to ${subject}/${topic}), respond ONLY with: "I can only help you with ${subject} — ${topic} right now. Do you have a question about that?"
+3. Do NOT give direct answers to practice questions. If the student pastes a question that looks like it is from their exercise, say: "That looks like one of your practice questions. I won't give you the answer, but I can explain the concept. What part do you not understand?"
+4. Keep answers SHORT — maximum 4 sentences.
+5. Use simple language for a ${level} student in Ghana.
+6. Use Ghanaian examples where helpful (cedis, markets, cocoa, local places).
+7. Be encouraging but firm about staying on topic.
+8. Never discuss violence, relationships, social issues, politics, or anything inappropriate for a school-age student.
+9. British English throughout.
 
-${context ? `Context from their learning pack:\n${context}\n` : ''}
+Student's question: "${question}"
 
-Answer guidelines:
-- Use simple, clear language appropriate for a ${level} student in Ghana
-- Keep the answer concise — 2-4 sentences maximum unless a longer explanation is truly needed
-- Use examples from Ghanaian daily life where helpful (e.g. cedis, markets, cocoa, local distances)
-- If the question is about a calculation, show the steps clearly
-- Be encouraging — end with a brief motivating phrase
-- British English throughout
-- Do NOT give away the answer to any exam question — guide them to understand the concept instead
-- If the question is off-topic or inappropriate, gently redirect to the subject
-
-Return ONLY your answer text — no preamble, no "Here's my answer:", just the response directly.`
+Respond directly — no preamble.`
 
   try {
     const response = await fetch('https://api.anthropic.com/v1/messages', {
@@ -48,13 +47,13 @@ Return ONLY your answer text — no preamble, no "Here's my answer:", just the r
       },
       body: JSON.stringify({
         model: 'claude-sonnet-4-6',
-        max_tokens: 400,
+        max_tokens: 200,
         messages: [{ role: 'user', content: prompt }],
       }),
     })
 
     const data = await response.json()
-    const answer = data.content?.[0]?.text?.trim() || ''
+    const answer = data.content?.[0]?.text?.trim() || 'I could not answer that. Please try again.'
 
     return {
       statusCode: 200,

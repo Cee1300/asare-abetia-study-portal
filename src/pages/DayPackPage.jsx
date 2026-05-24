@@ -99,7 +99,7 @@ export default function DayPackPage() {
       await setDoc(doc(db, 'submissions', id), subData)
       setSubmission(subData)
       setActiveTab('practice')
-      await autoMark(answers)
+      await autoMark(answers, pack)
     } catch (err) {
       console.error('submitAnswers error:', err)
     } finally {
@@ -107,8 +107,9 @@ export default function DayPackPage() {
     }
   }
 
-  async function autoMark(submittedAnswers) {
-    if (!pack?.questions?.length) return
+  async function autoMark(submittedAnswers, packData) {
+    const currentPack = packData || pack
+    if (!currentPack?.questions?.length) { console.error("autoMark: no questions in pack"); return }
     setMarking(true)
     try {
       const id = packId(studentId, dayNum)
@@ -116,7 +117,7 @@ export default function DayPackPage() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          questions: pack.questions,
+          questions: currentPack.questions,
           answers: submittedAnswers,
           subject: dayData?.subject,
           topic: dayData?.topic,
