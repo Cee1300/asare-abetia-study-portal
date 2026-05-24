@@ -4,6 +4,7 @@ import { doc, getDoc, updateDoc, serverTimestamp, collection, addDoc } from 'fir
 import { db } from '../firebase'
 import { STUDENTS, TIMETABLE, POINTS } from '../utils/students'
 import { ChevronLeft, CheckCircle, XCircle, Minus, Save, Zap, RefreshCw, Image } from 'lucide-react'
+import MathText from '../components/MathText'
 
 export default function AdminMarkWork() {
   const { studentId, dayNum } = useParams()
@@ -255,7 +256,7 @@ export default function AdminMarkWork() {
                   <span className="text-xs font-bold text-slate-300">Q{i+1}{isChallenge ? ' ⭐' : ''}</span>
                   <span className="text-xs text-slate-500">{q.a ? 'Has answer key' : 'No answer key'}</span>
                 </div>
-                <p className="text-white text-sm leading-relaxed whitespace-pre-line">{qText}</p>
+                <MathText text={qText} className="text-white text-sm leading-relaxed" />
               </div>
               <div className="px-4 py-3 border-b border-slate-800">
                 <p className="text-slate-400 text-xs mb-1.5">Student's answer</p>

@@ -7,6 +7,7 @@ import { collection, query, where, getDocs, doc, setDoc, serverTimestamp } from 
 import { db } from '../firebase'
 import { STUDENTS, TIMETABLE, SUBJECT_COLOURS } from '../utils/students'
 import { ChevronLeft, TrendingUp, TrendingDown, AlertCircle, CheckCircle, Zap, RefreshCw } from 'lucide-react'
+import MathText from '../components/MathText'
 
 const STUDENTS_LIST = ['jezreel', 'declyn', 'ivan']
 
@@ -355,7 +356,7 @@ export default function AdminAnalytics() {
                           <p className="text-slate-500 text-xs truncate">{w.topic}</p>
                           {w.correctAnswer && (
                             <p className="text-emerald-400/70 text-xs mt-1 truncate">
-                              ✓ {w.correctAnswer}
+                              
                             </p>
                           )}
                         </div>

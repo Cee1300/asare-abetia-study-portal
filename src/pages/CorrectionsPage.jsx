@@ -6,6 +6,7 @@ import { db } from '../firebase'
 import { useAuth } from '../contexts/AuthContext'
 import { TIMETABLE, SUBJECT_COLOURS, STUDENTS, POINTS } from '../utils/students'
 import { BookOpen, FlaskConical, Pencil, ChevronLeft, Send, CheckCircle } from 'lucide-react'
+import MathText from '../components/MathText'
 
 const SUBJECT_ICONS = { Mathematics: BookOpen, Science: FlaskConical, English: Pencil }
 
@@ -156,7 +157,7 @@ export default function CorrectionsPage() {
               <div className="p-4 space-y-3">
                 <div>
                   <p className="text-slate-400 text-xs mb-1.5">Question</p>
-                  <p className="text-white text-sm leading-relaxed whitespace-pre-line">{qText}</p>
+                  <MathText text={qText} className="text-white text-sm leading-relaxed" />
                 </div>
 
                 <div>
@@ -169,9 +170,7 @@ export default function CorrectionsPage() {
                 {ma.correctAnswer && (
                   <div>
                     <p className="text-emerald-400 text-xs mb-1.5">Correct answer</p>
-                    <p className="text-emerald-200/90 text-sm bg-emerald-500/5 border border-emerald-500/20 rounded-xl px-3 py-2 whitespace-pre-line">
-                      {ma.correctAnswer}
-                    </p>
+                    <MathText text={ma.correctAnswer} className="text-emerald-200/90 text-sm" />
                   </div>
                 )}
 

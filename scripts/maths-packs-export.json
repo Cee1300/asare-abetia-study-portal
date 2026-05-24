@@ -1,0 +1,768 @@
+{
+  "jezreel": {
+    "day1": {
+      "topic": "Place Value: Reading & Writing Numbers up to 1 Billion",
+      "standard": "B7.1.1.1.1–B7.1.1.1.2",
+      "objectives": [
+        "Read and write numbers up to 1 billion in words and figures",
+        "Identify the value of each digit in a large number",
+        "Compare two large numbers using >, < or =",
+        "Skip count forwards and backwards in 25s, 50s and 250s"
+      ],
+      "concepts": [
+        {
+          "heading": "Place Value Columns",
+          "body": "Every digit in a number has a PLACE VALUE — its value depends on its position.\nThe columns from right to left are:\nUnits, Tens, Hundreds, Thousands, Ten Thousands, Hundred Thousands, Millions, Ten Millions, Hundred Millions, Billions.\n\nExample: In 2,735,000,000 — the digit 7 is in the Hundred Millions column, so its value is 700,000,000.",
+          "note": "A billion = 1,000,000,000. Count the zeros: there are 9 of them."
+        },
+        {
+          "heading": "Comparing Large Numbers",
+          "body": "To compare two numbers, start from the LEFTMOST digit and move right until you find a difference. The number with the bigger digit in that column is larger.\n\nExample: Compare 5,223,487,637 and 5,113,487,637.\nBoth start with 5 (billions). Then 223 million vs 113 million — 223 > 113.\nSo: 5,223,487,637 > 5,113,487,637",
+          "note": "Always use the correct symbol: > means \"greater than\", < means \"less than\", = means \"equal to\"."
+        },
+        {
+          "heading": "Skip Counting",
+          "body": "Skip counting means adding (or subtracting) the same number each time.\n\nCounting forward in 250s from 1,000:\n1,000 — 1,250 — 1,500 — 1,750 — 2,000 — 2,250...\n\nCounting backward in 25s from 10,000:\n10,000 — 9,975 — 9,950 — 9,925 — 9,900...",
+          "note": null
+        }
+      ],
+      "worked": [
+        {
+          "q": "Write 1,295,800,000 in words.",
+          "a": "One billion, two hundred and ninety-five million, eight hundred thousand."
+        },
+        {
+          "q": "What is the value of the digit 7 in the number 2,735,000,000?",
+          "a": "7 is in the Hundred Millions column. Its value = 700,000,000 (seven hundred million)."
+        },
+        {
+          "q": "Which is greater: 8,301,456,221 or 8,310,456,221? Write using the correct symbol.",
+          "a": "Compare from left: both have 8 billion. Then 301 million vs 310 million. 310 > 301.\n8,301,456,221 < 8,310,456,221"
+        }
+      ]
+    },
+    "day3": {
+      "topic": "Rounding: Whole Numbers, Decimals & Significant Figures",
+      "standard": "B7.1.1.1.3–B7.1.1.1.5",
+      "objectives": [
+        "Round whole numbers to the nearest 10, 100, 1000, 10,000 and 100,000",
+        "Round decimal numbers to the nearest tenth, hundredth and thousandth",
+        "Distinguish between rounding up, rounding down and rounding off",
+        "Express numbers to given significant figures"
+      ],
+      "concepts": [
+        {
+          "heading": "Rounding Off (the most common type)",
+          "body": "Look at the digit IMMEDIATELY to the RIGHT of the place you are rounding to.\n• If that digit is 5 or more → round UP (increase the target digit by 1)\n• If that digit is 4 or less → round DOWN (keep the target digit the same)\nThen replace all digits to the right with zeros.\n\nExample: Round 2,846,655 to the nearest thousand.\nLook at the hundreds digit: 6 (which is ≥ 5) → round up.\nAnswer: 2,847,000",
+          "note": "Round UP = always take the larger option. Round DOWN = always take the smaller option. These ignore the digit rules."
+        },
+        {
+          "heading": "Rounding Decimals",
+          "body": "The same rule applies to decimals. Look at the digit one place to the RIGHT.\n\nExample: Round 486.3685 to:\n• Nearest tenth (1 d.p.): look at hundredths digit = 6 (≥5) → 486.4\n• Nearest hundredth (2 d.p.): look at thousandths digit = 8 (≥5) → 486.37\n• Nearest thousandth (3 d.p.): look at ten-thousandths digit = 5 (≥5) → 486.369",
+          "note": "d.p. means decimal places. 1 d.p. = tenths. 2 d.p. = hundredths. 3 d.p. = thousandths."
+        },
+        {
+          "heading": "Significant Figures (s.f.)",
+          "body": "Count from the FIRST NON-ZERO digit. That is your first significant figure.\n\nExample: Express 857,386,321 to 3 significant figures.\nFirst 3 digits: 8, 5, 7. The next digit is 3 (< 5) → round down.\nAnswer: 857,000,000\n\nFor decimals: 0.00234567 to 3 s.f.\nFirst non-zero digit is 2. Count: 2, 3, 4. Next digit is 5 → round up.\nAnswer: 0.00235",
+          "note": "Trailing zeros after a decimal point ARE significant. 0.360 has 3 significant figures."
+        }
+      ],
+      "worked": [
+        {
+          "q": "Round 2,846,655 to (a) the nearest thousand (b) the nearest hundred thousand",
+          "a": "(a) Hundreds digit = 6 (≥5) → round up: 2,847,000\n(b) Ten-thousands digit = 4 (<5) → round down: 2,800,000"
+        },
+        {
+          "q": "Round 0.08475 to (a) 1 decimal place (b) 2 decimal places (c) 3 decimal places",
+          "a": "(a) Hundredths digit = 8 (≥5) → round up: 0.1\n(b) Thousandths digit = 4 (<5) → round down: 0.08\n(c) Ten-thousandths digit = 7 (≥5) → round up: 0.085"
+        },
+        {
+          "q": "Express 857,386,321 to 4 significant figures.",
+          "a": "First 4 digits: 8, 5, 7, 3. Next digit = 8 (≥5) → round up the 3 to 4. Answer: 857,400,000"
+        }
+      ]
+    },
+    "day5": {
+      "topic": "Mental Maths: Multiply & Divide by Powers of 10, Word Problems",
+      "standard": "B7.1.2.1.1–B7.1.2.1.3",
+      "objectives": [
+        "Multiply and divide numbers by 10, 100 and 1000 mentally",
+        "Apply doubling, halving and the distributive property to solve problems",
+        "Solve word problems using mental mathematics strategies",
+        "Identify key words in problems: sum, difference, product, quotient"
+      ],
+      "concepts": [
+        {
+          "heading": "Multiplying and Dividing by Powers of 10",
+          "body": "× 10: shift the decimal point ONE place to the RIGHT\n× 100: shift TWO places to the RIGHT\n× 1,000: shift THREE places to the RIGHT\n÷ 10: shift ONE place to the LEFT\n÷ 100: shift TWO places to the LEFT\n÷ 1,000: shift THREE places to the LEFT\n\nExamples:\n105.25 × 1,000 = 105,250\n105.25 ÷ 100 = 1.0525\n0.075 × 10,000 = 750",
+          "note": "Think of the decimal point as fixed and the digits moving. Or think of the decimal point moving."
+        },
+        {
+          "heading": "Doubling, Halving & Distributive Property",
+          "body": "DOUBLING & HALVING: to make multiplication easier, halve one number and double the other.\nExample: 28 × 5 → halve 28, double 5 → 14 × 10 = 140\n\nDISTRIBUTIVE PROPERTY: split a number into parts that are easier to multiply.\nExample: 18 × 6 → think (20 - 2) × 6 = (20 × 6) - (2 × 6) = 120 - 12 = 108\nExample: 7 × 15 → think 7 × (10 + 5) = 70 + 35 = 105",
+          "note": "These tricks save time in exams. Practise them until they feel automatic."
+        },
+        {
+          "heading": "Key Words in Word Problems",
+          "body": "Recognise the operation from the language used:\n\nADDITION: sum, total, altogether, increased by, more than\nSUBTRACTION: difference, less than, reduced by, how much more, remaining\nMULTIPLICATION: product, times, of (with fractions), multiplied by\nDIVISION: quotient, share equally, how many times, divided by, per",
+          "note": null
+        }
+      ],
+      "worked": [
+        {
+          "q": "Find: (a) 34.56 × 100  (b) 8,450 ÷ 1,000  (c) 0.075 × 10,000",
+          "a": "(a) 3,456  (b) 8.45  (c) 750"
+        },
+        {
+          "q": "Use the distributive property: 9 × 98",
+          "a": "9 × (100 - 2) = (9 × 100) - (9 × 2) = 900 - 18 = 882"
+        },
+        {
+          "q": "Word problem: Mrs Adamu bought 13.6 kg of meat. Mrs Anderson bought 2.4 kg less. How many kg did they buy altogether?",
+          "a": "Mrs Anderson = 13.6 - 2.4 = 11.2 kg. Together = 13.6 + 11.2 = 24.8 kg."
+        }
+      ]
+    },
+    "day7": {
+      "topic": "Index Notation: Powers of Numbers, HCF & LCM",
+      "standard": "B7.1.2.3.1–B7.1.2.3.5",
+      "objectives": [
+        "Understand and use index notation (powers of numbers)",
+        "Express numbers as products of prime factors",
+        "Apply the zero index rule: any number⁰ = 1",
+        "Find the Highest Common Factor (HCF) and Lowest Common Multiple (LCM)"
+      ],
+      "concepts": [
+        {
+          "heading": "Index Notation — Powers of Numbers",
+          "body": "When we multiply the same number by itself repeatedly, we write it using a POWER (index).\n2 × 2 × 2 × 2 × 2 = 2⁵ = 32\n\nThe BASE is 2. The EXPONENT (index) is 5.\n2⁵ is read as \"2 to the power of 5\".\n\nMore examples:\n3⁴ = 3 × 3 × 3 × 3 = 81\n5³ = 5 × 5 × 5 = 125\n10⁴ = 10,000",
+          "note": "THE ZERO INDEX RULE: any number to the power of zero = 1. So 7⁰ = 1, 100⁰ = 1, 1,000,000⁰ = 1."
+        },
+        {
+          "heading": "Product of Prime Factors",
+          "body": "Every whole number can be written as a product of PRIME numbers. Use a factor tree.\n\nExample: Express 72 as a product of prime factors.\n72 = 8 × 9 = (2 × 2 × 2) × (3 × 3) = 2³ × 3²\n\nExample: Express 48 as a product of prime factors.\n48 = 2 × 24 = 2 × 2 × 12 = 2 × 2 × 2 × 2 × 3 = 2⁴ × 3",
+          "note": null
+        },
+        {
+          "heading": "HCF and LCM",
+          "body": "HIGHEST COMMON FACTOR (HCF): the largest number that divides exactly into two or more numbers.\nMethod: Express both as products of primes. Multiply the COMMON factors (using the lowest power).\n\nExample: HCF of 24 and 30.\n24 = 2³ × 3. 30 = 2 × 3 × 5.\nCommon: 2 and 3. HCF = 2 × 3 = 6.\n\nLOWEST COMMON MULTIPLE (LCM): the smallest number that is a multiple of two or more numbers.\nMethod: Multiply ALL prime factors, using the HIGHEST power of each.\n\nExample: LCM of 12 and 8.\n12 = 2² × 3. 8 = 2³.\nLCM = 2³ × 3 = 24.",
+          "note": "HCF is used in sharing/cutting problems. LCM is used in \"when will they meet again\" problems."
+        }
+      ],
+      "worked": [
+        {
+          "q": "Express 32 as a power of 2. Then evaluate 5³ and 3⁴.",
+          "a": "32 = 2⁵. 5³ = 5×5×5 = 125. 3⁴ = 3×3×3×3 = 81."
+        },
+        {
+          "q": "Find the HCF of 36 and 48 using prime factors.",
+          "a": "36 = 2² × 3². 48 = 2⁴ × 3. Common factors: 2² and 3¹. HCF = 2² × 3 = 4 × 3 = 12."
+        },
+        {
+          "q": "Baba exercises every 12 days and Serwa every 8 days. They both exercise today. After how many days will they exercise together again?",
+          "a": "Find LCM(12, 8): 12 = 2² × 3. 8 = 2³. LCM = 2³ × 3 = 8 × 3 = 24 days."
+        }
+      ]
+    },
+    "day9": {
+      "topic": "Fractions: Compare, Order, Add & Subtract",
+      "standard": "B7.1.3.1.1–B7.1.3.2.2",
+      "objectives": [
+        "Convert between fractions, decimals and percentages",
+        "Compare and order fractions with different denominators",
+        "Add and subtract fractions including mixed numbers",
+        "Solve word problems involving fractions"
+      ],
+      "concepts": [
+        {
+          "heading": "Converting Between Fractions, Decimals and Percentages",
+          "body": "FRACTION → DECIMAL: divide the top by the bottom.\n3/8 = 3 ÷ 8 = 0.375\n\nDECIMAL → PERCENTAGE: multiply by 100.\n0.375 × 100 = 37.5%\n\nPERCENTAGE → FRACTION: write over 100 and simplify.\n38% = 38/100 = 19/50\n\nBenchmark fractions to memorise:\n1/2 = 0.5 = 50%\n1/4 = 0.25 = 25%\n3/4 = 0.75 = 75%\n1/3 = 0.333... = 33.3%\n1/5 = 0.2 = 20%",
+          "note": null
+        },
+        {
+          "heading": "Comparing and Ordering Fractions",
+          "body": "Method 1: Convert to decimals and compare.\nMethod 2: Find the LCD (Lowest Common Denominator) and compare numerators.\n\nExample: Which is greater, 7/12 or 8/10?\n7/12 = 0.583... 8/10 = 0.8 → 8/10 is greater.\n\nTo order 5/6, 3/4, 7/8 in descending order:\n5/6 ≈ 0.833, 3/4 = 0.75, 7/8 = 0.875\nOrder: 7/8 > 5/6 > 3/4",
+          "note": null
+        },
+        {
+          "heading": "Adding and Subtracting Fractions",
+          "body": "STEP 1: Find the LCD (Lowest Common Denominator)\nSTEP 2: Convert each fraction to an equivalent fraction with the LCD\nSTEP 3: Add or subtract the numerators. Keep the denominator.\nSTEP 4: Simplify if possible.\n\nExample: 3/4 + 5/6\nLCD of 4 and 6 = 12\n3/4 = 9/12. 5/6 = 10/12.\n9/12 + 10/12 = 19/12 = 1 7/12\n\nFor MIXED NUMBERS: add/subtract whole numbers first, then fractions.",
+          "note": "Always simplify your final answer. If the answer is an improper fraction (top > bottom), convert to a mixed number."
+        }
+      ],
+      "worked": [
+        {
+          "q": "Order from least to greatest: 0.832, 3/8, 38%",
+          "a": "Convert all to %: 0.832 = 83.2%, 3/8 = 37.5%, 38% = 38%.\nOrder: 3/8 < 38% < 0.832"
+        },
+        {
+          "q": "Add: 2⅖ + 1⅔",
+          "a": "Whole numbers: 2+1=3. Fractions: 2/5+2/3. LCD=15. 6/15+10/15=16/15=1 1/15. Total = 3 + 1 1/15 = 4 1/15."
+        },
+        {
+          "q": "A board is 12¼ feet long. A piece of 3⅓ feet is cut off. How long is the remainder?",
+          "a": "12¼ - 3⅓ = 49/4 - 10/3. LCD=12: 147/12 - 40/12 = 107/12 = 8 11/12 feet."
+        }
+      ]
+    },
+    "day11": {
+      "topic": "Fractions: Multiply & Divide",
+      "standard": "B7.1.3.3.1–B7.1.3.3.4",
+      "objectives": [
+        "Multiply a fraction by a whole number and by another fraction",
+        "Divide a fraction by a whole number and by another fraction using the reciprocal",
+        "Find a fraction of a quantity (money, length, weight)",
+        "Solve word problems involving multiplication and division of fractions"
+      ],
+      "concepts": [
+        {
+          "heading": "Multiplying Fractions",
+          "body": "To multiply fraction × fraction: multiply the numerators together and the denominators together, then simplify.\nExample: 2/3 × 3/5 = (2×3)/(3×5) = 6/15 = 2/5\n\nTo find a fraction OF a quantity, multiply:\nExample: 2/3 of GH₵60 = 2/3 × 60 = GH₵40\n\nTo find a percentage of a quantity:\nExample: 28% of 40 = 28/100 × 40 = 11.2",
+          "note": "'OF' means multiply. So '3/4 of 80' = 3/4 × 80 = 60."
+        },
+        {
+          "heading": "Dividing Fractions — The Reciprocal Method",
+          "body": "To divide by a fraction, multiply by its RECIPROCAL (flip the fraction upside down).\nExample: 3 ÷ 1/4 = 3 × 4/1 = 12\nExample: 5/8 ÷ 1/2 = 5/8 × 2/1 = 10/8 = 5/4 = 1¼\n\nThe reciprocal of 3/5 is 5/3. The reciprocal of 4 is 1/4.",
+          "note": "Keep the first fraction. Change ÷ to ×. Flip the second fraction. Then multiply."
+        }
+      ],
+      "worked": [
+        {
+          "q": "Find: (a) 3/8 × 480  (b) 2/3 × 3/5 × 5/4  (c) 3½% of GH₵50",
+          "a": "(a) 3×480÷8 = 180  (b) (2×3×5)/(3×5×4) = 30/60 = 1/2  (c) 3.5/100 × 50 = GH₵1.75"
+        },
+        {
+          "q": "There are 132 learners in a school. 2/3 are girls. How many boys?",
+          "a": "Girls = 2/3 × 132 = 88. Boys = 132 - 88 = 44 boys."
+        },
+        {
+          "q": "A stack of plates weighs 10 kg. Each plate weighs 1/4 kg. How many plates?",
+          "a": "10 ÷ 1/4 = 10 × 4 = 40 plates."
+        }
+      ]
+    },
+    "day13": {
+      "topic": "Ratios: Language, Unit Rate & Equivalent Ratios",
+      "standard": "B7.1.4.1.1–B7.1.4.1.3",
+      "objectives": [
+        "Write and simplify ratios using the correct language and notation",
+        "Calculate unit rates from given information",
+        "Find missing values in equivalent ratio tables",
+        "Solve sharing problems using ratio"
+      ],
+      "concepts": [
+        {
+          "heading": "What is a Ratio?",
+          "body": "A ratio compares two or more quantities of the same kind. It can be written as: a:b or a/b or \"a to b\".\n\nExample: In a class of 60 boys and 120 girls:\nRatio of boys to girls = 60:120 = 1:2 (simplify by dividing both by HCF = 60)\n\nIMPORTANT: Order matters. Boys:Girls = 1:2 is NOT the same as Girls:Boys = 2:1.\n\nTo simplify a ratio: divide both parts by their HCF.\nExample: 45:75. HCF = 15. Simplified: 3:5.",
+          "note": "A ratio has NO units — convert both quantities to the same unit first before writing the ratio."
+        },
+        {
+          "heading": "Unit Rate",
+          "body": "A unit rate compares a quantity to ONE unit of another quantity.\n\nExample: If 2 litres of cola cost GH₵18:\nUnit rate = GH₵18 ÷ 2 = GH₵9 per litre\n\nUse the unit rate to find other values:\n• Cost of 1.5 litres = 1.5 × 9 = GH₵13.50\n• Cost of 7 litres = 7 × 9 = GH₵63",
+          "note": null
+        },
+        {
+          "heading": "Sharing in a Ratio",
+          "body": "To share an amount in a given ratio:\nStep 1: Add the ratio parts to find the total number of parts.\nStep 2: Divide the amount by the total parts to find one part.\nStep 3: Multiply each ratio number by one part.\n\nExample: Kofi and Ama share GH₵360 in ratio 3:5.\nTotal parts = 3 + 5 = 8. One part = 360 ÷ 8 = GH₵45.\nKofi = 3 × 45 = GH₵135. Ama = 5 × 45 = GH₵225.",
+          "note": "Check: 135 + 225 = 360 ✓. Always verify your answer adds back to the original amount."
+        }
+      ],
+      "worked": [
+        {
+          "q": "Write the ratio 1.5 m to 60 cm in its simplest form.",
+          "a": "Convert to same units: 1.5m = 150cm. Ratio = 150:60. HCF = 30. Simplified = 5:2."
+        },
+        {
+          "q": "If 3 kg of meat costs GH₵60, find the cost of 7 kg.",
+          "a": "Unit rate = 60 ÷ 3 = GH₵20/kg. Cost of 7 kg = 7 × 20 = GH₵140."
+        },
+        {
+          "q": "Kafui (36), Adoley (48) and Jantuah (24) share money in ratio of their ages. Jantuah gets GH₵24,000. How much altogether?",
+          "a": "Ratio = 36:48:24 = 3:4:2. Total parts = 9. Jantuah = 2 parts = GH₵24,000. 1 part = GH₵12,000. Total = 9 × 12,000 = GH₵108,000."
+        }
+      ]
+    },
+    "day15": {
+      "topic": "Proportion & Percentage as Rate per 100",
+      "standard": "B7.1.4.1.4–B7.1.4.1.5",
+      "objectives": [
+        "Use proportional reasoning to solve missing value problems",
+        "Express one quantity as a percentage of another",
+        "Find percentage increase and decrease",
+        "Calculate simple interest using the formula"
+      ],
+      "concepts": [
+        {
+          "heading": "Proportional Reasoning",
+          "body": "Two quantities are in proportion if their ratio stays the same.\nDirect proportion: as one increases, the other increases by the same factor.\n\nExample: 5 kg costs GH₵40. Find cost of 8 kg.\nUnit rate: 40 ÷ 5 = GH₵8/kg. Cost of 8 kg = 8 × 8 = GH₵64.\n\nCross-multiplication method:\n5/40 = 8/x → 5x = 40 × 8 = 320 → x = 64",
+          "note": null
+        },
+        {
+          "heading": "Percentage: Express, Increase & Decrease",
+          "body": "Express A as a % of B: (A ÷ B) × 100\nExample: Express 45 as a % of 180: (45 ÷ 180) × 100 = 25%\n\nPERCENTAGE INCREASE:\n% increase = (increase ÷ original) × 100\nExample: Price rises from GH₵80 to GH₵100. Increase = 20. % increase = (20 ÷ 80) × 100 = 25%\n\nPERCENTAGE DECREASE:\n% decrease = (decrease ÷ original) × 100\nExample: Salary drops from GH₵500 to GH₵400. Decrease = 100. % decrease = (100 ÷ 500) × 100 = 20%",
+          "note": null
+        },
+        {
+          "heading": "Simple Interest",
+          "body": "Simple Interest (SI) = Principal × Rate × Time ÷ 100\nOr: SI = P × R × T / 100\n\nExample: Invest GH₵1,500 at 8% per year for 2 years.\nSI = 1500 × 8 × 2 ÷ 100 = GH₵240\nTotal amount = 1500 + 240 = GH₵1,740\n\nTo find the Principal if given SI, Rate and Time:\nP = SI × 100 ÷ (R × T)",
+          "note": "Simple interest is calculated on the ORIGINAL amount (principal) only. It does not compound."
+        }
+      ],
+      "worked": [
+        {
+          "q": "A woman saves GH₵520 at 6% interest for 1 year. How much interest does she earn?",
+          "a": "SI = 520 × 6 × 1 ÷ 100 = GH₵31.20"
+        },
+        {
+          "q": "A shirt was GH₵120. It is now GH₵150. What is the percentage increase?",
+          "a": "Increase = 30. % increase = (30 ÷ 120) × 100 = 25%"
+        },
+        {
+          "q": "Express 75 as a percentage of 300.",
+          "a": "(75 ÷ 300) × 100 = 25%"
+        }
+      ]
+    },
+    "day17": {
+      "topic": "Algebra: Patterns, Sequences & Rules",
+      "standard": "B7.2.1.1.1–B7.2.1.1.4",
+      "objectives": [
+        "Identify and extend number and shape patterns",
+        "Find the rule for a sequence and express it algebraically",
+        "Use input-output tables to find and apply rules",
+        "Plot points on a number plane from a table of values"
+      ],
+      "concepts": [
+        {
+          "heading": "Number Patterns & Rules",
+          "body": "A pattern is a sequence where each term follows a RULE.\n\nARITHMETIC SEQUENCE: add or subtract the same number each time.\nExample: 3, 7, 11, 15... → add 4 each time. Rule: 4n - 1\nTerm 1 = 4(1)-1 = 3. Term 10 = 4(10)-1 = 39.\n\nGEOMETRIC SEQUENCE: multiply or divide by the same number each time.\nExample: 2, 6, 18, 54... → multiply by 3 each time.",
+          "note": "To find the nth term of an arithmetic sequence: rule is dn + (first term - d), where d = common difference."
+        },
+        {
+          "heading": "Input-Output Tables & the Number Plane",
+          "body": "A mapping rule takes an input (x) and produces an output (y).\nExample: Rule x → 2x + 1\nx: 0, 1, 2, 3, 4\ny: 1, 3, 5, 7, 9\n\nThe number plane has an x-axis (horizontal) and y-axis (vertical).\nEach point is written as (x, y).\n• (3, 5): 3 right, 5 up\n• (-2, 4): 2 left, 4 up\n• (0, -3): on y-axis, 3 down",
+          "note": "To find a missing INPUT from a given output: work BACKWARDS. If rule is x→3x+1 and output is 22: 3x+1=22, 3x=21, x=7."
+        }
+      ],
+      "worked": [
+        {
+          "q": "Continue the pattern and find the 10th term: 3, 7, 11, 15...",
+          "a": "Common difference = 4. Rule: 4n - 1. Terms continue: 19, 23, 27, 31, 35, 39. 10th term = 4(10)-1 = 39."
+        },
+        {
+          "q": "Find the rule for this table and complete it: Input: 1,2,3,4,5 | Output: 4,7,10,13,?",
+          "a": "Output increases by 3. Rule: 3x + 1. Check: 3(1)+1=4 ✓. Output for x=5: 3(5)+1 = 16."
+        },
+        {
+          "q": "Triangles made of sticks: Pattern 1=3, Pattern 2=5, Pattern 3=7. How many sticks in Pattern 20?",
+          "a": "Common difference = 2. Rule: 2n + 1. Pattern 20: 2(20)+1 = 41 sticks."
+        }
+      ]
+    },
+    "day19": {
+      "topic": "Algebraic Expressions: Form, Simplify & Evaluate",
+      "standard": "B7.2.2.1.1–B7.2.2.1.4",
+      "objectives": [
+        "Translate word statements into algebraic expressions",
+        "Simplify algebraic expressions by collecting like terms",
+        "Evaluate expressions by substituting given values",
+        "Write expressions for perimeter and area problems"
+      ],
+      "concepts": [
+        {
+          "heading": "Writing Algebraic Expressions",
+          "body": "An algebraic expression uses letters to represent unknown numbers.\n\nTranslating words into algebra:\n• \"5 more than x\" → x + 5\n• \"3 less than x\" → x - 3\n• \"4 times x\" → 4x\n• \"half of x\" → x/2\n• \"2 more than 5 times x\" → 5x + 2\n• \"x squared minus 3\" → x² - 3\n\nReal-life example: Afrako is 3 years older than Maako. Maako is x years old. Afrako's age = x + 3.",
+          "note": "Always define what your variable represents. \"Let x = the unknown number\" or \"Let x = Maako's age\"."
+        },
+        {
+          "heading": "Simplifying: Collecting Like Terms",
+          "body": "LIKE TERMS have the same variable and power — they can be added or subtracted.\nUNLIKE TERMS have different variables — they CANNOT be combined.\n\nExamples:\n• 4x + 3x = 7x ✓ (like terms)\n• 4x + 3y = 4x + 3y ✗ (unlike — cannot simplify)\n• 5x + 4 - 2x - 4 = 3x\n• 7xy + 5x - 4x + 2xy - 3 = 9xy + x - 3\n\nProcess: Group like terms first, then combine.",
+          "note": "xy and yx are the same term. 2xy + 3yx = 5xy."
+        },
+        {
+          "heading": "Evaluating Expressions",
+          "body": "To EVALUATE: substitute the given values in place of the variables and calculate.\n\nExample: Evaluate 3xy + 2x - y when x = 2, y = 3.\n= 3(2)(3) + 2(2) - 3\n= 18 + 4 - 3\n= 19\n\nAlways follow BODMAS: Brackets, Orders/powers, Division, Multiplication, Addition, Subtraction.",
+          "note": "When substituting negative numbers, use brackets to avoid sign errors: if x = -2, then x² = (-2)² = 4 (NOT -4)."
+        }
+      ],
+      "worked": [
+        {
+          "q": "Write as an expression: \"When 8 times x is subtracted from 5, the result is multiplied by 2.\"",
+          "a": "2(5 - 8x)"
+        },
+        {
+          "q": "Simplify: 5x + 4 - 9y + 3x + 2y - 7",
+          "a": "x terms: 5x+3x=8x. y terms: -9y+2y=-7y. Constants: 4-7=-3. Answer: 8x - 7y - 3"
+        },
+        {
+          "q": "Evaluate 3xy × 5y when x = 2, y = 4.",
+          "a": "= 3(2)(4) × 5(4) = 24 × 20 = 480"
+        }
+      ]
+    }
+  },
+  "declyn": {
+    "day1": {
+      "topic": "Numbers to 1,000,000: Place Value, Reading & Ordering",
+      "standard": "B5.1.1.1",
+      "objectives": [
+        "Read and write numbers up to 1,000,000 in figures and words",
+        "Identify the value of each digit using a place value chart",
+        "Compare and order large numbers using >, < and =",
+        "Round numbers to the nearest 10, 100, 1,000 and 10,000"
+      ],
+      "concepts": [
+        {
+          "heading": "Place Value up to 1,000,000",
+          "body": "Every digit in a number has a value based on its POSITION.\nColumns from right to left:\nUnits | Tens | Hundreds | Thousands | Ten Thousands | Hundred Thousands | Millions\n\nExample: 725,463\n7 → Hundred Thousands (700,000)\n2 → Ten Thousands (20,000)\n5 → Thousands (5,000)\n4 → Hundreds (400)\n6 → Tens (60)\n3 → Units (3)\n\nIn words: Seven hundred and twenty-five thousand, four hundred and sixty-three.",
+          "note": "A million = 1,000,000. It has SIX zeros."
+        },
+        {
+          "heading": "Rounding Large Numbers",
+          "body": "Look at the digit immediately to the RIGHT of the place you are rounding to.\n• If it is 5 or more → round UP\n• If it is 4 or less → round DOWN (keep the digit the same)\n\nExample: Round 348,726 to the nearest thousand.\nLook at hundreds digit: 7 (≥5) → round up.\nAnswer: 349,000\n\nExample: Round 348,726 to the nearest ten thousand.\nLook at thousands digit: 8 (≥5) → round up.\nAnswer: 350,000",
+          "note": null
+        }
+      ],
+      "worked": [
+        {
+          "q": "Write 483,057 in words.",
+          "a": "Four hundred and eighty-three thousand and fifty-seven."
+        },
+        {
+          "q": "What is the value of the digit 6 in 364,819?",
+          "a": "6 is in the ten-thousands place. Value = 60,000 (sixty thousand)."
+        },
+        {
+          "q": "Round 527,364 to (a) the nearest thousand (b) the nearest hundred thousand.",
+          "a": "(a) Hundreds digit = 3 (<5) → round down: 527,000. (b) Ten-thousands digit = 2 (<5) → round down: 500,000."
+        }
+      ]
+    },
+    "day3": {
+      "topic": "Multiply & Divide Large Numbers: Mental & Written Methods",
+      "standard": "B5.1.2.1",
+      "objectives": [
+        "Multiply and divide whole numbers by 10, 100 and 1,000 mentally",
+        "Multiply a 3-digit number by a 2-digit number using long multiplication",
+        "Divide a 3- or 4-digit number by a 1- or 2-digit number",
+        "Solve word problems involving multiplication and division"
+      ],
+      "concepts": [
+        {
+          "heading": "Multiplying & Dividing by Powers of 10",
+          "body": "× 10: add one zero (or shift decimal one place right)\n× 100: add two zeros\n× 1,000: add three zeros\n÷ 10: remove one zero (or shift decimal one place left)\n÷ 100: remove two zeros\n÷ 1,000: remove three zeros\n\nExamples:\n347 × 100 = 34,700\n82,000 ÷ 1,000 = 82\n56 × 1,000 = 56,000",
+          "note": null
+        },
+        {
+          "heading": "Long Multiplication (3-digit × 2-digit)",
+          "body": "Example: 347 × 26\n\nStep 1: Multiply 347 × 6 (units):\n6×7=42 (write 2, carry 4)\n6×4=24+4=28 (write 8, carry 2)\n6×3=18+2=20\nResult: 2,082\n\nStep 2: Multiply 347 × 20 (tens — put a zero first):\n347 × 2 = 694, so 347 × 20 = 6,940\n\nStep 3: Add: 2,082 + 6,940 = 9,022",
+          "note": "Always write a zero placeholder before multiplying by the tens digit."
+        }
+      ],
+      "worked": [
+        {
+          "q": "Calculate mentally: (a) 485 × 1,000  (b) 720,000 ÷ 100  (c) 36 × 100",
+          "a": "(a) 485,000  (b) 7,200  (c) 3,600"
+        },
+        {
+          "q": "Find: 268 × 34",
+          "a": "268 × 4 = 1,072. 268 × 30 = 8,040. 1,072 + 8,040 = 9,112."
+        },
+        {
+          "q": "A school orders 24 boxes of exercise books. Each box contains 144 books. How many books in total?",
+          "a": "144 × 24: 144×4=576. 144×20=2,880. 576+2,880 = 3,456 books."
+        }
+      ]
+    },
+    "day5": {
+      "topic": "Fractions: Equivalence, Comparing & Ordering",
+      "standard": "B5.1.3.1",
+      "objectives": [
+        "Find equivalent fractions by multiplying or dividing numerator and denominator",
+        "Simplify fractions to their lowest terms using the HCF",
+        "Compare and order fractions with different denominators using the LCD",
+        "Convert between improper fractions and mixed numbers"
+      ],
+      "concepts": [
+        {
+          "heading": "Equivalent Fractions & Simplifying",
+          "body": "EQUIVALENT FRACTIONS represent the same amount.\nTo find equivalent fractions: multiply OR divide both numerator and denominator by the SAME number.\n\nExample: 2/3 = 4/6 = 8/12 = 10/15\n\nTo SIMPLIFY: divide both numerator and denominator by their HCF.\nExample: Simplify 24/36.\nHCF of 24 and 36 = 12.\n24 ÷ 12 = 2. 36 ÷ 12 = 3.\nAnswer: 2/3",
+          "note": "A fraction is in its SIMPLEST FORM (lowest terms) when the HCF of numerator and denominator is 1."
+        },
+        {
+          "heading": "Comparing, Ordering & Mixed Numbers",
+          "body": "To COMPARE fractions: find the LCD and compare numerators.\nExample: Which is greater, 3/4 or 5/7?\nLCD = 28. 3/4 = 21/28. 5/7 = 20/28.\n21 > 20, so 3/4 > 5/7.\n\nIMPROPER FRACTION: numerator > denominator (e.g. 11/4)\nMIXED NUMBER: whole number + fraction (e.g. 2¾)\n\nConvert improper to mixed: 11/4 → 11 ÷ 4 = 2 remainder 3 → 2¾\nConvert mixed to improper: 2¾ → (2×4) + 3 = 11 → 11/4",
+          "note": null
+        }
+      ],
+      "worked": [
+        {
+          "q": "Find three fractions equivalent to 2/5.",
+          "a": "2/5 = 4/10 = 6/15 = 8/20"
+        },
+        {
+          "q": "Simplify 36/48 to its lowest terms.",
+          "a": "HCF of 36 and 48 = 12. 36÷12=3. 48÷12=4. Answer: 3/4."
+        },
+        {
+          "q": "Convert 19/5 to a mixed number and 3⅔ to an improper fraction.",
+          "a": "19/5: 19÷5=3 remainder 4 → 3⅘. 3⅔: (3×3)+2=11 → 11/3."
+        }
+      ]
+    },
+    "day7": {
+      "topic": "Fractions: Add, Subtract, Multiply & Divide",
+      "standard": "B5.1.3.2",
+      "objectives": [
+        "Add and subtract fractions with different denominators including mixed numbers",
+        "Multiply fractions and find fractions of quantities",
+        "Divide fractions using the reciprocal method",
+        "Solve word problems involving all four operations with fractions"
+      ],
+      "concepts": [
+        {
+          "heading": "Adding & Subtracting Fractions",
+          "body": "Step 1: Find the LCD.\nStep 2: Convert to equivalent fractions.\nStep 3: Add or subtract numerators.\nStep 4: Simplify.\n\nExample: 3/4 + 5/6\nLCD = 12. 3/4 = 9/12. 5/6 = 10/12.\n9/12 + 10/12 = 19/12 = 1 7/12\n\nFor mixed numbers: add/subtract whole parts, then fractions.\nExample: 4⅔ - 2¾\nConvert: 14/3 - 11/4. LCD=12.\n56/12 - 33/12 = 23/12 = 1 11/12",
+          "note": null
+        },
+        {
+          "heading": "Multiplying & Dividing Fractions",
+          "body": "MULTIPLYING: multiply numerators together and denominators together.\nExample: 2/3 × 4/5 = 8/15\nSimplify BEFORE multiplying where possible (cross-cancelling).\n\nDIVIDING: Keep the first fraction. Change ÷ to ×. Flip the second fraction.\nExample: 3/4 ÷ 2/5 = 3/4 × 5/2 = 15/8 = 1⅞\n\nFinding a fraction OF a quantity:\n2/5 of 80 = 2/5 × 80 = 32",
+          "note": "'OF' means MULTIPLY. Always simplify your final answer."
+        }
+      ],
+      "worked": [
+        {
+          "q": "Add: 2⅖ + 1⅔",
+          "a": "Whole: 2+1=3. Fractions: 2/5+2/3. LCD=15: 6/15+10/15=16/15=1 1/15. Total=4 1/15."
+        },
+        {
+          "q": "Multiply: 3/8 × 4/9",
+          "a": "Cross-cancel: 3/8 × 4/9 → divide 3&9 by 3, divide 4&8 by 4: 1/2 × 1/3 = 1/6."
+        },
+        {
+          "q": "A farmer has 6¾ acres of land. He uses ⅔ of it for maize. How many acres is that?",
+          "a": "⅔ of 6¾ = ⅔ × 27/4 = 54/12 = 9/2 = 4½ acres."
+        }
+      ]
+    },
+    "day9": {
+      "topic": "Decimals & Percentages: Converting, Operating & Applying",
+      "standard": "B5.1.3.3",
+      "objectives": [
+        "Convert between fractions, decimals and percentages",
+        "Add, subtract, multiply and divide decimal numbers",
+        "Calculate percentage of a quantity, percentage increase and decrease",
+        "Solve word problems involving decimals and percentages"
+      ],
+      "concepts": [
+        {
+          "heading": "Converting Between Fractions, Decimals & Percentages",
+          "body": "FRACTION → DECIMAL: divide top by bottom\n3/8 = 3 ÷ 8 = 0.375\n\nDECIMAL → PERCENTAGE: multiply by 100\n0.375 × 100 = 37.5%\n\nPERCENTAGE → FRACTION: write over 100 and simplify\n45% = 45/100 = 9/20\n\nKey benchmarks:\n½ = 0.5 = 50%\n¼ = 0.25 = 25%\n¾ = 0.75 = 75%\n⅕ = 0.2 = 20%\n⅓ ≈ 0.333 ≈ 33.3%\n⅛ = 0.125 = 12.5%",
+          "note": null
+        },
+        {
+          "heading": "Percentage Increase, Decrease & Finding Amounts",
+          "body": "% of a quantity: (% ÷ 100) × quantity\nExample: 35% of GH₵480 = 0.35 × 480 = GH₵168\n\n% INCREASE: (increase ÷ original) × 100\nExample: Price rises from GH₵120 to GH₵150.\nIncrease=30. %=(30÷120)×100=25%\n\n% DECREASE: (decrease ÷ original) × 100\nExample: Salary drops from GH₵800 to GH₵640.\nDecrease=160. %=(160÷800)×100=20%\n\nAdding decimals: line up the decimal points.\nMultiplying decimals: multiply as whole numbers, then count decimal places.",
+          "note": "When multiplying decimals, count the total decimal places in BOTH numbers and put that many in the answer."
+        }
+      ],
+      "worked": [
+        {
+          "q": "Convert: (a) 7/8 to decimal and %  (b) 0.64 to fraction  (c) 35% to fraction",
+          "a": "(a) 7÷8=0.875; 0.875×100=87.5%  (b) 0.64=64/100=16/25  (c) 35/100=7/20"
+        },
+        {
+          "q": "Find 28% of GH₵650.",
+          "a": "28/100 × 650 = 0.28 × 650 = GH₵182"
+        },
+        {
+          "q": "A shirt costs GH₵85. It is reduced by 20%. What is the new price?",
+          "a": "Discount = 20% × 85 = GH₵17. New price = 85 - 17 = GH₵68."
+        }
+      ]
+    }
+  },
+  "ivan": {
+    "day1": {
+      "topic": "Numbers: Counting & Place Value to 1,000",
+      "standard": "B3.1.1.1",
+      "objectives": [
+        "Count forwards and backwards to 1,000",
+        "Read and write numbers up to 1,000 in words and figures",
+        "Identify the value of each digit (hundreds, tens, units)",
+        "Compare numbers using >, < and = signs"
+      ],
+      "concepts": [
+        {
+          "heading": "Place Value — Hundreds, Tens and Units",
+          "body": "Every number has digits in different POSITIONS. Each position has a value.\n\nExample: The number 347\n3 is in the HUNDREDS place → value = 300\n4 is in the TENS place → value = 40\n7 is in the UNITS place → value = 7\n\nSo 347 = 300 + 40 + 7",
+          "note": "Remember: Hundreds | Tens | Units — from left to right."
+        },
+        {
+          "heading": "Reading, Writing & Comparing Numbers to 1,000",
+          "body": "Numbers in figures → write in words:\n356 → Three hundred and fifty-six\n908 → Nine hundred and eight\n1,000 → One thousand\n\nComparing numbers: always start from the HUNDREDS digit.\n456 > 389 because 4 hundreds > 3 hundreds\n\nUse > (greater than), < (less than), = (equal to)",
+          "note": "When writing numbers in words, use 'and' after the hundreds: 'three hundred AND fifty-six'."
+        }
+      ],
+      "worked": [
+        {
+          "q": "Write the value of each digit in 748.",
+          "a": "7 → hundreds (700). 4 → tens (40). 8 → units (8). So 748 = 700 + 40 + 8."
+        },
+        {
+          "q": "Write 625 in words.",
+          "a": "Six hundred and twenty-five."
+        },
+        {
+          "q": "Which is greater: 483 or 438? Use the correct symbol.",
+          "a": "Both have 4 hundreds. Then compare tens: 8 tens > 3 tens. So 483 > 438."
+        }
+      ]
+    },
+    "day3": {
+      "topic": "Addition & Subtraction: 2- and 3-digit Numbers",
+      "standard": "B3.1.2.1",
+      "objectives": [
+        "Add 2-digit and 3-digit numbers with and without carrying (regrouping)",
+        "Subtract 2-digit and 3-digit numbers with and without borrowing",
+        "Solve word problems involving addition and subtraction",
+        "Check answers using the inverse operation"
+      ],
+      "concepts": [
+        {
+          "heading": "Addition with Carrying (Regrouping)",
+          "body": "When the sum of a column is 10 or more, we CARRY the tens digit to the next column.\n\nExample: 365 + 247\nUnits: 5 + 7 = 12. Write 2, carry 1.\nTens: 6 + 4 + 1 (carried) = 11. Write 1, carry 1.\nHundreds: 3 + 2 + 1 (carried) = 6.\nAnswer: 612\n\nAlways add from RIGHT to LEFT (units first, then tens, then hundreds).",
+          "note": "Check your answer by adding again or by using subtraction."
+        },
+        {
+          "heading": "Subtraction with Borrowing",
+          "body": "When the top digit is smaller than the bottom digit, we BORROW from the next column.\n\nExample: 423 - 178\nUnits: 3 < 8. Borrow from tens: 13 - 8 = 5.\nTens: 1 (was 2, gave 1) < 7. Borrow from hundreds: 11 - 7 = 4.\nHundreds: 3 (was 4, gave 1) - 1 = 2.\nAnswer: 245\n\nCheck: 245 + 178 = 423 ✓",
+          "note": "KEY WORD CLUES: 'total', 'altogether', 'sum' = addition. 'difference', 'left', 'remaining', 'less' = subtraction."
+        }
+      ],
+      "worked": [
+        {
+          "q": "Add: 456 + 378",
+          "a": "Units: 6+8=14, write 4, carry 1. Tens: 5+7+1=13, write 3, carry 1. Hundreds: 4+3+1=8. Answer: 834."
+        },
+        {
+          "q": "Subtract: 700 - 364",
+          "a": "Units: 0<4, borrow. 10-4=6. Tens: 9<6... borrow from hundreds: 10-6=4. Hundreds: 6-3=3. Answer: 336. Check: 336+364=700 ✓"
+        },
+        {
+          "q": "Ivan collected 247 stamps and his brother collected 185 stamps. How many do they have altogether?",
+          "a": "247 + 185 = 432 stamps altogether."
+        }
+      ]
+    },
+    "day5": {
+      "topic": "Multiplication: 2× to 10× Tables",
+      "standard": "B3.1.3.1",
+      "objectives": [
+        "Recall multiplication facts for the 2× to 10× tables",
+        "Use multiplication as repeated addition",
+        "Multiply a 2-digit number by a 1-digit number",
+        "Solve word problems using multiplication"
+      ],
+      "concepts": [
+        {
+          "heading": "Multiplication as Repeated Addition",
+          "body": "Multiplication means adding the same number over and over.\n4 × 3 means \"4 groups of 3\" or 3 + 3 + 3 + 3 = 12\n7 × 5 means \"7 groups of 5\" or 5 + 5 + 5 + 5 + 5 + 5 + 5 = 35\n\nImportant rules:\n• Any number × 0 = 0. (9 × 0 = 0)\n• Any number × 1 = that number. (7 × 1 = 7)\n• Order does not matter: 4 × 6 = 6 × 4 = 24",
+          "note": "Practise your tables until they are automatic — this will help in ALL areas of maths."
+        },
+        {
+          "heading": "Multiplying a 2-digit Number by a 1-digit Number",
+          "body": "Method: Split the 2-digit number into tens and units.\n\nExample: 34 × 6\nStep 1: Multiply units: 4 × 6 = 24. Write 4, carry 2.\nStep 2: Multiply tens: 3 × 6 = 18. Add carried 2: 18 + 2 = 20.\nAnswer: 204\n\nAnother way — expanded method:\n34 × 6 = (30 × 6) + (4 × 6) = 180 + 24 = 204",
+          "note": null
+        }
+      ],
+      "worked": [
+        {
+          "q": "Find: (a) 7 × 8  (b) 9 × 6  (c) 4 × 7",
+          "a": "(a) 56  (b) 54  (c) 28"
+        },
+        {
+          "q": "Multiply: 47 × 5",
+          "a": "Units: 7×5=35. Write 5, carry 3. Tens: 4×5=20. Add 3: 23. Answer: 235."
+        },
+        {
+          "q": "A classroom has 8 rows of chairs. Each row has 9 chairs. How many chairs in total?",
+          "a": "8 × 9 = 72 chairs."
+        }
+      ]
+    },
+    "day7": {
+      "topic": "Division: Sharing Equally & The Relationship with Multiplication",
+      "standard": "B3.1.4.1",
+      "objectives": [
+        "Understand division as equal sharing and as repeated subtraction",
+        "Use the relationship between multiplication and division",
+        "Divide a 2-digit number by a 1-digit number",
+        "Solve word problems involving division"
+      ],
+      "concepts": [
+        {
+          "heading": "Division as Equal Sharing",
+          "body": "Division means sharing equally into groups.\n24 ÷ 6 = ? means: share 24 equally into 6 groups. Each group gets 4.\n\nDivision and multiplication are INVERSE operations — they undo each other:\nIf 6 × 4 = 24, then 24 ÷ 6 = 4 AND 24 ÷ 4 = 6\n\nCHECK a division answer using multiplication:\n72 ÷ 8 = 9. Check: 9 × 8 = 72 ✓",
+          "note": "You cannot divide by ZERO. Division by 0 is undefined."
+        },
+        {
+          "heading": "Dividing a 2-digit Number by a 1-digit Number",
+          "body": "Example: 84 ÷ 4\nStep 1: Divide the tens digit: 8 ÷ 4 = 2. Write 2 above the tens.\nStep 2: Divide the units digit: 4 ÷ 4 = 1. Write 1 above the units.\nAnswer: 21. Check: 21 × 4 = 84 ✓\n\nExample with remainder: 47 ÷ 5\nHow many times does 5 go into 47? 5 × 9 = 45. Remainder = 47 - 45 = 2.\nAnswer: 9 remainder 2 (written as 9 r 2)",
+          "note": null
+        }
+      ],
+      "worked": [
+        {
+          "q": "Find: (a) 63 ÷ 7  (b) 54 ÷ 6  (c) 81 ÷ 9",
+          "a": "(a) 9  (b) 9  (c) 9. Check: 9×7=63 ✓, 9×6=54 ✓, 9×9=81 ✓."
+        },
+        {
+          "q": "Divide: 76 ÷ 4",
+          "a": "7÷4=1 remainder 3. Bring down 6: 36÷4=9. Answer: 19. Check: 19×4=76 ✓."
+        },
+        {
+          "q": "48 mangoes are shared equally among 6 children. How many does each child get?",
+          "a": "48 ÷ 6 = 8 mangoes each."
+        }
+      ]
+    },
+    "day9": {
+      "topic": "Fractions: Halves, Quarters, Thirds & Simple Fractions",
+      "standard": "B3.1.5.1",
+      "objectives": [
+        "Understand a fraction as equal parts of a whole",
+        "Read and write simple fractions: ½, ¼, ¾, ⅓, ⅔",
+        "Compare simple fractions",
+        "Find a fraction of a quantity"
+      ],
+      "concepts": [
+        {
+          "heading": "What is a Fraction?",
+          "body": "A fraction is a part of a WHOLE that has been divided into EQUAL parts.\n\nA fraction has two parts:\n• NUMERATOR (top): how many parts you have\n• DENOMINATOR (bottom): how many EQUAL parts the whole is divided into\n\nExample: ¾ means the whole is cut into 4 equal parts and you have 3 of them.\n\nImportant fractions to know:\n½ = one half (2 equal parts, take 1)\n¼ = one quarter (4 equal parts, take 1)\n¾ = three quarters (4 equal parts, take 3)\n⅓ = one third (3 equal parts, take 1)",
+          "note": "The denominator shows how many EQUAL parts. If the parts are not equal, it is NOT a fraction."
+        },
+        {
+          "heading": "Finding a Fraction of a Quantity",
+          "body": "To find a fraction of a number:\nDIVIDE by the denominator, then MULTIPLY by the numerator.\n\nExample: Find ¾ of 24.\nStep 1: Divide by denominator: 24 ÷ 4 = 6\nStep 2: Multiply by numerator: 6 × 3 = 18\nAnswer: ¾ of 24 = 18\n\nExample: Find ⅓ of 30.\n30 ÷ 3 = 10. So ⅓ of 30 = 10.",
+          "note": "'OF' in maths means MULTIPLY. So ¾ of 24 = ¾ × 24."
+        }
+      ],
+      "worked": [
+        {
+          "q": "What fraction is shaded?\n(a) A shape cut into 4 equal parts with 1 shaded.\n(b) A shape cut into 6 equal parts with 5 shaded.",
+          "a": "(a) ¼ (one quarter)  (b) 5/6 (five sixths)"
+        },
+        {
+          "q": "Find: (a) ½ of 48  (b) ¼ of 36  (c) ⅓ of 27",
+          "a": "(a) 48÷2=24  (b) 36÷4=9  (c) 27÷3=9"
+        },
+        {
+          "q": "In a class of 32 pupils, ¾ are present today. How many pupils are present?",
+          "a": "32÷4=8. Then 8×3=24 pupils are present."
+        }
+      ]
+    }
+  }
+}
