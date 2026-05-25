@@ -22,6 +22,19 @@ function normaliseDayNum(dayNum) {
   return String(dayNum).startsWith('recap') ? dayNum : Number(dayNum)
 }
 
+// localStorage draft helpers — survive power cuts and network drops
+function draftKey(studentId, dayNum) {
+  return 'aasp_draft_' + studentId + '_' + dayNum
+}
+function saveDraft(studentId, dayNum, answers) {
+  try { localStorage.setItem(draftKey(studentId, dayNum), JSON.stringify(answers)) } catch (e) {}
+}
+function loadDraft(studentId, dayNum) {
+  try { return JSON.parse(localStorage.getItem(draftKey(studentId, dayNum)) || 'null') } catch (e) { return null }
+}
+function clearDraft(studentId, dayNum) {
+  try { localStorage.removeItem(draftKey(studentId, dayNum)) } catch (e) {}
+}
 
 export default function DayPackPage() {
   const { dayNum } = useParams()
@@ -36,6 +49,7 @@ export default function DayPackPage() {
   const [loading, setLoading] = useState(true)
   const [activeTab, setActiveTab] = useState('learn')
   const [loadError, setLoadError] = useState(null)
+  const [draftRestored, setDraftRestored] = useState(false)
 
   const studentId = profile?.studentId
   const student = STUDENTS[studentId]
@@ -59,6 +73,14 @@ export default function DayPackPage() {
         setAnswers(sub.answers || {})
         if (sub.score !== undefined) setActiveTab('results')
         else setActiveTab('practice')
+      } else {
+        // No submission — restore draft from localStorage if available
+        const draft = loadDraft(studentId, dayNum)
+        if (draft && Object.keys(draft).length > 0) {
+          setAnswers(draft)
+          setDraftRestored(true)
+          setActiveTab('practice')
+        }
       }
     } catch (err) {
       console.error('loadPack error:', err)
@@ -84,6 +106,8 @@ export default function DayPackPage() {
         status: 'submitted',
       }
       await setDoc(doc(db, 'submissions', id), subData)
+      clearDraft(studentId, dayNum) // Clear saved draft on successful submission
+      setDraftRestored(false)
       setSubmission(subData)
       setActiveTab('practice')
       await autoMark(answers, pack)
@@ -395,6 +419,14 @@ export default function DayPackPage() {
         {activeTab === 'practice' && (
           <div className="space-y-4 animate-fade-in">
 
+            {/* Draft restored banner */}
+            {draftRestored && !hasSubmitted && (
+              <div className="card p-3 border border-blue-500/20 bg-blue-500/5 flex items-center gap-2">
+                <span className="text-blue-400 text-sm">💾</span>
+                <p className="text-blue-300 text-xs">Your previous answers have been restored. Continue where you left off.</p>
+              </div>
+            )}
+
             {hasSubmitted && !isMarked && (
               <div className="card p-4 border border-amber-500/20 bg-amber-500/5">
                 <div className="flex items-center gap-2 text-amber-400">
@@ -456,7 +488,11 @@ export default function DayPackPage() {
                     ) : (
                       <textarea
                         value={answer}
-                        onChange={e => setAnswers(prev => ({ ...prev, [i]: e.target.value }))}
+                        onChange={e => {
+                          const updated = { ...answers, [i]: e.target.value }
+                          setAnswers(updated)
+                          saveDraft(studentId, dayNum, updated)
+                        }}
                         disabled={hasSubmitted}
                         placeholder={hasSubmitted ? 'Submitted' : 'Write your answer here...'}
                         rows={3}
