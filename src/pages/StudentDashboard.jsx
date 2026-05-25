@@ -92,13 +92,22 @@ export default function StudentDashboard() {
     const sub = submissions[day.day] || submissions[String(day.day)]
     if (sub?.score !== undefined) return 'marked'
     if (sub) return 'submitted'
-    // Recap sessions unlock when all their covered daily sessions are done
+    // Recap sessions always available
     if (day.isRecap) return 'available'
     // Day 1 always available
-    if (day.day === 1) return 'available'
-    // Sequential unlock: previous day must be MARKED (scored), not just submitted
+    if (day.day === 1) {
+      const today = new Date()
+      const packDate = new Date(day.date)
+      return packDate < today ? 'overdue' : 'available'
+    }
+    // Sequential unlock: previous day must be MARKED
     const prevSub = submissions[day.day - 1] || submissions[String(day.day - 1)]
-    if (prevSub?.score !== undefined) return 'available'
+    if (prevSub?.score !== undefined) {
+      // Available — check if overdue
+      const today = new Date()
+      const packDate = new Date(day.date)
+      return packDate < today ? 'overdue' : 'available'
+    }
     return 'upcoming'
   }
 
@@ -229,7 +238,7 @@ export default function StudentDashboard() {
           </div>
         )}
 
-        {timetable.filter(d => getPackStatus(d) === 'available' && !submissions[d.day]).map(day => {
+        {timetable.filter(d => (getPackStatus(d) === 'available' || getPackStatus(d) === 'overdue') && !submissions[d.day]).map(day => {
           const SubjectIcon = SUBJECT_ICONS[day.subject] || BookOpen
           const colours = SUBJECT_COLOURS[day.subject] || SUBJECT_COLOURS.Mathematics
           return (
@@ -266,6 +275,7 @@ export default function StudentDashboard() {
               const SubjectIcon = SUBJECT_ICONS[day.subject] || BookOpen
               const colours = SUBJECT_COLOURS[day.subject] || SUBJECT_COLOURS.Mathematics
               const isLocked = status === 'upcoming'
+              const isOverdue = status === 'overdue'
               return (
                 <div key={day.day} onClick={() => !isLocked && navigate(`/pack/${day.day}`)}
                   className={`flex items-center gap-4 px-4 py-3 rounded-xl border transition-all duration-200
@@ -285,11 +295,16 @@ export default function StudentDashboard() {
                     {status === 'marked' && (
                       <div className="flex items-center gap-2">
                         <span className={`font-bold text-sm font-mono ${getScoreColour(sub.score)}`}>{sub.score}/10</span>
-                        <CheckCircle size={15} className="text-emerald-400" />
+                        {sub.correctionsSubmitted
+                          ? <CheckCircle size={15} className="text-emerald-400" />
+                          : (sub.markedAnswers && Object.values(sub.markedAnswers).some(m => !m.correct))
+                            ? <span className="text-orange-400 text-[10px] font-medium">✏️ Fix</span>
+                            : <CheckCircle size={15} className="text-emerald-400" />
+                        }
                       </div>
                     )}
                     {status === 'submitted' && <span className="text-amber-400 text-xs flex items-center gap-1"><Clock size={13} /> Pending</span>}
-                    {status === 'available' && <span className="text-amber-400 text-xs font-medium flex items-center gap-1"><Star size={13} /> Next</span>}
+                    {(status === 'available' || status === 'overdue') && <span className={status === 'overdue' ? 'text-red-400 text-xs font-medium' : 'text-amber-400 text-xs font-medium flex items-center gap-1'}>{status === 'overdue' ? 'Overdue' : <><Star size={13} /> Next</>}</span>}
                     
                     {status === 'upcoming' && <Lock size={14} className="text-slate-600" />}
                   </div>
