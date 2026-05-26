@@ -12,6 +12,7 @@ import AdminMarkWork from './pages/AdminMarkWork'
 import AdminAnalytics from './pages/AdminAnalytics'
 import AdminRecapBuilder from './pages/AdminRecapBuilder'
 import LoadingScreen from './components/LoadingScreen'
+import AdminQuestions from './pages/AdminQuestions'
 
 function ProtectedRoute({ children, requireAdmin = false }) {
   const { user, profile, loading } = useAuth()
@@ -112,6 +113,14 @@ export default function App() {
             <ProtectedRoute requireAdmin>
               <ErrorBoundary>
                 <AdminRecapBuilder />
+              </ErrorBoundary>
+            </ProtectedRoute>
+          } />
+      
+          <Route path="/admin/questions" element={
+            <ProtectedRoute requireAdmin>
+              <ErrorBoundary>
+                <AdminQuestions />
               </ErrorBoundary>
             </ProtectedRoute>
           } />

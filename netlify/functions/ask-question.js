@@ -1,5 +1,5 @@
 // netlify/functions/ask-question.js
-// AI tutor for students — strictly limited to current pack subject/topic
+// AI tutor — strictly limited to current subject/topic + returns log data
 
 export async function handler(event) {
   if (event.httpMethod !== 'POST') {
@@ -18,16 +18,16 @@ export async function handler(event) {
     return { statusCode: 400, body: JSON.stringify({ error: 'Invalid JSON' }) }
   }
 
-  const { question, subject, topic, level, studentName } = body
+  const { question, subject, topic, level, studentName, studentId, dayNum } = body
 
   const prompt = `You are a strict but friendly classroom tutor helping ${studentName}, a ${level} student in Ghana, understand their ${subject} work on the topic "${topic}".
 
-STRICT RULES — you must follow these without exception:
-1. ONLY answer questions directly related to ${subject} and the topic "${topic}". 
+STRICT RULES — follow without exception:
+1. ONLY answer questions directly related to ${subject} and the topic "${topic}".
 2. If the student asks about ANYTHING else (other subjects, general knowledge, news, people, games, social media, or anything unrelated to ${subject}/${topic}), respond ONLY with: "I can only help you with ${subject} — ${topic} right now. Do you have a question about that?"
 3. Do NOT give direct answers to practice questions. If the student pastes a question that looks like it is from their exercise, say: "That looks like one of your practice questions. I won't give you the answer, but I can explain the concept. What part do you not understand?"
 4. Keep answers SHORT — maximum 4 sentences.
-5. Use simple language for a ${level} student in Ghana.
+5. Use simple language appropriate for a ${level} student in Ghana.
 6. Use Ghanaian examples where helpful (cedis, markets, cocoa, local places).
 7. Be encouraging but firm about staying on topic.
 8. Never discuss violence, relationships, social issues, politics, or anything inappropriate for a school-age student.
@@ -58,7 +58,10 @@ Respond directly — no preamble.`
     return {
       statusCode: 200,
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ answer }),
+      body: JSON.stringify({
+        answer,
+        logData: { studentId, studentName, dayNum, subject, topic, question, answer, timestamp: new Date().toISOString() }
+      }),
     }
   } catch (err) {
     return { statusCode: 500, body: JSON.stringify({ error: err.message }) }

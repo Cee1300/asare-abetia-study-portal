@@ -1,10 +1,11 @@
 // src/components/AskQuestion.jsx
 import { useState } from 'react'
+import { db } from '../firebase'
+import { collection, addDoc, serverTimestamp } from 'firebase/firestore'
 import { STUDENTS } from '../utils/students'
 
-export default function AskQuestion({ subject, topic, level, studentId, conceptContext }) {
+export default function AskQuestion({ subject, topic, level, studentId, conceptContext, dayNum }) {
   const [question, setQuestion] = useState('')
-  const [answer, setAnswer] = useState('')
   const [asking, setAsking] = useState(false)
   const [history, setHistory] = useState([])
   const [open, setOpen] = useState(false)
@@ -26,14 +27,29 @@ export default function AskQuestion({ subject, topic, level, studentId, conceptC
           subject,
           topic,
           level,
+          studentId,
           studentName: student?.name || 'Student',
+          dayNum,
           context: conceptContext || '',
         }),
       })
       const result = await response.json()
       const a = result.answer || 'Sorry, I could not answer that. Try asking differently.'
+
       setHistory(prev => [...prev, { q, a }])
-      setAnswer(a)
+
+      // Log to Firestore
+      if (result.logData) {
+        try {
+          await addDoc(collection(db, 'questions'), {
+            ...result.logData,
+            createdAt: serverTimestamp(),
+          })
+        } catch (logErr) {
+          console.error('Question log error:', logErr)
+          // Don't show error to student — logging failure is silent
+        }
+      }
     } catch {
       setHistory(prev => [...prev, { q, a: 'Something went wrong. Please try again.' }])
     }
@@ -102,9 +118,9 @@ export default function AskQuestion({ subject, topic, level, studentId, conceptC
             </div>
             <div className="bg-slate-800 rounded-2xl rounded-tl-sm px-4 py-2">
               <div className="flex gap-1">
-                <div className="w-1.5 h-1.5 bg-slate-400 rounded-full animate-bounce" style={{animationDelay:'0ms'}} />
-                <div className="w-1.5 h-1.5 bg-slate-400 rounded-full animate-bounce" style={{animationDelay:'150ms'}} />
-                <div className="w-1.5 h-1.5 bg-slate-400 rounded-full animate-bounce" style={{animationDelay:'300ms'}} />
+                <div className="w-1.5 h-1.5 bg-slate-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
+                <div className="w-1.5 h-1.5 bg-slate-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
+                <div className="w-1.5 h-1.5 bg-slate-400 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
               </div>
             </div>
           </div>
@@ -131,7 +147,7 @@ export default function AskQuestion({ subject, topic, level, studentId, conceptC
           </button>
         </div>
         <p className="text-slate-600 text-xs text-center">
-          The AI tutor explains concepts — it won't give you exam answers directly
+          The AI tutor explains concepts — it won't give exam answers directly
         </p>
       </div>
     </div>

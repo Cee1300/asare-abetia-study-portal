@@ -1,0 +1,293 @@
+{
+  "day2": {
+    "studentId": "ivan",
+    "dayNum": 2,
+    "subject": "Science",
+    "topic": "Living & Non-Living Things: How to Tell Them Apart",
+    "standard": "B3.1.1.1.1",
+    "objectives": [
+      "Classify things as living or non-living using their life processes",
+      "Group living things into plants and animals",
+      "Identify the characteristics that make something living",
+      "Give examples of living and non-living things from your environment"
+    ],
+    "concepts": [
+      {
+        "heading": "Living Things — What Makes Something Alive?",
+        "body": "Living things share these LIFE PROCESSES (MRS GREN):\n• Movement: they can move all or part of themselves\n• Respiration: they use air/oxygen to release energy\n• Sensitivity: they respond to things around them\n• Growth: they get bigger over time\n• Reproduction: they produce young ones like themselves\n• Excretion: they get rid of waste\n• Nutrition: they need food or make their own\n\nALL living things do ALL of these things.",
+        "note": "Memory tip: MRS GREN — Movement, Respiration, Sensitivity, Growth, Reproduction, Excretion, Nutrition."
+      },
+      {
+        "heading": "Plants vs Animals vs Non-Living Things",
+        "body": "PLANTS:\n• Make their own food using sunlight (photosynthesis)\n• Usually stay in one place — roots hold them in the ground\n• Examples: mango tree, cocoa, maize, grass, pawpaw\n\nANIMALS:\n• Cannot make their own food — they eat plants or other animals\n• Can move from place to place\n• Examples: goat, fish, butterfly, chicken, human beings\n\nNON-LIVING THINGS:\n• Do NONE of the MRS GREN processes\n• Examples: stone, water, chair, pencil, cloud",
+        "note": "A dead tree is NOT living — it does not carry out life processes anymore. But it was once alive, so it is different from a stone which was never alive."
+      }
+    ],
+    "worked": [
+      {
+        "q": "Sort into LIVING and NON-LIVING: butterfly, stone, maize plant, pencil, goat, river water, mango tree, cloud",
+        "a": "LIVING: butterfly, maize plant, goat, mango tree.\nNON-LIVING: stone, pencil, river water, cloud."
+      },
+      {
+        "q": "Explain TWO reasons why a dog is a living thing but a toy dog is not.",
+        "a": "1. The real dog GROWS — starts as a puppy and gets bigger. The toy never changes.\n2. The real dog FEEDS — eats food for energy. The toy does not need food."
+      },
+      {
+        "q": "How is a plant different from an animal? Give TWO differences.",
+        "a": "1. A plant makes its own food using sunlight. An animal must eat.\n2. A plant usually stays in one place. An animal can move from place to place."
+      }
+    ],
+    "questions": [
+      {
+        "q": "Name the 7 life processes. (Use MRS GREN to help you.)",
+        "a": "Movement, Respiration, Sensitivity, Growth, Reproduction, Excretion, Nutrition."
+      },
+      {
+        "q": "Classify each as PLANT, ANIMAL or NON-LIVING:\n(a) cocoa tree  (b) stone  (c) tilapia  (d) chair  (e) grasshopper  (f) water  (g) cassava",
+        "a": "(a) Plant  (b) Non-living  (c) Animal  (d) Non-living  (e) Animal  (f) Non-living  (g) Plant"
+      },
+      {
+        "q": "Give TWO ways you can tell that a mango tree is a living thing.",
+        "a": "Any two: it grows taller over time; it produces mangoes (reproduction); it has roots that absorb water (nutrition); its leaves turn toward sunlight (sensitivity)."
+      },
+      {
+        "q": "Give TWO differences between a plant and an animal.",
+        "a": "1. Plants make their own food using sunlight; animals eat other organisms.\n2. Plants stay rooted in one place; animals can move around freely."
+      },
+      {
+        "q": "Is a dead leaf living or non-living? Explain your answer.",
+        "a": "A dead leaf is NON-LIVING. Although it was once part of a living tree, it no longer carries out any life processes — it does not grow, feed, respond or reproduce. It is no longer alive."
+      },
+      {
+        "q": "Name THREE living things and THREE non-living things you can find in your home.",
+        "a": "Accept any correct examples. Living: plants, insects, people, pets, bacteria on food. Non-living: tables, phones, books, pots, stones, water."
+      },
+      {
+        "q": "A cloud can move. Does that make it a living thing? Explain.",
+        "a": "No. Movement alone does not make something living. A cloud moves because of wind, not because it has muscles or life processes. It does not grow, feed, reproduce, breathe or respond to things around it — so it is NOT living."
+      },
+      {
+        "q": "Name FIVE plants and FIVE animals that are common in Ghana.",
+        "a": "Plants: cocoa, maize, mango, cassava, plantain. Animals: tilapia, eagle, grasshopper, lizard, goat. Accept any correct Ghanaian examples."
+      },
+      {
+        "q": "Draw a simple table with two columns: LIVING THINGS and NON-LIVING THINGS. Put these in the correct column:\nhoney bee, textbook, tomato plant, soil, earthworm, plastic bottle, snail, thermometer",
+        "a": "LIVING: honey bee, tomato plant, earthworm, snail.\nNON-LIVING: textbook, soil, plastic bottle, thermometer."
+      },
+      {
+        "q": "[Challenge] Fire moves, grows bigger and needs air (oxygen). Does that make fire a living thing? Explain carefully.",
+        "a": "No, fire is NOT living. Although fire moves, grows and uses oxygen, it does not carry out ALL MRS GREN processes. Fire cannot reproduce itself (it needs an external source to spread), it cannot respond to stimuli in a coordinated way, it does not excrete waste products in a biological sense, and it has no cells. Living things are made of cells — fire is not. Meeting some conditions of MRS GREN is not enough; ALL must be present."
+      }
+    ],
+    "answerKey": [
+      "Movement, Respiration, Sensitivity, Growth, Reproduction, Excretion, Nutrition.",
+      "(a) Plant  (b) Non-living  (c) Animal  (d) Non-living  (e) Animal  (f) Non-living  (g) Plant",
+      "Any two: it grows taller over time; it produces mangoes (reproduction); it has roots that absorb water (nutrition); its leaves turn toward sunlight (sensitivity).",
+      "1. Plants make their own food using sunlight; animals eat other organisms.\n2. Plants stay rooted in one place; animals can move around freely.",
+      "A dead leaf is NON-LIVING. Although it was once part of a living tree, it no longer carries out any life processes — it does not grow, feed, respond or reproduce. It is no longer alive.",
+      "Accept any correct examples. Living: plants, insects, people, pets, bacteria on food. Non-living: tables, phones, books, pots, stones, water.",
+      "No. Movement alone does not make something living. A cloud moves because of wind, not because it has muscles or life processes. It does not grow, feed, reproduce, breathe or respond to things around it — so it is NOT living.",
+      "Plants: cocoa, maize, mango, cassava, plantain. Animals: tilapia, eagle, grasshopper, lizard, goat. Accept any correct Ghanaian examples.",
+      "LIVING: honey bee, tomato plant, earthworm, snail.\nNON-LIVING: textbook, soil, plastic bottle, thermometer.",
+      "No, fire is NOT living. Although fire moves, grows and uses oxygen, it does not carry out ALL MRS GREN processes. Fire cannot reproduce itself (it needs an external source to spread), it cannot respond to stimuli in a coordinated way, it does not excrete waste products in a biological sense, and it has no cells. Living things are made of cells — fire is not. Meeting some conditions of MRS GREN is not enough; ALL must be present."
+    ],
+    "createdAt": {
+      "_seconds": 1779077411,
+      "_nanoseconds": 475000000
+    }
+  },
+  "day6": {
+    "studentId": "ivan",
+    "dayNum": 6,
+    "subject": "Science",
+    "topic": "Materials & States of Matter: Solids, Liquids and Gases",
+    "standard": "B3.1.2.1–B3.1.2.3",
+    "objectives": [
+      "Identify the properties of solids, liquids and gases",
+      "Give examples of materials used for different purposes based on their properties",
+      "Explain how substances can change state through heating or cooling",
+      "Describe what a solid-liquid mixture is and how to separate it"
+    ],
+    "concepts": [
+      {
+        "heading": "Properties of Solids, Liquids and Gases",
+        "body": "SOLID: has a definite shape and volume. Particles are tightly packed.\nProperties: hard or soft, can be held, keeps its shape.\nExamples: wood, iron, stone, chalk, ice.\n\nLIQUID: has a definite volume but NO fixed shape. Takes the shape of its container.\nProperties: flows/pours, surface is level.\nExamples: water, palm oil, milk, blood.\n\nGAS: has NO fixed shape or volume. Fills any container completely.\nProperties: cannot be seen (usually), spreads out.\nExamples: air, steam, cooking gas, oxygen.",
+        "note": "Test: Can you hold it? = solid. Does it pour? = liquid. Does it fill the room? = gas."
+      },
+      {
+        "heading": "Materials and Their Uses & Changing State",
+        "body": "Materials are chosen for their PROPERTIES:\n• Metal → pots and pans (conducts heat, strong)\n• Wood → furniture (strong, can be shaped)\n• Plastic → bottles (can be moulded, does not break easily)\n• Cotton → clothes (soft, absorbs sweat)\n• Glass → windows (transparent)\n\nTemperature changes the STATE of matter:\nMELTING: solid → liquid (heat added). Example: ice melts into water.\nFREEZING: liquid → solid (heat removed). Example: water freezes into ice.\nEVAPORATION: liquid → gas (heat added). Example: water boils into steam.\nCONDENSATION: gas → liquid (heat removed). Example: steam cools into water drops.",
+        "note": "No new substance is formed when matter changes state — it is the SAME substance in a different form."
+      }
+    ],
+    "worked": [
+      {
+        "q": "Classify each material as SOLID, LIQUID or GAS:\n(a) cooking gas  (b) shea butter  (c) kerosene  (d) iron nail  (e) steam",
+        "a": "(a) gas  (b) solid  (c) liquid  (d) solid  (e) gas"
+      },
+      {
+        "q": "Why is metal used to make cooking pots instead of plastic?",
+        "a": "Metal is strong, hard and conducts heat well — it gets hot quickly and cooks food evenly. Plastic would melt if placed on a fire because it cannot withstand high temperatures."
+      },
+      {
+        "q": "What happens to shea butter when you leave it in the sun? Name the process.",
+        "a": "Shea butter MELTS — changes from solid to liquid. This is called MELTING. The sun's heat adds energy to the particles, causing them to move more freely."
+      }
+    ],
+    "questions": [
+      {
+        "q": "Name TWO properties of: (a) a solid  (b) a liquid  (c) a gas",
+        "a": "(a) Solid: has definite shape; particles are tightly packed.\n(b) Liquid: no fixed shape (takes shape of container); can pour/flow.\n(c) Gas: no fixed shape or volume; fills any container completely."
+      },
+      {
+        "q": "Give the correct material for each use and explain why:\n(a) Making a window  (b) Making a cooking spoon  (c) Making a school bag",
+        "a": "(a) Glass — it is transparent so you can see through it.\n(b) Wood or metal — wood does not conduct heat well; metal is strong and durable.\n(c) Cloth or plastic — flexible, lightweight and can hold items."
+      },
+      {
+        "q": "Name the state change in each situation:\n(a) Ice cream melting on a hot day\n(b) Wet clothes drying in the sun\n(c) Dew forming on leaves in the morning",
+        "a": "(a) Melting (solid → liquid).\n(b) Evaporation (liquid → gas).\n(c) Condensation (gas → liquid)."
+      },
+      {
+        "q": "A mobile phone is made of glass, plastic and metal. Give ONE reason why each material is used.",
+        "a": "Glass: transparent — used for the screen so you can see the display.\nPlastic: light and can be moulded into any shape — used for the casing.\nMetal: strong and conducts electricity — used for internal circuits and frame."
+      },
+      {
+        "q": "You mix sand and water together. Is this a mixture? How can you separate them?",
+        "a": "Yes, this is a mixture. Sand and water keep their own properties and are not chemically joined.\nTo separate: use FILTERING — filter paper holds the sand while water passes through."
+      },
+      {
+        "q": "What happens to candle wax when you light a candle? When you blow it out? Name the processes.",
+        "a": "When lit: wax near the flame MELTS (solid → liquid), then EVAPORATES/burns (liquid → gas).\nWhen blown out: the liquid wax FREEZES/SOLIDIFIES (liquid → solid) as it cools."
+      },
+      {
+        "q": "Give ONE example of an object in your home where each state of matter is useful:\n(a) a solid  (b) a liquid  (c) a gas",
+        "a": "(a) Solid: a table — solid wood gives it strength and a fixed shape to hold things.\n(b) Liquid: water — liquid form allows it to be poured, drunk and used for cooking.\n(c) Gas: cooking gas — gas flows through pipes easily and burns to produce heat for cooking."
+      },
+      {
+        "q": "Why can you pour water into any shaped container, but you cannot do the same with a stone?",
+        "a": "Water is a LIQUID — its particles move freely and it has no fixed shape, so it takes the shape of whatever container it is put in. A stone is a SOLID — its particles are tightly packed in fixed positions, giving it a definite shape that cannot change without breaking."
+      },
+      {
+        "q": "Steam and ice are both made of water. What is different about them?",
+        "a": "Steam is water in its GASEOUS state (very hot — particles move rapidly and spread out to fill any space). Ice is water in its SOLID state (very cold — particles vibrate slowly in fixed positions, giving it a definite shape). The difference is TEMPERATURE (and therefore the energy of the particles)."
+      },
+      {
+        "q": "[Challenge] When you breathe out on a cold morning, you can see a cloud of mist. Explain exactly what is happening using the words: water vapour, condensation, liquid, temperature.",
+        "a": "When you breathe out, warm air from your lungs contains WATER VAPOUR (water in its gaseous state). When this warm, moist air meets the cold outside air, the TEMPERATURE drops rapidly. This causes the water vapour to lose energy and undergo CONDENSATION — it changes from a gas into tiny LIQUID water droplets. These tiny droplets are what you see as a cloud of mist or \"steam\" from your breath."
+      }
+    ],
+    "answerKey": [
+      "(a) Solid: has definite shape; particles are tightly packed.\n(b) Liquid: no fixed shape (takes shape of container); can pour/flow.\n(c) Gas: no fixed shape or volume; fills any container completely.",
+      "(a) Glass — it is transparent so you can see through it.\n(b) Wood or metal — wood does not conduct heat well; metal is strong and durable.\n(c) Cloth or plastic — flexible, lightweight and can hold items.",
+      "(a) Melting (solid → liquid).\n(b) Evaporation (liquid → gas).\n(c) Condensation (gas → liquid).",
+      "Glass: transparent — used for the screen so you can see the display.\nPlastic: light and can be moulded into any shape — used for the casing.\nMetal: strong and conducts electricity — used for internal circuits and frame.",
+      "Yes, this is a mixture. Sand and water keep their own properties and are not chemically joined.\nTo separate: use FILTERING — filter paper holds the sand while water passes through.",
+      "When lit: wax near the flame MELTS (solid → liquid), then EVAPORATES/burns (liquid → gas).\nWhen blown out: the liquid wax FREEZES/SOLIDIFIES (liquid → solid) as it cools.",
+      "(a) Solid: a table — solid wood gives it strength and a fixed shape to hold things.\n(b) Liquid: water — liquid form allows it to be poured, drunk and used for cooking.\n(c) Gas: cooking gas — gas flows through pipes easily and burns to produce heat for cooking.",
+      "Water is a LIQUID — its particles move freely and it has no fixed shape, so it takes the shape of whatever container it is put in. A stone is a SOLID — its particles are tightly packed in fixed positions, giving it a definite shape that cannot change without breaking.",
+      "Steam is water in its GASEOUS state (very hot — particles move rapidly and spread out to fill any space). Ice is water in its SOLID state (very cold — particles vibrate slowly in fixed positions, giving it a definite shape). The difference is TEMPERATURE (and therefore the energy of the particles).",
+      "When you breathe out, warm air from your lungs contains WATER VAPOUR (water in its gaseous state). When this warm, moist air meets the cold outside air, the TEMPERATURE drops rapidly. This causes the water vapour to lose energy and undergo CONDENSATION — it changes from a gas into tiny LIQUID water droplets. These tiny droplets are what you see as a cloud of mist or \"steam\" from your breath."
+    ],
+    "createdAt": {
+      "_seconds": 1779077411,
+      "_nanoseconds": 475000000
+    }
+  },
+  "day10": {
+    "studentId": "ivan",
+    "dayNum": 10,
+    "subject": "Science",
+    "topic": "Earth Science: The Sun, Seasons, Precipitation & Water",
+    "standard": "B3.2.1.1–B3.2.1.4",
+    "objectives": [
+      "Describe cyclic events: day and night, wet and dry seasons",
+      "Explain the importance of the sun to life on Earth",
+      "Identify types of precipitation and describe the differences",
+      "Explain what makes water impure and why clean water matters"
+    ],
+    "concepts": [
+      {
+        "heading": "Cyclic Events — Things That Happen Over and Over",
+        "body": "A CYCLE is a series of events that repeat in the same order.\n\nExamples of natural cycles:\n• DAY AND NIGHT: the Earth rotates on its axis. One full rotation = 24 hours. Day = side facing the sun. Night = side facing away.\n• WET AND DRY SEASONS: caused by the Earth's movement around the Sun. In Ghana: Major rainy season (April–July), dry season (November–March).\n• YEARLY CYCLES: crop planting seasons, school terms, Independence Day (6th March).",
+        "note": "The Earth does NOT move closer to the Sun in summer — it is the TILT of the Earth that causes seasons."
+      },
+      {
+        "heading": "The Importance of the Sun & Water",
+        "body": "The Sun provides:\n• LIGHT: makes it possible to see during the day\n• HEAT/WARMTH: warms the Earth and allows life to exist\n• ENERGY for plants: powers PHOTOSYNTHESIS (how plants make food)\n• SOLAR ENERGY: used in solar panels to generate electricity\n• Drives the WATER CYCLE: sun's heat causes evaporation\n\nPRECIPITATION — water falling from clouds:\n• RAIN: liquid water droplets — most common in Ghana\n• HAIL: balls of ice that fall during storms\n• SNOW: frozen water crystals (cold countries — not Ghana)\n• SLEET: mix of rain and snow\n\nCLEAN WATER: no colour, no bad smell, no solid particles.\nThings that make water IMPURE: flooding, mining chemicals, littering, industrial waste, pesticides.",
+        "note": "Drinking impure water causes diseases like cholera, typhoid and diarrhoea."
+      }
+    ],
+    "worked": [
+      {
+        "q": "Explain why we have day and night.",
+        "a": "The Earth rotates on its axis once every 24 hours. The side facing the Sun receives sunlight — this is DAY. The side facing away is in darkness — this is NIGHT. As the Earth rotates, day and night alternate."
+      },
+      {
+        "q": "Give THREE ways the Sun is important to people in Ghana.",
+        "a": "Any three: provides light for daily activities; provides heat that warms the Earth; enables plants to photosynthesize and produce food; dries crops, fish and cocoa beans after harvesting; solar panels use sunlight to generate electricity; drives the water cycle."
+      },
+      {
+        "q": "Name the types of precipitation and explain which is most common in Ghana.",
+        "a": "Types: rain, hail, snow, sleet. Rain is most common in Ghana because Ghana is a tropical country with warm temperatures. Snow and sleet require very cold temperatures and do not occur in Ghana."
+      }
+    ],
+    "questions": [
+      {
+        "q": "What is a CYCLIC EVENT? Give THREE examples of natural cyclic events.",
+        "a": "A cyclic event is something that happens repeatedly in the same order. Examples: day and night, wet and dry seasons, the water cycle, tides, yearly crop seasons."
+      },
+      {
+        "q": "Explain the difference between the WET season and the DRY season in Ghana.",
+        "a": "Wet season (April–July): heavy rainfall, high humidity, good for farming, rivers full.\nDry season (November–March): little or no rain, hot and dry, Harmattan wind blows from the Sahara, rivers may shrink."
+      },
+      {
+        "q": "What would happen to life on Earth if the Sun suddenly disappeared? Give THREE effects.",
+        "a": "Any three: all light disappears — darkness everywhere; temperatures drop to -270°C — all life freezes; plants cannot photosynthesize — all plants die; food chains collapse — all animals starve; water freezes solid — no liquid water."
+      },
+      {
+        "q": "What is PRECIPITATION? Name ALL FOUR types and describe each briefly.",
+        "a": "Precipitation is water falling from clouds to the earth's surface.\nRain: liquid water droplets — most common.\nHail: balls of ice formed in storm clouds.\nSnow: frozen ice crystals that fall in cold countries.\nSleet: a mix of rain and snow."
+      },
+      {
+        "q": "Describe the properties of CLEAN drinking water.",
+        "a": "Clean drinking water: clear (no colour), no bad or unusual smell, no taste, free from solid particles, free from harmful bacteria and chemicals."
+      },
+      {
+        "q": "Give FOUR things that can pollute a river in Ghana.",
+        "a": "Any four: illegal gold mining (galamsey) chemicals; plastic waste dumped in gutters; industrial waste from factories; agricultural pesticides and fertilisers; sewage/human waste; flooding carrying rubbish."
+      },
+      {
+        "q": "Why is it dangerous to drink water from a river near a mining area?",
+        "a": "Mining releases toxic chemicals (mercury, cyanide) and sediment into rivers. These chemicals cannot be seen, smelled or tasted in the water but cause serious diseases including mercury poisoning, kidney damage and cancer when consumed."
+      },
+      {
+        "q": "How does the Sun drive the WATER CYCLE? Explain each stage briefly.",
+        "a": "Sun's heat causes EVAPORATION — water from oceans/rivers turns to vapour and rises. As vapour rises it cools → CONDENSATION into clouds. When droplets join and become heavy → PRECIPITATION falls as rain. Water collects in rivers/ground → COLLECTION. Sun's heat starts the cycle again."
+      },
+      {
+        "q": "Design a poster (describe it in words) showing people in your community how to keep water sources clean. Include a title, TWO images and TWO key messages.",
+        "a": "Accept any creative response with: a clear title (e.g. \"Keep Our Water Clean\"), two relevant images described (e.g. person throwing rubbish away from river; tap with clean water flowing), two clear messages (e.g. \"Never dump rubbish in rivers or gutters!\" and \"Report illegal mining near water sources!\")."
+      },
+      {
+        "q": "[Challenge] Ghana has both a wet season and a dry season. Explain how the water cycle helps farmers during the dry season, and what happens when the water cycle is disrupted by deforestation.",
+        "a": "During the dry season: the water cycle recharges underground water (aquifers) during the wet season; farmers can access this water through wells and boreholes for irrigation. Deforestation disrupts the water cycle because trees contribute to the cycle through transpiration — releasing water vapour that forms clouds and rain. Fewer trees = less transpiration = less water vapour = less rainfall. This makes dry seasons longer and droughts more severe, threatening crops and livestock."
+      }
+    ],
+    "answerKey": [
+      "A cyclic event is something that happens repeatedly in the same order. Examples: day and night, wet and dry seasons, the water cycle, tides, yearly crop seasons.",
+      "Wet season (April–July): heavy rainfall, high humidity, good for farming, rivers full.\nDry season (November–March): little or no rain, hot and dry, Harmattan wind blows from the Sahara, rivers may shrink.",
+      "Any three: all light disappears — darkness everywhere; temperatures drop to -270°C — all life freezes; plants cannot photosynthesize — all plants die; food chains collapse — all animals starve; water freezes solid — no liquid water.",
+      "Precipitation is water falling from clouds to the earth's surface.\nRain: liquid water droplets — most common.\nHail: balls of ice formed in storm clouds.\nSnow: frozen ice crystals that fall in cold countries.\nSleet: a mix of rain and snow.",
+      "Clean drinking water: clear (no colour), no bad or unusual smell, no taste, free from solid particles, free from harmful bacteria and chemicals.",
+      "Any four: illegal gold mining (galamsey) chemicals; plastic waste dumped in gutters; industrial waste from factories; agricultural pesticides and fertilisers; sewage/human waste; flooding carrying rubbish.",
+      "Mining releases toxic chemicals (mercury, cyanide) and sediment into rivers. These chemicals cannot be seen, smelled or tasted in the water but cause serious diseases including mercury poisoning, kidney damage and cancer when consumed.",
+      "Sun's heat causes EVAPORATION — water from oceans/rivers turns to vapour and rises. As vapour rises it cools → CONDENSATION into clouds. When droplets join and become heavy → PRECIPITATION falls as rain. Water collects in rivers/ground → COLLECTION. Sun's heat starts the cycle again.",
+      "Accept any creative response with: a clear title (e.g. \"Keep Our Water Clean\"), two relevant images described (e.g. person throwing rubbish away from river; tap with clean water flowing), two clear messages (e.g. \"Never dump rubbish in rivers or gutters!\" and \"Report illegal mining near water sources!\").",
+      "During the dry season: the water cycle recharges underground water (aquifers) during the wet season; farmers can access this water through wells and boreholes for irrigation. Deforestation disrupts the water cycle because trees contribute to the cycle through transpiration — releasing water vapour that forms clouds and rain. Fewer trees = less transpiration = less water vapour = less rainfall. This makes dry seasons longer and droughts more severe, threatening crops and livestock."
+    ],
+    "createdAt": {
+      "_seconds": 1779077411,
+      "_nanoseconds": 475000000
+    }
+  }
+}
