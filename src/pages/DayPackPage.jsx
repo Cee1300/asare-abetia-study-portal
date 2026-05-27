@@ -225,6 +225,7 @@ export default function DayPackPage() {
   const hasSubmitted = !!submission
   const isMarked = submission?.score !== undefined
   const isRecap = !!dayData.isRecap
+  const isQuiz = !!dayData.isQuiz
 
   return (
     <div className="min-h-screen pb-20">
@@ -255,7 +256,7 @@ export default function DayPackPage() {
               <ChevronLeft size={20} />
             </button>
             <div className={`w-7 h-7 rounded-md flex items-center justify-center ${colours.bg}`}>
-              {isRecap ? <span className="text-sm">🔧</span> : <SubjectIcon size={14} className={colours.text} />}
+              {isRecap ? <span className="text-sm">🔧</span> : isQuiz ? <span className="text-sm">📝</span> : <SubjectIcon size={14} className={colours.text} />}
             </div>
             <div className="flex-1 min-w-0">
               <p className="text-white font-medium text-sm truncate">{dayData.topic}</p>
@@ -346,8 +347,55 @@ export default function DayPackPage() {
               </div>
             )}
 
+
+            {/* QUIZ: intro card */}
+            {isQuiz && pack?.concepts?.[0] && (
+              <div className="card p-5 border border-red-500/20 bg-red-500/5">
+                <div className="flex items-center gap-2 mb-3">
+                  <span className="text-2xl">📝</span>
+                  <div>
+                    <p className="text-red-400 font-semibold text-sm">{pack.concepts[0].heading}</p>
+                    <p className="text-slate-400 text-xs">Formal assessment — no hints</p>
+                  </div>
+                </div>
+                <MathText text={pack.concepts[0].body} className="text-slate-200 text-sm leading-relaxed" />
+                {pack.concepts[0].note && (
+                  <div className="mt-3 bg-red-500/10 border border-red-500/20 rounded-xl px-3 py-2">
+                    <p className="text-red-300 text-xs">⚠️ {pack.concepts[0].note}</p>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* QUIZ: section breakdown */}
+            {isQuiz && questions.length > 0 && (
+              <div className="card p-5">
+                <h3 className="text-slate-300 text-xs font-semibold uppercase tracking-wider mb-3">Quiz Sections</h3>
+                <div className="space-y-2">
+                  {[
+                    { subj: 'Mathematics', prefix: 'MATHS' },
+                    { subj: 'Science', prefix: 'SCIENCE' },
+                    { subj: 'English', prefix: 'ENGLISH' },
+                  ].map(({ subj, prefix }) => {
+                    const subjQs = questions.filter(q => (q.q || '').includes('[' + prefix + ']'))
+                    if (!subjQs.length) return null
+                    const c = SUBJECT_COLOURS[subj] || SUBJECT_COLOURS.Mathematics
+                    return (
+                      <div key={subj} className={`flex items-center gap-3 px-3 py-2 rounded-xl ${c.bg}`}>
+                        <span className={`text-xs font-bold ${c.text}`}>{subj}</span>
+                        <span className="text-slate-400 text-xs">{subjQs.length} questions</span>
+                      </div>
+                    )
+                  })}
+                </div>
+                <div className="mt-4 bg-red-500/5 border border-red-500/20 rounded-xl px-3 py-2">
+                  <p className="text-red-300 text-xs">Show all working for Maths. Write in full sentences for English. No hints available.</p>
+                </div>
+              </div>
+            )}
+
             {/* DAILY: objectives */}
-            {!isRecap && pack?.objectives && (
+            {!isRecap && !isQuiz && pack?.objectives && (
               <div className="card p-5">
                 <h3 className="text-slate-300 text-xs font-semibold uppercase tracking-wider mb-3">What You Will Learn Today</h3>
                 <div className="space-y-2">
@@ -364,7 +412,7 @@ export default function DayPackPage() {
             )}
 
             {/* DAILY: concept cards */}
-            {!isRecap && pack?.concepts?.map((concept, i) => (
+            {!isRecap && !isQuiz && pack?.concepts?.map((concept, i) => (
               <div key={i} className="card p-5">
                 <div className="flex items-center gap-2 mb-3">
                   <div className="w-1.5 h-5 rounded-full" style={{ background: colours.hex }} />
@@ -384,7 +432,7 @@ export default function DayPackPage() {
             ))}
 
             {/* DAILY: worked examples */}
-            {!isRecap && pack?.worked?.map((ex, i) => (
+            {!isRecap && !isQuiz && pack?.worked?.map((ex, i) => (
               <div key={i} className="card overflow-hidden">
                 <div className="px-4 py-2.5 flex items-center gap-2" style={{ background: colours.hex + '20' }}>
                   <CheckCircle size={14} className={colours.text} />

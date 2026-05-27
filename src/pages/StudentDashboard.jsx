@@ -92,6 +92,12 @@ export default function StudentDashboard() {
     const sub = submissions[day.day] || submissions[String(day.day)]
     if (sub?.score !== undefined) return 'marked'
     if (sub) return 'submitted'
+    // Quiz sessions — available once all 20 regular days are done
+    if (day.isQuiz) {
+      const regularDays = timetable.filter(d => typeof d.day === 'number')
+      const allDone = regularDays.every(d => submissions[d.day]?.score !== undefined)
+      return allDone ? 'available' : 'upcoming'
+    }
     // Recap sessions always available
     if (day.isRecap) return 'available'
     // Day 1 always available
@@ -103,7 +109,6 @@ export default function StudentDashboard() {
     // Sequential unlock: previous day must be MARKED
     const prevSub = submissions[day.day - 1] || submissions[String(day.day - 1)]
     if (prevSub?.score !== undefined) {
-      // Available — check if overdue
       const today = new Date()
       const packDate = new Date(day.date)
       return packDate < today ? 'overdue' : 'available'
@@ -116,6 +121,13 @@ export default function StudentDashboard() {
     if (score >= 7) return 'text-emerald-400'
     if (score >= 5) return 'text-amber-400'
     return 'text-red-400'
+  }
+
+  // Day label for display
+  function dayLabel(day) {
+    if (day.isQuiz) return `Quiz ${day.day.replace('quiz', '')}`
+    if (day.isRecap) return `R&R ${day.day.replace('recap', '')}`
+    return `Day ${day.day}`
   }
 
   const completed = Object.values(submissions).filter(s => s.score !== undefined).length
@@ -171,6 +183,7 @@ export default function StudentDashboard() {
 
       <div className="max-w-3xl mx-auto px-4 pt-6 space-y-6">
 
+        {/* Dad message */}
         <div className="card overflow-hidden animate-fade-up">
           <div className="flex items-center gap-4 p-5">
             <div className="relative flex-shrink-0">
@@ -198,6 +211,7 @@ export default function StudentDashboard() {
           )}
         </div>
 
+        {/* Stats */}
         <div className="grid grid-cols-4 gap-2 animate-fade-up delay-100">
           {[
             { label: 'Done', value: completed, icon: CheckCircle, colour: 'text-emerald-400' },
@@ -213,6 +227,7 @@ export default function StudentDashboard() {
           ))}
         </div>
 
+        {/* Badges */}
         {earnedBadges.length > 0 && (
           <div className="card p-4 cursor-pointer hover:border-slate-600 transition-all" onClick={() => navigate('/rewards')}>
             <div className="flex items-center justify-between mb-3">
@@ -238,34 +253,51 @@ export default function StudentDashboard() {
           </div>
         )}
 
-        {timetable.filter(d => (getPackStatus(d) === 'available' || getPackStatus(d) === 'overdue') && !submissions[d.day]).map(day => {
+        {/* Active packs — available or overdue */}
+        {timetable.filter(d => {
+          const status = getPackStatus(d)
+          return (status === 'available' || status === 'overdue') && !submissions[d.day]
+        }).map(day => {
           const SubjectIcon = SUBJECT_ICONS[day.subject] || BookOpen
           const colours = SUBJECT_COLOURS[day.subject] || SUBJECT_COLOURS.Mathematics
+          const isQuiz = !!day.isQuiz
+          const borderColour = isQuiz ? '#ef4444' : colours.hex
           return (
             <div key={day.day} onClick={() => navigate(`/pack/${day.day}`)}
               className="card-hover cursor-pointer p-5 border-2 animate-fade-up delay-200"
-              style={{ borderColor: colours.hex + '40' }}>
+              style={{ borderColor: borderColour + '40' }}>
               <div className="flex items-center gap-2 mb-3">
-                <div className={`w-6 h-6 rounded-md flex items-center justify-center ${colours.bg}`}>
-                  <SubjectIcon size={13} className={colours.text} />
-                </div>
-                <span className={`subject-badge ${colours.bg} ${colours.text} ${colours.border}`}>{day.subject}</span>
-                <span className="ml-auto text-xs text-slate-400">Day {day.day}</span>
+                {isQuiz
+                  ? <div className="w-6 h-6 rounded-md flex items-center justify-center bg-red-500/10">
+                      <span className="text-xs">📝</span>
+                    </div>
+                  : <div className={`w-6 h-6 rounded-md flex items-center justify-center ${colours.bg}`}>
+                      <SubjectIcon size={13} className={colours.text} />
+                    </div>
+                }
+                <span className={`subject-badge ${isQuiz ? 'bg-red-500/10 text-red-400 border-red-500/20' : `${colours.bg} ${colours.text} ${colours.border}`}`}>
+                  {isQuiz ? 'Assessment' : day.subject}
+                </span>
+                <span className="ml-auto text-xs text-slate-400">{dayLabel(day)}</span>
               </div>
               <h2 className="text-lg text-white font-semibold mb-1">{day.topic}</h2>
-              <p className="text-slate-400 text-sm mb-4">{day.standard} · Today</p>
+              <p className="text-slate-400 text-sm mb-4">
+                {isQuiz ? '15 questions · No hints · Show all working' : `${day.standard} · Today`}
+              </p>
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-1.5 text-slate-400 text-sm">
-                  <Clock size={14} /><span>50 minutes · Read → Solve → Submit</span>
+                  <Clock size={14} />
+                  <span>{isQuiz ? '60 minutes · Assessment' : '50 minutes · Read → Solve → Submit'}</span>
                 </div>
-                <div className="flex items-center gap-1 text-amber-400 text-sm font-medium">
-                  Start <ChevronRight size={16} />
+                <div className={`flex items-center gap-1 text-sm font-medium ${isQuiz ? 'text-red-400' : 'text-amber-400'}`}>
+                  {isQuiz ? 'Begin Quiz' : 'Start'} <ChevronRight size={16} />
                 </div>
               </div>
             </div>
           )
         })}
 
+        {/* All sessions list */}
         <div className="animate-fade-up delay-300">
           <h3 className="text-slate-300 text-sm font-medium mb-3 px-1">All Sessions</h3>
           <div className="space-y-2">
@@ -276,25 +308,45 @@ export default function StudentDashboard() {
               const colours = SUBJECT_COLOURS[day.subject] || SUBJECT_COLOURS.Mathematics
               const isLocked = status === 'upcoming'
               const isOverdue = status === 'overdue'
+              const isQuiz = !!day.isQuiz
+              const isRecap = !!day.isRecap
+
               return (
-                <div key={day.day} onClick={() => !isLocked && navigate(`/pack/${day.day}`)}
+                <div key={day.day}
+                  onClick={() => !isLocked && navigate(`/pack/${day.day}`)}
                   className={`flex items-center gap-4 px-4 py-3 rounded-xl border transition-all duration-200
-                    ${isLocked ? 'border-slate-800/50 opacity-40 cursor-not-allowed bg-slate-900/30'
-                      : 'border-slate-800 hover:border-slate-600 cursor-pointer bg-slate-900 hover:bg-slate-800/50'}`}>
+                    ${isLocked
+                      ? 'border-slate-800/50 opacity-40 cursor-not-allowed bg-slate-900/30'
+                      : isQuiz
+                        ? 'border-red-500/20 hover:border-red-500/40 cursor-pointer bg-red-500/5'
+                        : 'border-slate-800 hover:border-slate-600 cursor-pointer bg-slate-900 hover:bg-slate-800/50'
+                    }`}>
                   <div className="w-8 h-8 rounded-lg bg-slate-800 flex items-center justify-center flex-shrink-0">
-                    <span className="text-slate-400 text-xs font-mono font-bold">{day.day}</span>
+                    {isQuiz
+                      ? <span className="text-xs">📝</span>
+                      : isRecap
+                        ? <span className="text-xs">🔧</span>
+                        : <span className="text-slate-400 text-xs font-mono font-bold">{day.day}</span>
+                    }
                   </div>
-                  <div className={`w-7 h-7 rounded-md flex items-center justify-center flex-shrink-0 ${colours.bg}`}>
-                    <SubjectIcon size={13} className={colours.text} />
+                  <div className={`w-7 h-7 rounded-md flex items-center justify-center flex-shrink-0 ${isQuiz ? 'bg-red-500/10' : colours.bg}`}>
+                    {isQuiz
+                      ? <span className="text-xs text-red-400 font-bold">Q</span>
+                      : <SubjectIcon size={13} className={colours.text} />
+                    }
                   </div>
                   <div className="flex-1 min-w-0">
                     <p className="text-white text-sm font-medium truncate">{day.topic}</p>
-                    <p className="text-slate-500 text-xs">{format(parseISO(day.date), 'EEE, MMM d')} · {day.subject}</p>
+                    <p className="text-slate-500 text-xs">
+                      {format(parseISO(day.date), 'EEE, MMM d')} · {isQuiz ? 'Assessment' : isRecap ? 'R&R' : day.subject}
+                    </p>
                   </div>
                   <div className="flex-shrink-0">
                     {status === 'marked' && (
                       <div className="flex items-center gap-2">
-                        <span className={`font-bold text-sm font-mono ${getScoreColour(sub.score)}`}>{sub.score}/10</span>
+                        <span className={`font-bold text-sm font-mono ${getScoreColour(sub.score)}`}>
+                          {sub.score}/{isQuiz ? 15 : 10}
+                        </span>
                         {sub.correctionsSubmitted
                           ? <CheckCircle size={15} className="text-emerald-400" />
                           : (sub.markedAnswers && Object.values(sub.markedAnswers).some(m => !m.correct))
@@ -303,9 +355,16 @@ export default function StudentDashboard() {
                         }
                       </div>
                     )}
-                    {status === 'submitted' && <span className="text-amber-400 text-xs flex items-center gap-1"><Clock size={13} /> Pending</span>}
-                    {(status === 'available' || status === 'overdue') && <span className={status === 'overdue' ? 'text-red-400 text-xs font-medium' : 'text-amber-400 text-xs font-medium flex items-center gap-1'}>{status === 'overdue' ? 'Overdue' : <><Star size={13} /> Next</>}</span>}
-                    
+                    {status === 'submitted' && (
+                      <span className="text-amber-400 text-xs flex items-center gap-1">
+                        <Clock size={13} /> Pending
+                      </span>
+                    )}
+                    {(status === 'available' || status === 'overdue') && (
+                      <span className={status === 'overdue' ? 'text-red-400 text-xs font-medium' : isQuiz ? 'text-red-400 text-xs font-medium' : 'text-amber-400 text-xs font-medium flex items-center gap-1'}>
+                        {status === 'overdue' ? 'Overdue' : isQuiz ? '📝 Ready' : <><Star size={13} /> Next</>}
+                      </span>
+                    )}
                     {status === 'upcoming' && <Lock size={14} className="text-slate-600" />}
                   </div>
                 </div>

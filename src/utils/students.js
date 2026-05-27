@@ -41,8 +41,6 @@ export const STUDENTS = {
   },
 }
 
-// Timetable — maps day number to subject and topic
-// Day 1 = April 29 2026 (Wednesday)
 export const TIMETABLE = {
   jezreel: [
     { day: 1,  date: '2026-04-29', subject: 'Mathematics', topic: 'Numbers & Place Value to 1,000,000', standard: 'B7.1.1.1' },
@@ -65,7 +63,8 @@ export const TIMETABLE = {
     { day: 18, date: '2026-05-20', subject: 'Science',     topic: 'Human Body: Nutrition & Digestion', standard: 'B7.3.2.1' },
     { day: 19, date: '2026-05-21', subject: 'Mathematics', topic: 'Probability & Statistics', standard: 'B7.5.2.1' },
     { day: 20, date: '2026-05-22', subject: 'English',     topic: 'Vocabulary, Idioms & Figurative Language', standard: 'B7.5.1.1' },
-    { day: 'recap3', date: '2026-05-23', subject: 'All', topic: 'Recap & Repair Session 3 — Days 13–16', standard: 'B7.R.3', isRecap: true },
+    { day: 'recap3', date: '2026-05-23', subject: 'All',   topic: 'Recap & Repair Session 3 — Days 13–16', standard: 'B7.R.3', isRecap: true },
+    { day: 'quiz1',   date: '2026-06-03', subject: 'All',  topic: 'End-of-Programme Quiz 1 — Days 1–20',   standard: 'B7.Q.1', isQuiz: true },
   ],
   declyn: [
     { day: 1,  date: '2026-05-19', subject: 'Mathematics', topic: 'Numbers to 1,000,000', standard: 'B5.1.1.1' },
