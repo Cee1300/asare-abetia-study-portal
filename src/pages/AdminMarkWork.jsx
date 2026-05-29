@@ -260,8 +260,8 @@ export default function AdminMarkWork() {
           </div>
         )}
 
-        {/* Handwritten upload — shown when no typed answers */}
-        {(!submission?.answers || Object.keys(submission.answers).length === 0) && (
+        {/* Handwritten upload — always available for supplementary work */}
+        {(
           <div className="card p-4 border border-dashed border-slate-700">
             <p className="text-slate-300 text-sm font-medium mb-3 flex items-center gap-2">
               <Image size={14} className="text-slate-400" />
