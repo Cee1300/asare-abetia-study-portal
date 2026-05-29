@@ -6,7 +6,7 @@ import { db } from '../firebase'
 import { useAuth } from '../contexts/AuthContext'
 import { STUDENTS, POINTS } from '../utils/students'
 import { ChevronLeft, Zap, Trophy, Star, TrendingUp } from 'lucide-react'
-import { getStudentBadges, getTitle, getAvatar } from '../utils/rewards'
+import { getTitle, getAvatar } from '../utils/rewards'
 
 export default function RewardsPage() {
   const { profile } = useAuth()
