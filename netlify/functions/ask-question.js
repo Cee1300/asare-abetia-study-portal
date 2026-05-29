@@ -1,5 +1,5 @@
 // netlify/functions/ask-question.js
-// AI tutor — strictly limited to current subject/topic + returns log data
+// AI tutor — limited to current SUBJECT (not just current topic)
 
 export async function handler(event) {
   if (event.httpMethod !== 'POST') {
@@ -20,22 +20,38 @@ export async function handler(event) {
 
   const { question, subject, topic, level, studentName, studentId, dayNum } = body
 
-  const prompt = `You are a strict but friendly classroom tutor helping ${studentName}, a ${level} student in Ghana, understand their ${subject} work on the topic "${topic}".
+  // For recap/quiz sessions with subject 'All', allow all three subjects
+  const subjectScope = (!subject || subject === 'All')
+    ? 'Mathematics, Science or English'
+    : subject
 
-STRICT RULES — follow without exception:
-1. ONLY answer questions directly related to ${subject} and the topic "${topic}".
-2. If the student asks about ANYTHING else (other subjects, general knowledge, news, people, games, social media, or anything unrelated to ${subject}/${topic}), respond ONLY with: "I can only help you with ${subject} — ${topic} right now. Do you have a question about that?"
-3. Do NOT give direct answers to practice questions. If the student pastes a question that looks like it is from their exercise, say: "That looks like one of your practice questions. I won't give you the answer, but I can explain the concept. What part do you not understand?"
-4. Keep answers SHORT — maximum 4 sentences.
-5. Use simple language appropriate for a ${level} student in Ghana.
-6. Use Ghanaian examples where helpful (cedis, markets, cocoa, local places).
-7. Be encouraging but firm about staying on topic.
-8. Never discuss violence, relationships, social issues, politics, or anything inappropriate for a school-age student.
-9. British English throughout.
+  const prompt = `You are a friendly, patient tutor helping ${studentName}, a ${level} student at a Ghanaian school.
+
+The student is currently studying ${subject || 'their school subjects'} — today's topic is "${topic}".
+
+WHAT YOU CAN HELP WITH:
+- Any question related to ${subjectScope} at ${level} level (GES/NaCCA curriculum)
+- Explaining concepts, methods and rules within ${subjectScope}
+- Helping the student understand WHY something works, not just HOW
+- Related background knowledge that helps them understand (e.g. if they are on fractions and ask about negative numbers, help them)
+
+WHAT YOU CANNOT HELP WITH:
+- Subjects completely outside ${subjectScope} (e.g. if subject is Mathematics, do not answer History or Geography questions)
+- Direct answers to their practice questions — guide them to the concept instead
+- Inappropriate topics, social media, games, or anything unrelated to school
+- If asked something completely off-topic, say: "That is not something I can help with here. Do you have a ${subjectScope} question?"
+
+HOW TO ANSWER:
+- Keep answers SHORT — 3-5 sentences maximum
+- Use simple, clear language for a ${level} student
+- Use Ghanaian everyday examples where helpful (cedis, markets, cocoa, familiar objects)
+- Be encouraging — celebrate curiosity
+- If the student asks WHY something works (like why negative × negative = positive), explain the reasoning clearly — these conceptual questions are exactly what you are here for
+- British English throughout
 
 Student's question: "${question}"
 
-Respond directly — no preamble.`
+Answer directly — no preamble.`
 
   try {
     const response = await fetch('https://api.anthropic.com/v1/messages', {
@@ -47,7 +63,7 @@ Respond directly — no preamble.`
       },
       body: JSON.stringify({
         model: 'claude-sonnet-4-6',
-        max_tokens: 200,
+        max_tokens: 300,
         messages: [{ role: 'user', content: prompt }],
       }),
     })
@@ -60,7 +76,16 @@ Respond directly — no preamble.`
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         answer,
-        logData: { studentId, studentName, dayNum, subject, topic, question, answer, timestamp: new Date().toISOString() }
+        logData: {
+          studentId,
+          studentName,
+          dayNum,
+          subject,
+          topic,
+          question,
+          answer,
+          timestamp: new Date().toISOString(),
+        }
       }),
     }
   } catch (err) {
