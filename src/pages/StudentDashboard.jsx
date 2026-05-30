@@ -24,6 +24,7 @@ export default function StudentDashboard() {
   const [newBadges, setNewBadges] = useState([])
   const [streak, setStreak] = useState(0)
   const [loading, setLoading] = useState(true)
+  const [leaderboard, setLeaderboard] = useState([])
 
   const studentId = profile?.studentId
   const student = STUDENTS[studentId]
@@ -85,6 +86,19 @@ export default function StudentDashboard() {
       else break
     }
     setStreak(currentStreak)
+    // Load leaderboard
+    try {
+      const board = []
+      for (const [id, s] of Object.entries(STUDENTS)) {
+        const lsnap = await getDocs(query(collection(db, 'points'), where('studentId', '==', id)))
+        let pts = 0
+        lsnap.forEach(d => { pts += d.data().amount || 0 })
+        board.push({ id, name: s.name, colour: s.colour, points: pts })
+      }
+      board.sort((a, b) => b.points - a.points)
+      setLeaderboard(board)
+    } catch (err) { console.error('Leaderboard error:', err) }
+
     setLoading(false)
   }
 
@@ -226,6 +240,40 @@ export default function StudentDashboard() {
             </div>
           ))}
         </div>
+
+        {/* Mini leaderboard */}
+        {leaderboard.length > 0 && (
+          <div className="card overflow-hidden animate-fade-up cursor-pointer" onClick={() => navigate('/rewards')}>
+            <div className="px-4 py-2.5 bg-slate-800/50 flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <Trophy size={13} className="text-amber-400" />
+                <p className="text-white text-xs font-medium">Leaderboard</p>
+              </div>
+              <ChevronRight size={13} className="text-slate-500" />
+            </div>
+            <div className="divide-y divide-slate-800/50">
+              {leaderboard.map((entry, i) => {
+                const isMe = entry.id === studentId
+                const emoji = i === 0 ? '🥇' : i === 1 ? '🥈' : '🥉'
+                return (
+                  <div key={entry.id} className={`px-4 py-2.5 flex items-center gap-3 ${isMe ? 'bg-amber-500/5' : ''}`}>
+                    <span className="text-sm w-6 text-center">{emoji}</span>
+                    <div className="w-6 h-6 rounded-full flex items-center justify-center text-white font-bold text-xs flex-shrink-0"
+                      style={{ background: entry.colour + '40', color: entry.colour }}>
+                      {entry.name[0]}
+                    </div>
+                    <p className={`flex-1 text-xs font-medium ${isMe ? 'text-amber-400' : 'text-white'}`}>
+                      {entry.name}{isMe ? ' (you)' : ''}
+                    </p>
+                    <span className={`text-xs font-bold ${isMe ? 'text-amber-400' : 'text-slate-400'}`}>
+                      {entry.points} pts
+                    </span>
+                  </div>
+                )
+              })}
+            </div>
+          </div>
+        )}
 
         {/* Badges */}
         {earnedBadges.length > 0 && (

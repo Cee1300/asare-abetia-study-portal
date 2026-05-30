@@ -23,37 +23,36 @@ export default function RewardsPage() {
 
   async function loadData() {
     if (!studentId) return
+    try {
+      const q = query(collection(db, 'points'), where('studentId', '==', studentId), orderBy('createdAt', 'desc'))
+      const snap = await getDocs(q)
+      const history = snap.docs.map(d => ({ id: d.id, ...d.data() }))
+      const total = history.reduce((sum, p) => sum + (p.amount || 0), 0)
+      setPointsHistory(history)
+      setTotalPoints(total)
+    } catch (err) { console.error('Points history error:', err) }
 
-    // Load this student's points history
-    const q = query(
-      collection(db, 'points'),
-      where('studentId', '==', studentId),
-      orderBy('createdAt', 'desc')
-    )
-    const snap = await getDocs(q)
-    const history = snap.docs.map(d => ({ id: d.id, ...d.data() }))
-    const total = history.reduce((sum, p) => sum + (p.amount || 0), 0)
-    setPointsHistory(history)
-    setTotalPoints(total)
+    try {
+      const board = []
+      for (const [id, s] of Object.entries(STUDENTS)) {
+        const lsnap = await getDocs(query(collection(db, 'points'), where('studentId', '==', id)))
+        let pts = 0
+        lsnap.forEach(d => { pts += d.data().amount || 0 })
+        board.push({ id, name: s.name, colour: s.colour, points: pts, level: s.level })
+      }
+      board.sort((a, b) => b.points - a.points)
+      setLeaderboard(board)
+    } catch (err) { console.error('Leaderboard error:', err) }
 
-    // Load leaderboard — all students' total points
-    const board = []
-    for (const [id, s] of Object.entries(STUDENTS)) {
-      const lq = query(collection(db, 'points'), where('studentId', '==', id))
-      const lsnap = await getDocs(lq)
-      let pts = 0
-      lsnap.forEach(d => { pts += d.data().amount || 0 })
-      board.push({ id, name: s.name, colour: s.colour, points: pts, level: s.level })
-    }
-    board.sort((a, b) => b.points - a.points)
-    setLeaderboard(board)
     setLoading(false)
   }
 
   function formatDate(ts) {
     if (!ts) return ''
-    const d = ts.toDate ? ts.toDate() : new Date(ts)
-    return d.toLocaleDateString('en-GB', { day: '2-digit', month: 'short' })
+    try {
+      const d = ts.toDate ? ts.toDate() : new Date(ts)
+      return d.toLocaleDateString('en-GB', { day: '2-digit', month: 'short' })
+    } catch { return '' }
   }
 
   function getPointsColour(amount) {
@@ -66,13 +65,11 @@ export default function RewardsPage() {
   function getRankEmoji(index) {
     if (index === 0) return '🥇'
     if (index === 1) return '🥈'
-    if (index === 2) return '🥉'
-    return `${index + 1}.`
+    return '🥉'
   }
 
   const myRank = leaderboard.findIndex(b => b.id === studentId)
-  const badges = getStudentBadges ? getStudentBadges(studentId, pointsHistory) : []
-  const title = getTitle ? getTitle(totalPoints) : ''
+  const titleObj = getTitle ? getTitle(totalPoints) : { title: '', colour: 'text-slate-400' }
 
   if (loading) return (
     <div className="min-h-screen flex items-center justify-center">
@@ -97,19 +94,15 @@ export default function RewardsPage() {
 
       <div className="max-w-2xl mx-auto px-4 pt-6 space-y-4">
 
-        {/* Points total card */}
         <div className="card p-6 text-center border border-amber-500/20">
           <div className="text-5xl font-bold text-amber-400 mb-1">{totalPoints}</div>
           <p className="text-slate-400 text-sm mb-2">Total Points</p>
-          {title && <p className="text-amber-300 text-xs font-medium">{title}</p>}
+          {titleObj?.title && <p className={`text-xs font-medium ${titleObj.colour}`}>{titleObj.title}</p>}
           {myRank >= 0 && (
-            <p className="text-slate-400 text-xs mt-1">
-              {getRankEmoji(myRank)} Rank {myRank + 1} of {leaderboard.length}
-            </p>
+            <p className="text-slate-400 text-xs mt-1">{getRankEmoji(myRank)} Rank {myRank + 1} of {leaderboard.length}</p>
           )}
         </div>
 
-        {/* How points are earned */}
         <div className="card p-5">
           <h3 className="text-slate-300 text-xs font-semibold uppercase tracking-wider mb-3 flex items-center gap-2">
             <Zap size={12} className="text-amber-400" /> How You Earn Points
@@ -129,49 +122,69 @@ export default function RewardsPage() {
           </div>
           <div className="mt-3 bg-amber-500/5 border border-amber-500/20 rounded-xl px-3 py-2">
             <p className="text-amber-200/70 text-xs">
-              💡 Best score: submit on time AND score 9+ = <span className="text-amber-400 font-bold">+{POINTS.submitOnTime + POINTS.score9plus} points</span> in one session
+              💡 Best score: submit AND score 9+ = <span className="text-amber-400 font-bold">+{POINTS.submitOnTime + POINTS.score9plus} points</span>
             </p>
           </div>
         </div>
 
-        {/* Leaderboard */}
-        <div className="card overflow-hidden">
-          <div className="px-4 py-3 bg-slate-800/50 flex items-center gap-2">
-            <Trophy size={14} className="text-amber-400" />
-            <p className="text-white text-sm font-medium">Leaderboard</p>
+        {leaderboard.length > 0 && (
+          <div className="card overflow-hidden">
+            <div className="px-4 py-3 bg-slate-800/50 flex items-center gap-2">
+              <Trophy size={14} className="text-amber-400" />
+              <p className="text-white text-sm font-medium">Leaderboard</p>
+            </div>
+            <div className="divide-y divide-slate-800">
+              {leaderboard.map((entry, i) => {
+                const isMe = entry.id === studentId
+                return (
+                  <div key={entry.id} className={`px-4 py-3 flex items-center gap-3 ${isMe ? 'bg-amber-500/5' : ''}`}>
+                    <span className="text-lg w-8 text-center">{getRankEmoji(i)}</span>
+                    <div className="w-8 h-8 rounded-full flex items-center justify-center text-white font-bold text-sm flex-shrink-0"
+                      style={{ background: entry.colour + '40', color: entry.colour }}>
+                      {entry.name[0]}
+                    </div>
+                    <div className="flex-1">
+                      <p className={`text-sm font-medium ${isMe ? 'text-amber-400' : 'text-white'}`}>
+                        {entry.name} {isMe ? '(you)' : ''}
+                      </p>
+                      <p className="text-slate-500 text-xs">{entry.level}</p>
+                    </div>
+                    <div className="text-right">
+                      <p className={`font-bold text-sm ${i === 0 ? 'text-amber-400' : 'text-slate-300'}`}>{entry.points}</p>
+                      <p className="text-slate-500 text-xs">pts</p>
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
           </div>
-          <div className="divide-y divide-slate-800">
-            {leaderboard.map((entry, i) => {
-              const isMe = entry.id === studentId
-              return (
-                <div key={entry.id}
-                  className={`px-4 py-3 flex items-center gap-3 ${isMe ? 'bg-amber-500/5' : ''}`}>
-                  <span className="text-lg w-8 text-center">{getRankEmoji(i)}</span>
-                  <div
-                    className="w-8 h-8 rounded-full flex items-center justify-center text-white font-bold text-sm flex-shrink-0"
-                    style={{ background: entry.colour + '40', color: entry.colour }}
-                  >
-                    {entry.name[0]}
-                  </div>
-                  <div className="flex-1">
-                    <p className={`text-sm font-medium ${isMe ? 'text-amber-400' : 'text-white'}`}>
-                      {entry.name} {isMe ? '(you)' : ''}
-                    </p>
-                    <p className="text-slate-500 text-xs">{entry.level}</p>
-                  </div>
-                  <div className="text-right">
-                    <p className={`font-bold text-sm ${i === 0 ? 'text-amber-400' : 'text-slate-300'}`}>
-                      {entry.points}
-                    </p>
-                    <p className="text-slate-500 text-xs">pts</p>
-                  </div>
+        )}
+
+        <div className="card p-5">
+          <h3 className="text-slate-300 text-xs font-semibold uppercase tracking-wider mb-3 flex items-center gap-2">
+            <Star size={12} className="text-amber-400" /> Score to Points Guide
+          </h3>
+          <div className="space-y-2">
+            {[
+              { range: 'Score 9-10', total: POINTS.submitOnTime + POINTS.score9plus, colour: 'text-amber-400', bar: 'bg-amber-400' },
+              { range: 'Score 7-8', total: POINTS.submitOnTime + POINTS.score7plus, colour: 'text-emerald-400', bar: 'bg-emerald-400' },
+              { range: 'Score 5-6', total: POINTS.submitOnTime, colour: 'text-blue-400', bar: 'bg-blue-400' },
+              { range: 'Score 0-4', total: POINTS.submitOnTime, colour: 'text-slate-400', bar: 'bg-slate-600' },
+            ].map(({ range, total, colour, bar }) => (
+              <div key={range} className="flex items-center gap-3">
+                <div className="w-20 flex-shrink-0"><p className="text-slate-300 text-xs">{range}</p></div>
+                <div className="flex-1 bg-slate-800 rounded-full h-2">
+                  <div className={`h-2 rounded-full ${bar}`} style={{ width: `${(total / (POINTS.submitOnTime + POINTS.score9plus)) * 100}%` }} />
                 </div>
-              )
-            })}
+                <div className="w-16 text-right flex-shrink-0">
+                  <span className={`text-xs font-bold ${colour}`}>+{total} pts</span>
+                </div>
+              </div>
+            ))}
           </div>
+          <p className="text-slate-500 text-xs mt-3 text-center">Plus +{POINTS.correctionsSubmit} pts for corrections</p>
         </div>
 
-        {/* Points history */}
         <div className="card overflow-hidden">
           <div className="px-4 py-3 bg-slate-800/50 flex items-center gap-2">
             <TrendingUp size={14} className="text-emerald-400" />
@@ -189,46 +202,11 @@ export default function RewardsPage() {
                     <p className="text-slate-200 text-sm truncate">{entry.reason}</p>
                     <p className="text-slate-500 text-xs">{formatDate(entry.createdAt)}</p>
                   </div>
-                  <span className={`font-bold text-sm ml-3 flex-shrink-0 ${getPointsColour(entry.amount)}`}>
-                    +{entry.amount}
-                  </span>
+                  <span className={`font-bold text-sm ml-3 flex-shrink-0 ${getPointsColour(entry.amount)}`}>+{entry.amount}</span>
                 </div>
               ))}
             </div>
           )}
-        </div>
-
-        {/* Score to points guide */}
-        <div className="card p-5">
-          <h3 className="text-slate-300 text-xs font-semibold uppercase tracking-wider mb-3 flex items-center gap-2">
-            <Star size={12} className="text-amber-400" /> Score to Points Guide
-          </h3>
-          <div className="space-y-2">
-            {[
-              { range: 'Score 9-10', total: POINTS.submitOnTime + POINTS.score9plus, label: 'Outstanding', colour: 'text-amber-400', bar: 'bg-amber-400' },
-              { range: 'Score 7-8', total: POINTS.submitOnTime + POINTS.score7plus, label: 'Good work', colour: 'text-emerald-400', bar: 'bg-emerald-400' },
-              { range: 'Score 5-6', total: POINTS.submitOnTime, label: 'Keep going', colour: 'text-blue-400', bar: 'bg-blue-400' },
-              { range: 'Score 0-4', total: POINTS.submitOnTime, label: 'Try harder', colour: 'text-slate-400', bar: 'bg-slate-600' },
-            ].map(({ range, total, label, colour, bar }) => (
-              <div key={range} className="flex items-center gap-3">
-                <div className="w-20 flex-shrink-0">
-                  <p className="text-slate-300 text-xs">{range}</p>
-                </div>
-                <div className="flex-1 bg-slate-800 rounded-full h-2">
-                  <div
-                    className={`h-2 rounded-full ${bar}`}
-                    style={{ width: `${(total / (POINTS.submitOnTime + POINTS.score9plus)) * 100}%` }}
-                  />
-                </div>
-                <div className="w-16 text-right flex-shrink-0">
-                  <span className={`text-xs font-bold ${colour}`}>+{total} pts</span>
-                </div>
-              </div>
-            ))}
-          </div>
-          <p className="text-slate-500 text-xs mt-3 text-center">
-            Plus +{POINTS.correctionsSubmit} pts for submitting corrections on wrong answers
-          </p>
         </div>
 
       </div>
