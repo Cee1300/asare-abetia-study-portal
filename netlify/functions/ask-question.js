@@ -71,22 +71,30 @@ Answer directly — no preamble.`
     const data = await response.json()
     const answer = data.content?.[0]?.text?.trim() || 'I could not answer that. Please try again.'
 
+    // Log to Firestore via Admin SDK if available
+    // This bypasses client-side security rules
+    const FIREBASE_SA = process.env.FIREBASE_SERVICE_ACCOUNT
+    if (FIREBASE_SA) {
+      try {
+        const { initializeApp, getApps, cert } = await import('firebase-admin/app')
+        const { getFirestore } = await import('firebase-admin/firestore')
+        if (!getApps().length) initializeApp({ credential: cert(JSON.parse(FIREBASE_SA)) })
+        const db = getFirestore()
+        await db.collection('questions').add({
+          studentId, studentName, dayNum, subject, topic,
+          question, answer,
+          timestamp: new Date().toISOString(),
+          createdAt: new Date(),
+        })
+      } catch (logErr) {
+        console.error('Question log error:', logErr.message)
+      }
+    }
+
     return {
       statusCode: 200,
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        answer,
-        logData: {
-          studentId,
-          studentName,
-          dayNum,
-          subject,
-          topic,
-          question,
-          answer,
-          timestamp: new Date().toISOString(),
-        }
-      }),
+      body: JSON.stringify({ answer }),
     }
   } catch (err) {
     return { statusCode: 500, body: JSON.stringify({ error: err.message }) }

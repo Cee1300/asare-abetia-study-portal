@@ -25,10 +25,12 @@ export default function StudentDashboard() {
   const [streak, setStreak] = useState(0)
   const [loading, setLoading] = useState(true)
   const [leaderboard, setLeaderboard] = useState([])
+  const [extraSessions, setExtraSessions] = useState([])
 
   const studentId = profile?.studentId
   const student = STUDENTS[studentId]
-  const timetable = TIMETABLE[studentId] || []
+  const baseTimetable = TIMETABLE[studentId] || []
+  const timetable = [...baseTimetable, ...extraSessions]
 
   useEffect(() => { if (studentId) loadData() }, [studentId])
 
@@ -98,6 +100,31 @@ export default function StudentDashboard() {
       board.sort((a, b) => b.points - a.points)
       setLeaderboard(board)
     } catch (err) { console.error('Leaderboard error:', err) }
+
+    // Load any recap/quiz packs from Firestore not in timetable
+    try {
+      const packsSnap = await getDocs(
+        query(collection(db, 'packs'), where('studentId', '==', studentId))
+      )
+      const timetableDays = new Set(TIMETABLE[studentId]?.map(d => String(d.day)) || [])
+      const extras = []
+      packsSnap.forEach(d => {
+        const data = d.data()
+        const dayKey = String(data.dayNum)
+        if ((data.isRecap || data.isQuiz) && !timetableDays.has(dayKey)) {
+          extras.push({
+            day: data.dayNum,
+            date: data.createdAt?.toDate?.()?.toISOString?.()?.split('T')[0] || new Date().toISOString().split('T')[0],
+            subject: 'All',
+            topic: data.topic,
+            standard: data.isQuiz ? 'Quiz' : 'R&R',
+            isRecap: !!data.isRecap,
+            isQuiz: !!data.isQuiz,
+          })
+        }
+      })
+      setExtraSessions(extras)
+    } catch (err) { console.error('Extra sessions error:', err) }
 
     setLoading(false)
   }
